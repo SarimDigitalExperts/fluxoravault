@@ -38,7 +38,10 @@
 
     --glow-orange: 0 0 20px hsl(28 100% 50% / 0.4);
     --glow-blue: 0 0 20px hsl(197 100% 47% / 0.4);
+    --glow-purple: 0 0 20px hsl(270 80% 60% / 0.4);
     --gradient-primary: linear-gradient(135deg, hsl(28 100% 50%), hsl(197 100% 47%));
+    --gradient-warm: linear-gradient(135deg, hsl(28 100% 50%), hsl(350 80% 55%));
+    --gradient-cool: linear-gradient(135deg, hsl(197 100% 47%), hsl(270 80% 60%));
 
     --sidebar-background: 240 10% 4%;
     --sidebar-foreground: 0 0% 95%;
@@ -70,14 +73,41 @@
   .glow-blue {
     box-shadow: var(--glow-blue);
   }
+  .glow-purple {
+    box-shadow: var(--glow-purple);
+  }
   .gradient-text {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .gradient-text-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-cool {
+    background: var(--gradient-cool);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .glass {
     @apply bg-card/60 backdrop-blur-xl border border-border/50;
+  }
+  .glass-strong {
+    @apply bg-card/80 backdrop-blur-2xl border border-border/60;
+  }
+  .section-padding {
+    @apply py-20 md:py-28;
+  }
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
@@ -107,4 +137,19 @@
 @keyframes twinkle {
   0% { opacity: 0.6; }
   100% { opacity: 1; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(240 10% 4%);
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(240 6% 25%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(28 100% 50% / 0.6);
 }
