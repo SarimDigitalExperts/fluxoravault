@@ -16,19 +16,19 @@ export interface Product {
 export interface Category {
   name: string;
   slug: string;
-  icon: string;
+  icon: string; // lucide icon name
   count: number;
 }
 
 export const categories: Category[] = [
-  { name: "UI Kits", slug: "ui-kits", icon: "🎨", count: 24 },
-  { name: "Templates", slug: "templates", icon: "📄", count: 38 },
-  { name: "Icons", slug: "icons", icon: "✨", count: 156 },
-  { name: "Fonts", slug: "fonts", icon: "🔤", count: 42 },
-  { name: "Illustrations", slug: "illustrations", icon: "🖼️", count: 67 },
-  { name: "3D Assets", slug: "3d-assets", icon: "🧊", count: 31 },
-  { name: "Mockups", slug: "mockups", icon: "📱", count: 53 },
-  { name: "Courses", slug: "courses", icon: "🎓", count: 12 },
+  { name: "UI Kits", slug: "ui-kits", icon: "Palette", count: 24 },
+  { name: "Templates", slug: "templates", icon: "FileText", count: 38 },
+  { name: "Icons", slug: "icons", icon: "Sparkles", count: 156 },
+  { name: "Fonts", slug: "fonts", icon: "Type", count: 42 },
+  { name: "Illustrations", slug: "illustrations", icon: "Image", count: 67 },
+  { name: "3D Assets", slug: "3d-assets", icon: "Box", count: 31 },
+  { name: "Mockups", slug: "mockups", icon: "Smartphone", count: 53 },
+  { name: "Courses", slug: "courses", icon: "GraduationCap", count: 12 },
 ];
 
 export const products: Product[] = [
