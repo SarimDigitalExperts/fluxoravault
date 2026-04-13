@@ -32,6 +32,13 @@ import AdminLayout from "@/pages/admin/AdminLayout";
 import Dashboard from "@/pages/admin/Dashboard";
 import AdminProducts from "@/pages/admin/Products";
 import AdminOrders from "@/pages/admin/Orders";
+import AdminCategories from "@/pages/admin/Categories";
+import AdminCoupons from "@/pages/admin/Coupons";
+import AdminBanners from "@/pages/admin/Banners";
+import AdminBlogs from "@/pages/admin/Blogs";
+import AdminPaymentMethods from "@/pages/admin/PaymentMethods";
+import AdminPricingPlans from "@/pages/admin/PricingPlans";
+import AdminContactMessages from "@/pages/admin/ContactMessages";
 import AdminAnalytics from "@/pages/admin/Analytics";
 import NotFound from "@/pages/NotFound";
 
@@ -75,6 +82,13 @@ const App = () => (
                     <Route index element={<Dashboard />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="orders" element={<AdminOrders />} />
+                    <Route path="categories" element={<AdminCategories />} />
+                    <Route path="coupons" element={<AdminCoupons />} />
+                    <Route path="banners" element={<AdminBanners />} />
+                    <Route path="blogs" element={<AdminBlogs />} />
+                    <Route path="payment-methods" element={<AdminPaymentMethods />} />
+                    <Route path="pricing-plans" element={<AdminPricingPlans />} />
+                    <Route path="messages" element={<AdminContactMessages />} />
                     <Route path="analytics" element={<AdminAnalytics />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
