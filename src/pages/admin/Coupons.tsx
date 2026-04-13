@@ -1,0 +1,111 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Ticket, Plus, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+export default function AdminCoupons() {
+  const [coupons, setCoupons] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<any>(null);
+  const [form, setForm] = useState({ code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0, max_uses: "", expires_at: "", is_active: true });
+
+  const fetch = async () => {
+    setLoading(true);
+    const { data } = await supabase.from("coupons").select("*").order("created_at", { ascending: false });
+    setCoupons(data || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetch(); }, []);
+
+  const resetForm = () => { setForm({ code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0, max_uses: "", expires_at: "", is_active: true }); setEditing(null); };
+
+  const handleSave = async () => {
+    if (!form.code) { toast.error("Code required"); return; }
+    const payload: any = { code: form.code.toUpperCase(), discount_type: form.discount_type, discount_value: form.discount_value, min_order_amount: form.min_order_amount, is_active: form.is_active, max_uses: form.max_uses ? Number(form.max_uses) : null, expires_at: form.expires_at || null };
+    if (editing) {
+      const { error } = await supabase.from("coupons").update(payload).eq("id", editing.id);
+      if (error) { toast.error(error.message); return; }
+      toast.success("Coupon updated");
+    } else {
+      const { error } = await supabase.from("coupons").insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success("Coupon created");
+    }
+    setOpen(false); resetForm(); fetch();
+  };
+
+  const handleDelete = async (id: string) => {
+    await supabase.from("coupons").delete().eq("id", id);
+    toast.success("Deleted"); fetch();
+  };
+
+  const openEdit = (c: any) => {
+    setEditing(c);
+    setForm({ code: c.code, discount_type: c.discount_type, discount_value: Number(c.discount_value), min_order_amount: Number(c.min_order_amount || 0), max_uses: c.max_uses?.toString() || "", expires_at: c.expires_at ? c.expires_at.split("T")[0] : "", is_active: c.is_active });
+    setOpen(true);
+  };
+
+  return (
+    <Card className="glass border-border/50">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg flex items-center gap-2"><Ticket className="h-5 w-5 text-primary" /> Coupons ({coupons.length})</CardTitle>
+        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
+          <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add</Button></DialogTrigger>
+          <DialogContent className="glass">
+            <DialogHeader><DialogTitle>{editing ? "Edit" : "Add"} Coupon</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div><Label>Code</Label><Input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className="mt-1 uppercase" /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Type</Label>
+                  <Select value={form.discount_type} onValueChange={(v) => setForm({ ...form, discount_type: v })}>
+                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="percentage">Percentage</SelectItem><SelectItem value="fixed">Fixed Amount</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                <div><Label>Value</Label><Input type="number" value={form.discount_value} onChange={(e) => setForm({ ...form, discount_value: Number(e.target.value) })} className="mt-1" /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Min Order ($)</Label><Input type="number" value={form.min_order_amount} onChange={(e) => setForm({ ...form, min_order_amount: Number(e.target.value) })} className="mt-1" /></div>
+                <div><Label>Max Uses</Label><Input type="number" value={form.max_uses} onChange={(e) => setForm({ ...form, max_uses: e.target.value })} placeholder="Unlimited" className="mt-1" /></div>
+              </div>
+              <div><Label>Expires At</Label><Input type="date" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} className="mt-1" /></div>
+              <Button onClick={handleSave} className="w-full">{editing ? "Update" : "Create"}</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </CardHeader>
+      <CardContent>
+        {loading ? <p className="text-sm text-muted-foreground">Loading...</p> : coupons.length === 0 ? <p className="text-sm text-muted-foreground">No coupons yet.</p> : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader><TableRow><TableHead>Code</TableHead><TableHead>Discount</TableHead><TableHead>Uses</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {coupons.map((c) => (
+                  <TableRow key={c.id}>
+                    <TableCell className="font-mono text-xs">{c.code}</TableCell>
+                    <TableCell className="text-sm">{c.discount_type === "percentage" ? `${c.discount_value}%` : `$${c.discount_value}`}</TableCell>
+                    <TableCell className="text-sm">{c.used_count}/{c.max_uses || "∞"}</TableCell>
+                    <TableCell><span className={`text-xs px-2 py-0.5 rounded-full ${c.is_active ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>{c.is_active ? "Active" : "Inactive"}</span></TableCell>
+                    <TableCell className="text-right space-x-1">
+                      <Button size="icon" variant="ghost" onClick={() => openEdit(c)}><Pencil className="h-4 w-4" /></Button>
+                      <Button size="icon" variant="ghost" onClick={() => handleDelete(c.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
