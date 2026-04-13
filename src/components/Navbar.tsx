@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Heart, Menu, X, Search } from "lucide-react";
+import { ShoppingCart, Heart, Menu, X, Search, User, Shield, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
+import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -15,6 +19,7 @@ const navLinks = [
 export default function Navbar() {
   const { itemCount } = useCart();
   const { items: wishlistItems } = useWishlist();
+  const { user, isAdmin, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -25,7 +30,6 @@ export default function Navbar() {
           <span className="text-sm font-display text-muted-foreground">Assets</span>
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((l) => (
             <Link key={l.to} to={l.to} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -34,7 +38,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link to="/shop">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Search className="h-5 w-5" />
@@ -61,13 +65,44 @@ export default function Navbar() {
             </Button>
           </Link>
 
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="glass-strong border-border/50 w-48">
+                <div className="px-3 py-2">
+                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="flex items-center gap-2">
+                      <Shield className="h-4 w-4" /> Admin Panel
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 text-destructive">
+                  <LogOut className="h-4 w-4" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/auth">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
+
           <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden glass border-t border-border/30 py-4">
           <div className="container flex flex-col gap-4">
@@ -76,6 +111,16 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
+            {!user && (
+              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm text-primary hover:text-primary/80 transition-colors">
+                Sign In
+              </Link>
+            )}
+            {isAdmin && (
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-sm text-primary hover:text-primary/80 transition-colors">
+                Admin Panel
+              </Link>
+            )}
           </div>
         </div>
       )}
