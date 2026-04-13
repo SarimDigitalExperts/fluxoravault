@@ -1,7 +1,7 @@
 import { Navigate, Outlet, Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  LayoutDashboard, Package, ShoppingCart, BarChart3, Settings, ArrowLeft,
+  LayoutDashboard, Package, ShoppingCart, BarChart3, Layers, Ticket, Image, FileText, Wallet, Crown, MessageSquare, ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +9,13 @@ const adminLinks = [
   { label: "Dashboard", to: "/admin", icon: LayoutDashboard },
   { label: "Products", to: "/admin/products", icon: Package },
   { label: "Orders", to: "/admin/orders", icon: ShoppingCart },
+  { label: "Categories", to: "/admin/categories", icon: Layers },
+  { label: "Coupons", to: "/admin/coupons", icon: Ticket },
+  { label: "Banners", to: "/admin/banners", icon: Image },
+  { label: "Blogs", to: "/admin/blogs", icon: FileText },
+  { label: "Payment Methods", to: "/admin/payment-methods", icon: Wallet },
+  { label: "Pricing Plans", to: "/admin/pricing-plans", icon: Crown },
+  { label: "Messages", to: "/admin/messages", icon: MessageSquare },
   { label: "Analytics", to: "/admin/analytics", icon: BarChart3 },
 ];
 
