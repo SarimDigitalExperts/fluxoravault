@@ -5,14 +5,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { user } = useAuth();
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) { toast.error("Please sign in to send a message"); return; }
+    setSending(true);
+    const { error } = await supabase.from("contact_messages").insert({
+      name: form.name,
+      email: form.email,
+      subject: form.subject || null,
+      message: form.message,
+      user_id: user.id,
+    });
+    setSending(false);
+    if (error) { toast.error(error.message); return; }
     toast.success("Message sent! We'll get back to you soon.");
-    setForm({ name: "", email: "", message: "" });
+    setForm({ name: "", email: "", subject: "", message: "" });
   };
 
   return (
@@ -45,8 +60,9 @@ export default function Contact() {
               <Input placeholder="Your Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="bg-muted/50 border-border" />
               <Input type="email" placeholder="Your Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required className="bg-muted/50 border-border" />
             </div>
+            <Input placeholder="Subject (optional)" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="bg-muted/50 border-border" />
             <Textarea placeholder="Your Message" rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required className="bg-muted/50 border-border" />
-            <Button type="submit" variant="glow" size="lg" className="w-full">Send Message</Button>
+            <Button type="submit" variant="glow" size="lg" className="w-full" disabled={sending}>{sending ? "Sending..." : "Send Message"}</Button>
           </form>
         </div>
       </div>
