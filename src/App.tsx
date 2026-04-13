@@ -20,6 +20,14 @@ import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Checkout from "@/pages/Checkout";
 import Auth from "@/pages/Auth";
+import Pricing from "@/pages/Pricing";
+import AccountLayout from "@/pages/account/AccountLayout";
+import AccountDashboard from "@/pages/account/AccountDashboard";
+import AccountOrders from "@/pages/account/AccountOrders";
+import AccountWishlist from "@/pages/account/AccountWishlist";
+import AccountDownloads from "@/pages/account/AccountDownloads";
+import AccountBilling from "@/pages/account/AccountBilling";
+import AccountSettings from "@/pages/account/AccountSettings";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import Dashboard from "@/pages/admin/Dashboard";
 import AdminProducts from "@/pages/admin/Products";
@@ -54,6 +62,15 @@ const App = () => (
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/account" element={<AccountLayout />}>
+                    <Route index element={<AccountDashboard />} />
+                    <Route path="orders" element={<AccountOrders />} />
+                    <Route path="wishlist" element={<AccountWishlist />} />
+                    <Route path="downloads" element={<AccountDownloads />} />
+                    <Route path="billing" element={<AccountBilling />} />
+                    <Route path="settings" element={<AccountSettings />} />
+                  </Route>
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="products" element={<AdminProducts />} />
