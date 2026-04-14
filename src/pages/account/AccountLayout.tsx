@@ -24,7 +24,7 @@ export default function AccountLayout() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar */}
         <aside className="w-full lg:w-64 shrink-0">
-          <div className="glass-strong rounded-2xl p-4 space-y-1 sticky top-24">
+          <div className="rounded-2xl border border-border bg-card p-4 space-y-1 sticky top-24">
             <div className="px-3 py-3 mb-2">
               <p className="text-sm font-medium truncate">{user.user_metadata?.display_name || user.email}</p>
               <p className="text-xs text-muted-foreground truncate">{user.email}</p>
