@@ -58,9 +58,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-2">
-            <span className="font-display font-bold text-lg">${product.price}</span>
+            <span className="font-display font-bold text-lg">PKR {product.price.toLocaleString()}</span>
             {product.originalPrice && (
-              <span className="text-xs text-muted-foreground line-through">${product.originalPrice}</span>
+              <span className="text-xs text-muted-foreground line-through">PKR {product.originalPrice.toLocaleString()}</span>
             )}
           </div>
           <Button size="sm" onClick={() => addToCart(product)} className="h-8 text-xs">

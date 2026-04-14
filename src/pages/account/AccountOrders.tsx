@@ -52,7 +52,7 @@ export default function AccountOrders() {
                   <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColor[order.status] || ""}`}>
                     {order.status}
                   </span>
-                  <span className="font-bold">${order.total}</span>
+                  <span className="font-bold">PKR {Number(order.total).toLocaleString()}</span>
                 </div>
               </div>
               {order.order_items?.map((item: any) => (
@@ -62,7 +62,7 @@ export default function AccountOrders() {
                   )}
                   <span className="text-sm flex-1">{item.products?.title || "Product"}</span>
                   <span className="text-xs text-muted-foreground">x{item.quantity}</span>
-                  <span className="text-sm font-medium">${item.price}</span>
+                  <span className="text-sm font-medium">PKR {Number(item.price).toLocaleString()}</span>
                 </div>
               ))}
             </div>

@@ -37,7 +37,7 @@ export default function Dashboard() {
   const cards = [
     { label: "Total Products", value: stats.totalProducts, icon: Package, color: "text-primary" },
     { label: "Total Orders", value: stats.totalOrders, icon: ShoppingCart, color: "text-secondary" },
-    { label: "Revenue", value: `$${stats.totalRevenue.toFixed(2)}`, icon: DollarSign, color: "text-green-600" },
+    { label: "Revenue", value: `PKR ${stats.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-green-600" },
     { label: "Pending Orders", value: stats.pendingOrders, icon: Clock, color: "text-amber-500" },
   ];
 
@@ -79,7 +79,7 @@ export default function Dashboard() {
                     <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium">${Number(o.total).toFixed(2)}</p>
+                    <p className="text-sm font-medium">PKR {Number(o.total).toLocaleString()}</p>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       o.status === "completed" ? "bg-green-100 text-green-700" :
                       o.status === "pending" || o.status === "pending_verification" ? "bg-amber-100 text-amber-700" :

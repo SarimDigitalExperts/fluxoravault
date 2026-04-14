@@ -146,7 +146,7 @@ export default function AdminProducts() {
                       </div>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{p.category}</TableCell>
-                    <TableCell className="text-sm">${Number(p.price).toFixed(2)}</TableCell>
+                    <TableCell className="text-sm">PKR {Number(p.price).toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
                         {(p.tags || []).map((t) => (

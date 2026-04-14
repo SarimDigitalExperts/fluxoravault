@@ -64,7 +64,7 @@ export default function AdminAnalytics() {
                 <DollarSign className="h-8 w-8 text-green-400 opacity-60" />
                 <div>
                   <p className="text-xs text-muted-foreground">Total Revenue</p>
-                  <p className="text-2xl font-bold">${data.totalRevenue.toFixed(2)}</p>
+                  <p className="text-2xl font-bold">PKR {data.totalRevenue.toLocaleString()}</p>
                 </div>
               </div>
             </CardContent>
@@ -77,7 +77,7 @@ export default function AdminAnalytics() {
                 <TrendingUp className="h-8 w-8 text-primary opacity-60" />
                 <div>
                   <p className="text-xs text-muted-foreground">Avg. Order Value</p>
-                  <p className="text-2xl font-bold">${data.avgOrderValue.toFixed(2)}</p>
+                  <p className="text-2xl font-bold">PKR {data.avgOrderValue.toLocaleString()}</p>
                 </div>
               </div>
             </CardContent>

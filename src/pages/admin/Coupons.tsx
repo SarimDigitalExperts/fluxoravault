@@ -92,7 +92,7 @@ export default function AdminCoupons() {
                 {coupons.map((c) => (
                   <TableRow key={c.id}>
                     <TableCell className="font-mono text-xs">{c.code}</TableCell>
-                    <TableCell className="text-sm">{c.discount_type === "percentage" ? `${c.discount_value}%` : `$${c.discount_value}`}</TableCell>
+                    <TableCell className="text-sm">{c.discount_type === "percentage" ? `${c.discount_value}%` : `PKR ${Number(c.discount_value).toLocaleString()}`}</TableCell>
                     <TableCell className="text-sm">{c.used_count}/{c.max_uses || "∞"}</TableCell>
                     <TableCell><span className={`text-xs px-2 py-0.5 rounded-full ${c.is_active ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>{c.is_active ? "Active" : "Inactive"}</span></TableCell>
                     <TableCell className="text-right space-x-1">

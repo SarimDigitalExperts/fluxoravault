@@ -66,10 +66,10 @@ export default function Checkout() {
     const coupon = data as any;
     if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) { toast.error("Coupon expired"); return; }
     if (coupon.max_uses && coupon.used_count >= coupon.max_uses) { toast.error("Coupon usage limit reached"); return; }
-    if (coupon.min_order_amount && total < Number(coupon.min_order_amount)) { toast.error(`Minimum order: $${coupon.min_order_amount}`); return; }
+    if (coupon.min_order_amount && total < Number(coupon.min_order_amount)) { toast.error(`Minimum order: PKR ${Number(coupon.min_order_amount).toLocaleString()}`); return; }
     const disc = coupon.discount_type === "percentage" ? (total * Number(coupon.discount_value)) / 100 : Number(coupon.discount_value);
     setDiscount(Math.min(disc, total)); setCouponApplied(true);
-    toast.success(`Coupon applied! -$${Math.min(disc, total).toFixed(2)}`);
+    toast.success(`Coupon applied! -PKR ${Math.min(disc, total).toLocaleString()}`);
   };
 
   const finalTotal = total - discount;
@@ -221,14 +221,14 @@ export default function Checkout() {
                   {items.map((item) => (
                     <div key={item.product.id} className="flex justify-between text-sm">
                       <span className="truncate mr-2">{item.product.title} × {item.quantity}</span>
-                      <span className="font-medium shrink-0">${(item.product.price * item.quantity).toFixed(2)}</span>
+                      <span className="font-medium shrink-0">PKR {(item.product.price * item.quantity).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
                 <div className="border-t border-border pt-3 space-y-2">
-                  <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal</span><span>${total.toFixed(2)}</span></div>
-                  {discount > 0 && <div className="flex justify-between text-sm text-green-600"><span>Discount</span><span>-${discount.toFixed(2)}</span></div>}
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-border"><span>Total</span><span className="text-primary">${finalTotal.toFixed(2)}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal</span><span>PKR {total.toLocaleString()}</span></div>
+                  {discount > 0 && <div className="flex justify-between text-sm text-green-600"><span>Discount</span><span>-PKR {discount.toLocaleString()}</span></div>}
+                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-border"><span>Total</span><span className="text-primary">PKR {finalTotal.toLocaleString()}</span></div>
                 </div>
               </CardContent>
             </Card>
