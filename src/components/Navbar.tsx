@@ -24,22 +24,21 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/30">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-display font-bold gradient-text">Orbit</span>
-          <span className="text-sm font-display text-muted-foreground">Assets</span>
+          <img src="/logo.png" alt="Signify Vault" className="h-9" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((l) => (
-            <Link key={l.to} to={l.to} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link key={l.to} to={l.to} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {l.label}
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Link to="/shop">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Search className="h-5 w-5" />
@@ -73,7 +72,7 @@ export default function Navbar() {
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="glass-strong border-border/50 w-48">
+              <DropdownMenuContent align="end" className="w-48">
                 <div className="px-3 py-2">
                   <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 </div>
@@ -110,20 +109,20 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-border/30 py-4">
+        <div className="md:hidden bg-background border-t border-border py-4">
           <div className="container flex flex-col gap-4">
             {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} onClick={() => setMobileOpen(false)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link key={l.to} to={l.to} onClick={() => setMobileOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 {l.label}
               </Link>
             ))}
             {!user && (
-              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm text-primary hover:text-primary/80 transition-colors">
+              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm text-primary font-medium">
                 Sign In
               </Link>
             )}
             {isAdmin && (
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-sm text-primary hover:text-primary/80 transition-colors">
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-sm text-primary font-medium">
                 Admin Panel
               </Link>
             )}

@@ -53,10 +53,9 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <div className="stars-bg" />
               <PromoPopup />
               <Navbar />
-              <main className="relative z-10 pt-6">
+              <main className="relative pt-6">
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/shop" element={<Shop />} />

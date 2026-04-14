@@ -20,15 +20,14 @@ export default function ProductCard({ product }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group glass rounded-lg overflow-hidden hover:border-primary/30 transition-all duration-300"
+      className="group bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300"
     >
       <Link to={`/product/${product.slug}`} className="block relative overflow-hidden aspect-[4/3]">
         <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         {product.tags.length > 0 && (
           <div className="absolute top-3 left-3 flex gap-1.5">
             {product.tags.map((tag) => (
-              <span key={tag} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/90 text-primary-foreground">
+              <span key={tag} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary text-primary-foreground">
                 {tag}
               </span>
             ))}
@@ -64,7 +63,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span className="text-xs text-muted-foreground line-through">${product.originalPrice}</span>
             )}
           </div>
-          <Button size="sm" variant="glow" onClick={() => addToCart(product)} className="h-8 text-xs">
+          <Button size="sm" onClick={() => addToCart(product)} className="h-8 text-xs">
             <ShoppingCart className="h-3 w-3 mr-1" /> Add
           </Button>
         </div>

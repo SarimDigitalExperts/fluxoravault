@@ -13,7 +13,7 @@ export default function Cart() {
         <ShoppingCart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
         <h1 className="text-2xl font-display font-bold mb-2">Your cart is empty</h1>
         <p className="text-muted-foreground mb-6">Discover our premium digital assets</p>
-        <Button asChild variant="glow">
+        <Button asChild>
           <Link to="/shop">Browse Shop</Link>
         </Button>
       </div>
@@ -33,7 +33,7 @@ export default function Cart() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="glass rounded-lg p-4 flex gap-4"
+              className="rounded-xl border border-border bg-card p-4 flex gap-4"
             >
               <img src={item.product.image} alt={item.product.title} className="w-20 h-20 rounded-md object-cover" />
               <div className="flex-1 min-w-0">
@@ -61,24 +61,19 @@ export default function Cart() {
               </div>
             </motion.div>
           ))}
-
-          <button onClick={clearCart} className="text-xs text-muted-foreground hover:text-destructive transition-colors">
-            Clear Cart
-          </button>
+          <button onClick={clearCart} className="text-xs text-muted-foreground hover:text-destructive transition-colors">Clear Cart</button>
         </div>
 
-        <div className="glass rounded-lg p-6 h-fit sticky top-24">
+        <div className="rounded-xl border border-border bg-card p-6 h-fit sticky top-24">
           <h3 className="font-display font-semibold mb-4">Order Summary</h3>
           <div className="space-y-2 text-sm mb-4">
             <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${total}</span></div>
             <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span className="text-primary">-$0</span></div>
           </div>
           <div className="border-t border-border pt-4 mb-6">
-            <div className="flex justify-between font-display font-bold text-lg">
-              <span>Total</span><span>${total}</span>
-            </div>
+            <div className="flex justify-between font-display font-bold text-lg"><span>Total</span><span>${total}</span></div>
           </div>
-          <Button asChild variant="glow" className="w-full" size="lg">
+          <Button asChild className="w-full" size="lg">
             <Link to="/checkout">Checkout <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </Button>
         </div>

@@ -2,16 +2,17 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border/30 mt-20">
+    <footer className="border-t border-border mt-20 bg-muted/30">
       <div className="container py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <span className="text-xl font-display font-bold gradient-text">Orbit Assets</span>
-          <p className="text-sm text-muted-foreground mt-3">Premium digital assets for creators and developers. Templates, UI kits, icons, and more.</p>
+          <img src="/logo.png" alt="Signify Vault" className="h-8 mb-3" />
+          <p className="text-sm text-muted-foreground mt-3">Smart digital apps & softwares. Premium templates, tools, and resources for creators.</p>
         </div>
         <div>
           <h4 className="font-display font-semibold text-sm mb-3">Quick Links</h4>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
             <Link to="/shop" className="hover:text-foreground transition-colors">Shop</Link>
+            <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
             <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
             <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
           </div>
@@ -32,8 +33,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-border/30 py-6">
-        <p className="text-center text-xs text-muted-foreground">© 2026 Orbit Assets. All rights reserved.</p>
+      <div className="border-t border-border py-6">
+        <p className="text-center text-xs text-muted-foreground">© 2026 Signify Vault. All rights reserved.</p>
       </div>
     </footer>
   );

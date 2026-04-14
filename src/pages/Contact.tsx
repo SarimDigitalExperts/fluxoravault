@@ -18,11 +18,7 @@ export default function Contact() {
     if (!user) { toast.error("Please sign in to send a message"); return; }
     setSending(true);
     const { error } = await supabase.from("contact_messages").insert({
-      name: form.name,
-      email: form.email,
-      subject: form.subject || null,
-      message: form.message,
-      user_id: user.id,
+      name: form.name, email: form.email, subject: form.subject || null, message: form.message, user_id: user.id,
     });
     setSending(false);
     if (error) { toast.error(error.message); return; }
@@ -41,11 +37,11 @@ export default function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-6">
             {[
-              { icon: Mail, title: "Email", value: "hello@orbitassets.com" },
+              { icon: Mail, title: "Email", value: "hello@signifyvault.com" },
               { icon: MapPin, title: "Location", value: "Global — Remote First" },
               { icon: MessageSquare, title: "Support", value: "24/7 Live Chat" },
             ].map((item) => (
-              <div key={item.title} className="glass rounded-lg p-5 flex items-start gap-4">
+              <div key={item.title} className="rounded-xl border border-border bg-card p-5 flex items-start gap-4">
                 <item.icon className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium">{item.title}</p>
@@ -55,14 +51,14 @@ export default function Contact() {
             ))}
           </div>
 
-          <form onSubmit={handleSubmit} className="md:col-span-2 glass rounded-lg p-8 space-y-5">
+          <form onSubmit={handleSubmit} className="md:col-span-2 rounded-xl border border-border bg-card p-8 space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input placeholder="Your Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="bg-muted/50 border-border" />
-              <Input type="email" placeholder="Your Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required className="bg-muted/50 border-border" />
+              <Input placeholder="Your Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+              <Input type="email" placeholder="Your Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
             </div>
-            <Input placeholder="Subject (optional)" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="bg-muted/50 border-border" />
-            <Textarea placeholder="Your Message" rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required className="bg-muted/50 border-border" />
-            <Button type="submit" variant="glow" size="lg" className="w-full" disabled={sending}>{sending ? "Sending..." : "Send Message"}</Button>
+            <Input placeholder="Subject (optional)" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
+            <Textarea placeholder="Your Message" rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required />
+            <Button type="submit" size="lg" className="w-full" disabled={sending}>{sending ? "Sending..." : "Send Message"}</Button>
           </form>
         </div>
       </div>

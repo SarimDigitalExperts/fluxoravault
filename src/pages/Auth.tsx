@@ -39,7 +39,7 @@ export default function Auth() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md glass-strong rounded-2xl p-8"
+        className="w-full max-w-md bg-card border border-border rounded-2xl p-8 shadow-sm"
       >
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 mb-4">
@@ -49,7 +49,7 @@ export default function Auth() {
             {isLogin ? "Welcome Back" : "Create Account"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {isLogin ? "Sign in to your Orbit account" : "Join the Orbit community"}
+            {isLogin ? "Sign in to your Signify Vault account" : "Join the Signify Vault community"}
           </p>
         </div>
 
@@ -61,32 +61,17 @@ export default function Auth() {
                 placeholder="Display Name"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="pl-10 bg-muted/50 border-border/50"
+                className="pl-10"
               />
             </div>
           )}
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="pl-10 bg-muted/50 border-border/50"
-            />
+            <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required className="pl-10" />
           </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="pl-10 bg-muted/50 border-border/50"
-            />
+            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="pl-10" />
           </div>
 
           <Button type="submit" className="w-full" disabled={submitting}>
