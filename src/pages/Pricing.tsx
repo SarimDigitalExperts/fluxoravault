@@ -3,29 +3,78 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const plans = [
   {
-    name: "Starter", price: 9, period: "/month",
+    name: "Starter", price: 999, period: "/month",
     description: "Perfect for beginners exploring digital assets",
-    icon: Zap, featured: false,
+    icon: Zap, featured: false, planKey: "starter",
     features: ["5 downloads per month", "Access to free assets", "Basic file formats", "Email support", "Personal use license"],
   },
   {
-    name: "Pro", price: 29, period: "/month",
+    name: "Pro", price: 2999, period: "/month",
     description: "Ideal for professionals and freelancers",
-    icon: Crown, featured: true,
+    icon: Crown, featured: true, planKey: "pro",
     features: ["50 downloads per month", "Access to all assets", "Premium file formats", "Priority support", "Commercial license", "Early access to new drops", "Custom requests"],
   },
   {
-    name: "Enterprise", price: 79, period: "/month",
+    name: "Enterprise", price: 7999, period: "/month",
     description: "For teams and agencies needing unlimited access",
-    icon: Rocket, featured: false,
+    icon: Rocket, featured: false, planKey: "enterprise",
     features: ["Unlimited downloads", "Access to all assets", "All file formats + source files", "Dedicated account manager", "Extended commercial license", "Team collaboration tools", "API access", "Custom branding options"],
   },
 ];
 
 export default function Pricing() {
+  const { user } = useAuth();
+  const [subscribing, setSubscribing] = useState<string | null>(null);
+
+  const handleSubscribe = async (planKey: string) => {
+    if (!user) {
+      toast.error("Please sign in first");
+      return;
+    }
+    setSubscribing(planKey);
+    try {
+      // Check if user already has an active subscription
+      const { data: existing } = await supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .maybeSingle();
+
+      if (existing) {
+        // Update existing subscription
+        const { error } = await supabase
+          .from("subscriptions")
+          .update({ plan: planKey, updated_at: new Date().toISOString() })
+          .eq("id", existing.id);
+        if (error) throw error;
+        toast.success(`Plan updated to ${planKey}!`);
+      } else {
+        // Create new subscription
+        const { error } = await supabase.from("subscriptions").insert({
+          user_id: user.id,
+          plan: planKey,
+          status: "active",
+          starts_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        });
+        if (error) throw error;
+        toast.success(`Subscribed to ${planKey} plan!`);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to subscribe");
+    } finally {
+      setSubscribing(null);
+    }
+  };
+
   return (
     <div className="container pt-24 pb-20">
       <div className="text-center mb-14">
@@ -54,19 +103,15 @@ export default function Pricing() {
                 Most Popular
               </span>
             )}
-
             <div className={cn("p-3 rounded-xl w-fit mb-4", plan.featured ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
               <plan.icon className="h-6 w-6" />
             </div>
-
             <h2 className="text-xl font-display font-bold">{plan.name}</h2>
             <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.description}</p>
-
             <div className="mb-6">
-              <span className="text-4xl font-bold">${plan.price}</span>
+              <span className="text-4xl font-bold">PKR {plan.price.toLocaleString()}</span>
               <span className="text-muted-foreground text-sm">{plan.period}</span>
             </div>
-
             <ul className="space-y-3 mb-8 flex-1">
               {plan.features.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
@@ -75,9 +120,18 @@ export default function Pricing() {
                 </li>
               ))}
             </ul>
-
-            <Button asChild variant={plan.featured ? "default" : "outline"} className="w-full">
-              <Link to="/auth">Get Started</Link>
+            <Button
+              variant={plan.featured ? "default" : "outline"}
+              className="w-full"
+              disabled={subscribing === plan.planKey}
+              onClick={() => user ? handleSubscribe(plan.planKey) : undefined}
+              asChild={!user}
+            >
+              {user ? (
+                subscribing === plan.planKey ? "Subscribing..." : "Get Started"
+              ) : (
+                <Link to="/auth">Get Started</Link>
+              )}
             </Button>
           </motion.div>
         ))}
