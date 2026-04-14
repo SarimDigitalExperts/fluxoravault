@@ -33,12 +33,12 @@ export default function AdminLayout() {
         <Button variant="ghost" size="icon" asChild>
           <Link to="/"><ArrowLeft className="h-5 w-5" /></Link>
         </Button>
-        <h1 className="text-2xl font-display font-bold gradient-text">Admin Panel</h1>
+        <h1 className="text-2xl font-display font-bold">Admin Panel</h1>
       </div>
 
       <div className="flex gap-6">
         <aside className="w-56 shrink-0 hidden md:block">
-          <nav className="glass rounded-xl p-3 space-y-1 sticky top-24">
+          <nav className="rounded-xl border border-border bg-card p-3 space-y-1 sticky top-24">
             {adminLinks.map((l) => {
               const active = location.pathname === l.to;
               return (
@@ -48,7 +48,7 @@ export default function AdminLayout() {
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                     active
                       ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}
                 >
                   <l.icon className="h-4 w-4" />

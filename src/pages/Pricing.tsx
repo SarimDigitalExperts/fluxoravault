@@ -6,54 +6,22 @@ import { Link } from "react-router-dom";
 
 const plans = [
   {
-    name: "Starter",
-    price: 9,
-    period: "/month",
+    name: "Starter", price: 9, period: "/month",
     description: "Perfect for beginners exploring digital assets",
-    icon: Zap,
-    featured: false,
-    features: [
-      "5 downloads per month",
-      "Access to free assets",
-      "Basic file formats",
-      "Email support",
-      "Personal use license",
-    ],
+    icon: Zap, featured: false,
+    features: ["5 downloads per month", "Access to free assets", "Basic file formats", "Email support", "Personal use license"],
   },
   {
-    name: "Pro",
-    price: 29,
-    period: "/month",
+    name: "Pro", price: 29, period: "/month",
     description: "Ideal for professionals and freelancers",
-    icon: Crown,
-    featured: true,
-    features: [
-      "50 downloads per month",
-      "Access to all assets",
-      "Premium file formats",
-      "Priority support",
-      "Commercial license",
-      "Early access to new drops",
-      "Custom requests",
-    ],
+    icon: Crown, featured: true,
+    features: ["50 downloads per month", "Access to all assets", "Premium file formats", "Priority support", "Commercial license", "Early access to new drops", "Custom requests"],
   },
   {
-    name: "Enterprise",
-    price: 79,
-    period: "/month",
+    name: "Enterprise", price: 79, period: "/month",
     description: "For teams and agencies needing unlimited access",
-    icon: Rocket,
-    featured: false,
-    features: [
-      "Unlimited downloads",
-      "Access to all assets",
-      "All file formats + source files",
-      "Dedicated account manager",
-      "Extended commercial license",
-      "Team collaboration tools",
-      "API access",
-      "Custom branding options",
-    ],
+    icon: Rocket, featured: false,
+    features: ["Unlimited downloads", "Access to all assets", "All file formats + source files", "Dedicated account manager", "Extended commercial license", "Team collaboration tools", "API access", "Custom branding options"],
   },
 ];
 
@@ -61,19 +29,10 @@ export default function Pricing() {
   return (
     <div className="container pt-24 pb-20">
       <div className="text-center mb-14">
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-display font-bold mb-4"
-        >
-          Choose Your <span className="gradient-text">Plan</span>
+        <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-display font-bold mb-4">
+          Choose Your <span className="text-primary">Plan</span>
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-muted-foreground max-w-lg mx-auto"
-        >
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-lg mx-auto">
           Unlock premium digital assets with a plan that fits your workflow. Cancel anytime.
         </motion.p>
       </div>
@@ -86,10 +45,8 @@ export default function Pricing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             className={cn(
-              "rounded-2xl p-7 flex flex-col relative",
-              plan.featured
-                ? "glass-strong border-2 border-primary/40 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)]"
-                : "glass-strong border border-border/30"
+              "rounded-2xl p-7 flex flex-col relative bg-card border",
+              plan.featured ? "border-primary shadow-lg" : "border-border"
             )}
           >
             {plan.featured && (
@@ -98,7 +55,7 @@ export default function Pricing() {
               </span>
             )}
 
-            <div className={cn("p-3 rounded-xl w-fit mb-4", plan.featured ? "bg-primary/20 text-primary" : "bg-muted/50 text-muted-foreground")}>
+            <div className={cn("p-3 rounded-xl w-fit mb-4", plan.featured ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
               <plan.icon className="h-6 w-6" />
             </div>
 
@@ -119,11 +76,7 @@ export default function Pricing() {
               ))}
             </ul>
 
-            <Button
-              asChild
-              variant={plan.featured ? "glow" : "ghost-border"}
-              className="w-full"
-            >
+            <Button asChild variant={plan.featured ? "default" : "outline"} className="w-full">
               <Link to="/auth">Get Started</Link>
             </Button>
           </motion.div>

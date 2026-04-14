@@ -5,10 +5,10 @@ export default function Terms() {
     <div className="container pt-24 pb-16 max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-4xl font-display font-bold mb-8">Terms & Conditions</h1>
-        <div className="prose prose-invert prose-sm max-w-none space-y-6 text-muted-foreground">
+        <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
           <p>Last updated: April 2026</p>
           <h2 className="text-foreground font-display">1. Acceptance of Terms</h2>
-          <p>By accessing and using Orbit Assets, you agree to be bound by these terms and conditions.</p>
+          <p>By accessing and using Signify Vault, you agree to be bound by these terms and conditions.</p>
           <h2 className="text-foreground font-display">2. Digital Products</h2>
           <p>All digital products are delivered electronically. Once purchased, you receive a license to use the assets as specified in each product's license terms.</p>
           <h2 className="text-foreground font-display">3. Refund Policy</h2>
