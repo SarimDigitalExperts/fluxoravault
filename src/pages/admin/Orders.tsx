@@ -105,7 +105,7 @@ export default function AdminOrders() {
                         <div className="text-xs text-muted-foreground">{o.customer_email || ""}</div>
                       </TableCell>
                       <TableCell className="text-sm">{new Date(o.created_at).toLocaleDateString()}</TableCell>
-                      <TableCell className="text-sm font-medium">${Number(o.total).toFixed(2)}</TableCell>
+                      <TableCell className="text-sm font-medium">PKR {Number(o.total).toLocaleString()}</TableCell>
                       <TableCell>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${statusColor(o.status)}`}>{o.status}</span>
                       </TableCell>
