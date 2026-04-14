@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
@@ -8,54 +8,83 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Download, Shield, Zap, Star, Users, Package, Check,
   ChevronDown, Layers, Award, Clock, Globe, Headphones, Lock,
-  TrendingUp, Sparkles, Heart,
+  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search,
 } from "lucide-react";
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
 interface DBProduct {
-  id: string;
-  title: string;
-  description: string | null;
-  price: number;
-  original_price: number | null;
-  category: string;
-  category_slug: string;
-  image: string | null;
-  tags: string[] | null;
-  rating: number | null;
-  reviews_count: number | null;
-  slug: string;
+  id: string; title: string; description: string | null; price: number;
+  original_price: number | null; category: string; category_slug: string;
+  image: string | null; tags: string[] | null; rating: number | null;
+  reviews_count: number | null; slug: string;
 }
 
 interface DBCategory {
-  id: string;
-  name: string;
-  slug: string;
-  icon: string | null;
-  description: string | null;
+  id: string; name: string; slug: string; icon: string | null; description: string | null;
 }
 
 function toProduct(p: DBProduct): Product {
   return {
-    id: p.id,
-    title: p.title,
-    description: p.description || "",
-    price: p.price,
-    originalPrice: p.original_price || undefined,
-    category: p.category,
-    categorySlug: p.category_slug,
-    image: p.image || "/placeholder.svg",
-    tags: p.tags || [],
-    rating: p.rating || 0,
-    reviews: p.reviews_count || 0,
-    slug: p.slug,
+    id: p.id, title: p.title, description: p.description || "", price: p.price,
+    originalPrice: p.original_price || undefined, category: p.category,
+    categorySlug: p.category_slug, image: p.image || "/placeholder.svg",
+    tags: p.tags || [], rating: p.rating || 0, reviews: p.reviews_count || 0, slug: p.slug,
   };
 }
 
 const iconMap: Record<string, any> = {
   Layers, Package, Zap, Star, Globe, Shield, Award, Download, Sparkles, Heart,
 };
+
+function ProductCarousel({ products, title, subtitle }: { products: Product[]; title: string; subtitle: string }) {
+  const [scrollIndex, setScrollIndex] = useState(0);
+  const maxIndex = Math.max(0, products.length - 4);
+  const prev = () => setScrollIndex(i => Math.max(0, i - 1));
+  const next = () => setScrollIndex(i => Math.min(maxIndex, i + 1));
+
+  if (products.length === 0) return null;
+
+  return (
+    <section className="section-padding">
+      <div className="container">
+        <motion.div {...fadeUp} className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-display font-bold">{title}</h2>
+            <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={prev} disabled={scrollIndex === 0} className="h-9 w-9 rounded-full border border-border flex items-center justify-center hover:border-primary disabled:opacity-30 transition-colors">
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button onClick={next} disabled={scrollIndex >= maxIndex} className="h-9 w-9 rounded-full border border-border flex items-center justify-center hover:border-primary disabled:opacity-30 transition-colors">
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <Button variant="outline" asChild className="ml-2 hidden sm:inline-flex">
+              <Link to="/shop">View All <ArrowRight className="h-4 w-4 ml-1" /></Link>
+            </Button>
+          </div>
+        </motion.div>
+        <div className="overflow-hidden">
+          <div
+            className="flex gap-6 transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${scrollIndex * (100 / 4 + 1.5)}%)` }}
+          >
+            {products.map(p => (
+              <div key={p.id} className="min-w-[calc(25%-18px)] max-w-[calc(25%-18px)] flex-shrink-0 hidden lg:block first:block [&:nth-child(-n+2)]:block sm:[&:nth-child(-n+2)]:block lg:[&]:block">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Mobile: show grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:hidden mt-4">
+          {products.slice(0, 4).map(p => <ProductCard key={p.id} product={p} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -76,9 +105,11 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const featured = products.filter(p => p.tags.includes("Featured")).slice(0, 4);
-  const trending = products.filter(p => p.tags.includes("Hot")).slice(0, 4);
+  const featured = products.filter(p => p.tags.includes("Featured")).slice(0, 8);
+  const trending = products.filter(p => p.tags.includes("Hot") || p.tags.includes("Trending")).slice(0, 8);
+  const bestSellers = products.filter(p => p.tags.includes("Best Seller")).slice(0, 8);
   const latest = products.slice(0, 8);
+  const newProducts = products.filter(p => p.tags.includes("New")).slice(0, 8);
 
   const stats = [
     { label: "Products", value: `${products.length}+`, icon: Package },
@@ -108,40 +139,106 @@ export default function Home() {
     { name: "Sarah M.", role: "UI Designer", text: "The quality of templates from Signify Vault is outstanding. Saved me weeks of work!", rating: 5 },
     { name: "Ahmed K.", role: "Developer", text: "Best digital assets store I've used. Great support and instant delivery.", rating: 5 },
     { name: "Lisa T.", role: "Freelancer", text: "Premium quality at affordable prices. The lifetime access is a game changer.", rating: 5 },
+    { name: "Usman R.", role: "Agency Owner", text: "Our go-to marketplace for digital assets. The enterprise plan is worth every rupee.", rating: 5 },
+    { name: "Fatima S.", role: "Content Creator", text: "Amazing collection and super fast delivery. Highly recommend!", rating: 5 },
+    { name: "David L.", role: "Startup Founder", text: "Signify Vault helped us launch our product 3x faster. Incredible value.", rating: 5 },
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="section-padding pt-28 md:pt-36">
+      {/* Hero - Reference Image Style */}
+      <section className="relative overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24">
+        {/* Background decorative elements */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-secondary/5 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
+
         <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.div {...fadeUp}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-                <Sparkles className="h-4 w-4" /> Premium Digital Assets
-              </span>
-            </motion.div>
-            <motion.h1 {...fadeUp} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-display font-extrabold leading-tight mb-6">
-              Smart Digital Apps &{" "}
-              <span className="text-primary">Softwares</span>
-            </motion.h1>
-            <motion.p {...fadeUp} transition={{ delay: 0.2 }} className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-              Discover premium templates, UI kits, icons, fonts, illustrations and digital tools crafted for creators and developers.
-            </motion.p>
-            <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="flex flex-wrap gap-4 justify-center">
-              <Button asChild size="lg" className="text-base px-8">
-                <Link to="/shop">Browse Shop <ArrowRight className="h-4 w-4 ml-2" /></Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-base px-8">
-                <Link to="/pricing">View Plans</Link>
-              </Button>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left content */}
+            <div>
+              <motion.div {...fadeUp}>
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                  <Sparkles className="h-4 w-4" /> Premium Digital Assets Marketplace
+                </span>
+              </motion.div>
+              <motion.h1 {...fadeUp} transition={{ delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-tight mb-6">
+                {products.length > 0 ? `${products.length}+` : "2M+"} Curated{" "}
+                <span className="text-primary">Digital Products</span>
+              </motion.h1>
+              <motion.p {...fadeUp} transition={{ delay: 0.2 }} className="text-lg text-muted-foreground mb-8 max-w-lg">
+                Explore the best premium themes, plugins, templates, and digital assets available for sale. 
+                Our unique collection is hand-curated by experts.
+              </motion.p>
+
+              {/* Search bar */}
+              <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="relative max-w-lg mb-8">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search themes, plugins & more..."
+                  className="w-full h-14 pl-12 pr-14 rounded-full border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  onFocus={(e) => { e.target.blur(); window.location.href = '/shop'; }}
+                />
+                <Link to="/shop" className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </motion.div>
+
+              {/* Category icons row */}
+              <motion.div {...fadeUp} transition={{ delay: 0.4 }} className="flex flex-wrap gap-3">
+                {categories.slice(0, 6).map(cat => {
+                  const Icon = iconMap[cat.icon || ""] || Layers;
+                  return (
+                    <Link key={cat.id} to={`/shop?category=${cat.slug}`}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors text-xs font-medium">
+                      <Icon className="h-4 w-4 text-primary" />
+                      {cat.name}
+                    </Link>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* Right - Product showcase grid */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="hidden lg:block relative"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {products.slice(0, 4).map((p, i) => (
+                  <Link key={p.id} to={`/product/${p.slug}`}
+                    className={`group relative rounded-xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-lg transition-all duration-300 ${i === 0 ? 'row-span-2' : ''}`}
+                  >
+                    <div className={`overflow-hidden ${i === 0 ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
+                      <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                      <p className="text-white text-xs font-semibold truncate">{p.title}</p>
+                      <p className="text-white/80 text-[10px]">PKR {p.price.toLocaleString()}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* Floating badges */}
+              <div className="absolute -top-4 -right-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
+                <p className="text-2xl font-display font-bold text-primary">{products.length > 0 ? `${products.length}+` : '19K+'}</p>
+                <p className="text-xs text-muted-foreground">Products</p>
+              </div>
+              <div className="absolute bottom-16 -left-6 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
+                <p className="text-lg font-display font-bold text-secondary">50k+</p>
+                <p className="text-xs text-muted-foreground">Customers</p>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-12">
+      <section className="py-12 border-y border-border bg-muted/20">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((s, i) => (
@@ -156,7 +253,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="section-padding bg-muted/30">
+      <section className="section-padding">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Why Choose <span className="text-primary">Signify Vault</span></h2>
@@ -178,7 +275,7 @@ export default function Home() {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <section className="section-padding">
+        <section className="section-padding bg-muted/30">
           <div className="container">
             <motion.div {...fadeUp} className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Browse by Category</h2>
@@ -189,10 +286,8 @@ export default function Home() {
                 const Icon = iconMap[cat.icon || ""] || Layers;
                 return (
                   <motion.div key={cat.id} {...fadeUp} transition={{ delay: i * 0.05 }}>
-                    <Link
-                      to={`/shop?category=${cat.slug}`}
-                      className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all text-center"
-                    >
+                    <Link to={`/shop?category=${cat.slug}`}
+                      className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all text-center">
                       <Icon className="h-8 w-8 text-primary mb-3" />
                       <span className="font-display font-semibold text-sm">{cat.name}</span>
                       {cat.description && <span className="text-xs text-muted-foreground mt-1">{cat.description}</span>}
@@ -205,68 +300,23 @@ export default function Home() {
         </section>
       )}
 
-      {/* Featured Products */}
-      {featured.length > 0 && (
-        <section className="section-padding bg-muted/30">
-          <div className="container">
-            <motion.div {...fadeUp} className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-display font-bold">Featured Products</h2>
-                <p className="text-muted-foreground text-sm mt-1">Hand-picked premium assets</p>
-              </div>
-              <Button variant="outline" asChild>
-                <Link to="/shop">View All <ArrowRight className="h-4 w-4 ml-1" /></Link>
-              </Button>
-            </motion.div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featured.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Product Carousels */}
+      <ProductCarousel products={featured} title="Featured Products" subtitle="Hand-picked premium assets" />
+      
+      <div className="bg-muted/30">
+        <ProductCarousel products={trending} title="Trending Now" subtitle="Most popular this week" />
+      </div>
 
-      {/* Trending Products */}
-      {trending.length > 0 && (
-        <section className="section-padding">
-          <div className="container">
-            <motion.div {...fadeUp} className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-display font-bold">Trending Now</h2>
-                <p className="text-muted-foreground text-sm mt-1">Most popular this week</p>
-              </div>
-              <Button variant="outline" asChild>
-                <Link to="/shop">View All <ArrowRight className="h-4 w-4 ml-1" /></Link>
-              </Button>
-            </motion.div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {trending.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
+      <ProductCarousel products={bestSellers} title="Best Sellers" subtitle="Top-rated by our customers" />
 
-      {/* Latest Products */}
-      {latest.length > 0 && (
-        <section className="section-padding bg-muted/30">
-          <div className="container">
-            <motion.div {...fadeUp} className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-display font-bold">Latest Additions</h2>
-                <p className="text-muted-foreground text-sm mt-1">Fresh assets just added</p>
-              </div>
-              <Button variant="outline" asChild>
-                <Link to="/shop">View All <ArrowRight className="h-4 w-4 ml-1" /></Link>
-              </Button>
-            </motion.div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {latest.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </section>
-      )}
+      <div className="bg-muted/30">
+        <ProductCarousel products={newProducts} title="New Arrivals" subtitle="Fresh assets just added" />
+      </div>
+
+      <ProductCarousel products={latest} title="Latest Products" subtitle="Recently added to our collection" />
 
       {/* How It Works */}
-      <section className="section-padding">
+      <section className="section-padding bg-muted/30">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">How It Works</h2>
@@ -291,13 +341,13 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="section-padding bg-muted/30">
+      <section className="section-padding">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">What Our Customers Say</h2>
             <p className="text-muted-foreground">Trusted by thousands of creators worldwide</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((t, i) => (
               <motion.div key={t.name} {...fadeUp} transition={{ delay: i * 0.1 }} className="p-6 rounded-xl border border-border bg-card">
                 <div className="flex gap-0.5 mb-4">
@@ -317,7 +367,7 @@ export default function Home() {
       </section>
 
       {/* Pricing Preview */}
-      <section className="section-padding">
+      <section className="section-padding bg-muted/30">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Simple, Transparent Pricing</h2>
@@ -325,9 +375,9 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { name: "Starter", price: "$9", desc: "5 downloads/month", features: ["Free assets", "Basic formats", "Email support"] },
-              { name: "Pro", price: "$29", desc: "50 downloads/month", features: ["All assets", "Premium formats", "Priority support", "Commercial license"], popular: true },
-              { name: "Enterprise", price: "$79", desc: "Unlimited downloads", features: ["Everything in Pro", "Source files", "API access", "Team tools"] },
+              { name: "Starter", price: "PKR 999", desc: "5 downloads/month", features: ["Free assets", "Basic formats", "Email support"] },
+              { name: "Pro", price: "PKR 2,999", desc: "50 downloads/month", features: ["All assets", "Premium formats", "Priority support", "Commercial license"], popular: true },
+              { name: "Enterprise", price: "PKR 7,999", desc: "Unlimited downloads", features: ["Everything in Pro", "Source files", "API access", "Team tools"] },
             ].map((plan, i) => (
               <motion.div key={plan.name} {...fadeUp} transition={{ delay: i * 0.1 }}
                 className={`p-7 rounded-xl border bg-card flex flex-col ${plan.popular ? "border-primary shadow-lg" : "border-border"}`}
@@ -355,7 +405,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="section-padding bg-muted/30">
+      <section className="section-padding">
         <div className="container max-w-3xl">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Frequently Asked Questions</h2>
