@@ -31,16 +31,36 @@ export default function AdminOrders() {
     if (status === "completed") {
       const order = orders.find((o) => o.id === id);
       if (order) {
-        const { data: orderItems } = await supabase.from("order_items").select("*").eq("order_id", id);
+        const { data: orderItems } = await supabase.from("order_items").select("*, products(delivery_type, file_url, download_link, max_downloads_per_user)").eq("order_id", id);
         if (orderItems) {
           for (const item of orderItems) {
+            const p = (item as any).products;
+            const deliveryType = p?.delivery_type || "file";
+
+            // Insert download record
             await supabase.from("downloads").insert({
               user_id: order.user_id,
               product_id: item.product_id,
               order_id: id,
-              download_url: null,
-              max_downloads: 5,
+              download_url: deliveryType === "link" ? p?.download_link : p?.file_url,
+              max_downloads: p?.max_downloads_per_user || 5,
             });
+
+            // If license key, assign one unused key
+            if (deliveryType === "license_key") {
+              const { data: availableKey } = await supabase
+                .from("license_keys")
+                .select("id")
+                .eq("product_id", item.product_id)
+                .eq("is_used", false)
+                .limit(1)
+                .maybeSingle();
+              if (availableKey) {
+                await supabase.from("license_keys").update({
+                  is_used: true, assigned_to: order.user_id, assigned_order_id: id,
+                }).eq("id", availableKey.id);
+              }
+            }
           }
         }
       }

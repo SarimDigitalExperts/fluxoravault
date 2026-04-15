@@ -242,6 +242,47 @@ export type Database = {
         }
         Relationships: []
       }
+      license_keys: {
+        Row: {
+          assigned_order_id: string | null
+          assigned_to: string | null
+          created_at: string
+          id: string
+          is_used: boolean
+          key_value: string
+          product_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_order_id?: string | null
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          is_used?: boolean
+          key_value: string
+          product_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_order_id?: string | null
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          is_used?: boolean
+          key_value?: string
+          product_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_keys_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
@@ -394,52 +435,100 @@ export type Database = {
           category: string
           category_slug: string
           created_at: string
+          delivery_type: string
           description: string | null
+          download_expiry_days: number | null
+          download_link: string | null
+          file_size: string | null
+          file_url: string | null
           id: string
           image: string | null
+          is_featured: boolean
           is_published: boolean | null
+          is_trending: boolean
+          max_downloads_per_user: number
+          meta_description: string | null
+          meta_title: string | null
           original_price: number | null
+          os_compatibility: string | null
           price: number
+          qr_image_url: string | null
+          qr_target_url: string | null
           rating: number | null
+          requires_approval: boolean
           reviews_count: number | null
           slug: string
+          status: string
           tags: string[] | null
           title: string
           updated_at: string
+          version: string | null
         }
         Insert: {
           category: string
           category_slug: string
           created_at?: string
+          delivery_type?: string
           description?: string | null
+          download_expiry_days?: number | null
+          download_link?: string | null
+          file_size?: string | null
+          file_url?: string | null
           id?: string
           image?: string | null
+          is_featured?: boolean
           is_published?: boolean | null
+          is_trending?: boolean
+          max_downloads_per_user?: number
+          meta_description?: string | null
+          meta_title?: string | null
           original_price?: number | null
+          os_compatibility?: string | null
           price?: number
+          qr_image_url?: string | null
+          qr_target_url?: string | null
           rating?: number | null
+          requires_approval?: boolean
           reviews_count?: number | null
           slug: string
+          status?: string
           tags?: string[] | null
           title: string
           updated_at?: string
+          version?: string | null
         }
         Update: {
           category?: string
           category_slug?: string
           created_at?: string
+          delivery_type?: string
           description?: string | null
+          download_expiry_days?: number | null
+          download_link?: string | null
+          file_size?: string | null
+          file_url?: string | null
           id?: string
           image?: string | null
+          is_featured?: boolean
           is_published?: boolean | null
+          is_trending?: boolean
+          max_downloads_per_user?: number
+          meta_description?: string | null
+          meta_title?: string | null
           original_price?: number | null
+          os_compatibility?: string | null
           price?: number
+          qr_image_url?: string | null
+          qr_target_url?: string | null
           rating?: number | null
+          requires_approval?: boolean
           reviews_count?: number | null
           slug?: string
+          status?: string
           tags?: string[] | null
           title?: string
           updated_at?: string
+          version?: string | null
         }
         Relationships: []
       }
