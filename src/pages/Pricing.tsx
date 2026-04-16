@@ -4,76 +4,30 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useState } from "react";
 
 const plans = [
   {
-    name: "Starter", price: 999, period: "/month",
+    name: "Starter", price: 999, period: "/month", planKey: "starter",
     description: "Perfect for beginners exploring digital assets",
-    icon: Zap, featured: false, planKey: "starter",
+    icon: Zap, featured: false,
     features: ["5 downloads per month", "Access to free assets", "Basic file formats", "Email support", "Personal use license"],
   },
   {
-    name: "Pro", price: 2999, period: "/month",
+    name: "Pro", price: 2999, period: "/month", planKey: "pro",
     description: "Ideal for professionals and freelancers",
-    icon: Crown, featured: true, planKey: "pro",
+    icon: Crown, featured: true,
     features: ["50 downloads per month", "Access to all assets", "Premium file formats", "Priority support", "Commercial license", "Early access to new drops", "Custom requests"],
   },
   {
-    name: "Enterprise", price: 7999, period: "/month",
+    name: "Enterprise", price: 7999, period: "/month", planKey: "enterprise",
     description: "For teams and agencies needing unlimited access",
-    icon: Rocket, featured: false, planKey: "enterprise",
+    icon: Rocket, featured: false,
     features: ["Unlimited downloads", "Access to all assets", "All file formats + source files", "Dedicated account manager", "Extended commercial license", "Team collaboration tools", "API access", "Custom branding options"],
   },
 ];
 
 export default function Pricing() {
   const { user } = useAuth();
-  const [subscribing, setSubscribing] = useState<string | null>(null);
-
-  const handleSubscribe = async (planKey: string) => {
-    if (!user) {
-      toast.error("Please sign in first");
-      return;
-    }
-    setSubscribing(planKey);
-    try {
-      // Check if user already has an active subscription
-      const { data: existing } = await supabase
-        .from("subscriptions")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("status", "active")
-        .maybeSingle();
-
-      if (existing) {
-        // Update existing subscription
-        const { error } = await supabase
-          .from("subscriptions")
-          .update({ plan: planKey, updated_at: new Date().toISOString() })
-          .eq("id", existing.id);
-        if (error) throw error;
-        toast.success(`Plan updated to ${planKey}!`);
-      } else {
-        // Create new subscription
-        const { error } = await supabase.from("subscriptions").insert({
-          user_id: user.id,
-          plan: planKey,
-          status: "active",
-          starts_at: new Date().toISOString(),
-          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        });
-        if (error) throw error;
-        toast.success(`Subscribed to ${planKey} plan!`);
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to subscribe");
-    } finally {
-      setSubscribing(null);
-    }
-  };
 
   return (
     <div className="container pt-24 pb-20">
@@ -123,15 +77,11 @@ export default function Pricing() {
             <Button
               variant={plan.featured ? "default" : "outline"}
               className="w-full"
-              disabled={subscribing === plan.planKey}
-              onClick={() => user ? handleSubscribe(plan.planKey) : undefined}
-              asChild={!user}
+              asChild
             >
-              {user ? (
-                subscribing === plan.planKey ? "Subscribing..." : "Get Started"
-              ) : (
-                <Link to="/auth">Get Started</Link>
-              )}
+              <Link to={user ? `/subscribe/${plan.planKey}` : "/auth"}>
+                Get Started
+              </Link>
             </Button>
           </motion.div>
         ))}
