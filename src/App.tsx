@@ -21,6 +21,7 @@ import Privacy from "@/pages/Privacy";
 import Checkout from "@/pages/Checkout";
 import Auth from "@/pages/Auth";
 import Pricing from "@/pages/Pricing";
+import SubscriptionCheckout from "@/pages/SubscriptionCheckout";
 import AccountLayout from "@/pages/account/AccountLayout";
 import AccountDashboard from "@/pages/account/AccountDashboard";
 import AccountOrders from "@/pages/account/AccountOrders";
@@ -28,6 +29,8 @@ import AccountWishlist from "@/pages/account/AccountWishlist";
 import AccountDownloads from "@/pages/account/AccountDownloads";
 import AccountBilling from "@/pages/account/AccountBilling";
 import AccountSettings from "@/pages/account/AccountSettings";
+import AccountSubscriptions from "@/pages/account/AccountSubscriptions";
+import AccountSupport from "@/pages/account/AccountSupport";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import Dashboard from "@/pages/admin/Dashboard";
 import AdminProducts from "@/pages/admin/Products";
@@ -40,6 +43,8 @@ import AdminPaymentMethods from "@/pages/admin/PaymentMethods";
 import AdminPricingPlans from "@/pages/admin/PricingPlans";
 import AdminContactMessages from "@/pages/admin/ContactMessages";
 import AdminAnalytics from "@/pages/admin/Analytics";
+import AdminUsers from "@/pages/admin/Users";
+import AdminDigitalSigns from "@/pages/admin/DigitalSigns";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,46 +59,60 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <PromoPopup />
-              <Navbar />
-              <main className="relative pt-6">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/product/:slug" element={<ProductDetail />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/wishlist" element={<Wishlist />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/pricing" element={<Pricing />} />
-                  <Route path="/account" element={<AccountLayout />}>
-                    <Route index element={<AccountDashboard />} />
-                    <Route path="orders" element={<AccountOrders />} />
-                    <Route path="wishlist" element={<AccountWishlist />} />
-                    <Route path="downloads" element={<AccountDownloads />} />
-                    <Route path="billing" element={<AccountBilling />} />
-                    <Route path="settings" element={<AccountSettings />} />
-                  </Route>
-                  <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="categories" element={<AdminCategories />} />
-                    <Route path="coupons" element={<AdminCoupons />} />
-                    <Route path="banners" element={<AdminBanners />} />
-                    <Route path="blogs" element={<AdminBlogs />} />
-                    <Route path="payment-methods" element={<AdminPaymentMethods />} />
-                    <Route path="pricing-plans" element={<AdminPricingPlans />} />
-                    <Route path="messages" element={<AdminContactMessages />} />
-                    <Route path="analytics" element={<AdminAnalytics />} />
-                  </Route>
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
+              <Routes>
+                {/* Admin routes - no navbar/footer */}
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="orders" element={<AdminOrders />} />
+                  <Route path="categories" element={<AdminCategories />} />
+                  <Route path="coupons" element={<AdminCoupons />} />
+                  <Route path="banners" element={<AdminBanners />} />
+                  <Route path="blogs" element={<AdminBlogs />} />
+                  <Route path="payment-methods" element={<AdminPaymentMethods />} />
+                  <Route path="pricing-plans" element={<AdminPricingPlans />} />
+                  <Route path="messages" element={<AdminContactMessages />} />
+                  <Route path="analytics" element={<AdminAnalytics />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="digital-signs" element={<AdminDigitalSigns />} />
+                </Route>
+
+                {/* Public routes with navbar/footer */}
+                <Route path="*" element={
+                  <>
+                    <Navbar />
+                    <main className="relative pt-6">
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/shop" element={<Shop />} />
+                        <Route path="/product/:slug" element={<ProductDetail />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/wishlist" element={<Wishlist />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/terms" element={<Terms />} />
+                        <Route path="/privacy" element={<Privacy />} />
+                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/auth" element={<Auth />} />
+                        <Route path="/pricing" element={<Pricing />} />
+                        <Route path="/subscribe/:plan" element={<SubscriptionCheckout />} />
+                        <Route path="/account" element={<AccountLayout />}>
+                          <Route index element={<AccountDashboard />} />
+                          <Route path="orders" element={<AccountOrders />} />
+                          <Route path="wishlist" element={<AccountWishlist />} />
+                          <Route path="downloads" element={<AccountDownloads />} />
+                          <Route path="billing" element={<AccountBilling />} />
+                          <Route path="settings" element={<AccountSettings />} />
+                          <Route path="subscriptions" element={<AccountSubscriptions />} />
+                          <Route path="support" element={<AccountSupport />} />
+                        </Route>
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </main>
+                    <Footer />
+                  </>
+                } />
+              </Routes>
             </BrowserRouter>
           </WishlistProvider>
         </CartProvider>
