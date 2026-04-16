@@ -559,6 +559,42 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          comment: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          product_id: string
+          rating: number
+          reviewer_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          product_id: string
+          rating?: number
+          reviewer_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          product_id?: string
+          rating?: number
+          reviewer_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string
