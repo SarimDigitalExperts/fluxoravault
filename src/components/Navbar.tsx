@@ -5,6 +5,7 @@ import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -45,6 +46,7 @@ export default function Navbar() {
               <Search className="h-5 w-5" />
             </Button>
           </Link>
+          <LanguageSwitcher />
           <Link to="/wishlist" className="relative">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Heart className="h-5 w-5" />
