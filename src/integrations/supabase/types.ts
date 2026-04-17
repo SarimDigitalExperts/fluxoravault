@@ -164,46 +164,90 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_redemptions: {
+        Row: {
+          coupon_id: string
+          created_at: string
+          id: string
+          order_id: string | null
+          user_id: string
+        }
+        Insert: {
+          coupon_id: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          user_id: string
+        }
+        Update: {
+          coupon_id?: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupon_redemptions_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coupons: {
         Row: {
           applies_to: string
+          category_slug: string | null
           code: string
           created_at: string
           discount_type: string
           discount_value: number
           expires_at: string | null
+          first_order_only: boolean
           id: string
           is_active: boolean
           max_uses: number | null
           min_order_amount: number | null
+          per_user_limit: number | null
+          stackable: boolean
           updated_at: string
           used_count: number
         }
         Insert: {
           applies_to?: string
+          category_slug?: string | null
           code: string
           created_at?: string
           discount_type?: string
           discount_value?: number
           expires_at?: string | null
+          first_order_only?: boolean
           id?: string
           is_active?: boolean
           max_uses?: number | null
           min_order_amount?: number | null
+          per_user_limit?: number | null
+          stackable?: boolean
           updated_at?: string
           used_count?: number
         }
         Update: {
           applies_to?: string
+          category_slug?: string | null
           code?: string
           created_at?: string
           discount_type?: string
           discount_value?: number
           expires_at?: string | null
+          first_order_only?: boolean
           id?: string
           is_active?: boolean
           max_uses?: number | null
           min_order_amount?: number | null
+          per_user_limit?: number | null
+          stackable?: boolean
           updated_at?: string
           used_count?: number
         }
@@ -471,6 +515,8 @@ export type Database = {
           title: string
           updated_at: string
           version: string | null
+          version_notes: string | null
+          version_updated_at: string | null
         }
         Insert: {
           category: string
@@ -509,6 +555,8 @@ export type Database = {
           title: string
           updated_at?: string
           version?: string | null
+          version_notes?: string | null
+          version_updated_at?: string | null
         }
         Update: {
           category?: string
@@ -547,6 +595,8 @@ export type Database = {
           title?: string
           updated_at?: string
           version?: string | null
+          version_notes?: string | null
+          version_updated_at?: string | null
         }
         Relationships: []
       }

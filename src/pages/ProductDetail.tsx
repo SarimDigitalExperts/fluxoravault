@@ -107,13 +107,39 @@ export default function ProductDetail() {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Image */}
+        {/* Image / Demo */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
           <div className="relative rounded-2xl overflow-hidden aspect-[4/3] border border-border bg-muted/20">
             <img src={product.image || "/placeholder.svg"} alt={product.title} className="w-full h-full object-cover" />
             {discount && <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">-{discount}%</span>}
             {product.is_featured && <Badge className="absolute top-4 right-4 bg-secondary text-secondary-foreground">Featured</Badge>}
           </div>
+
+          {/* Demo / Preview Video */}
+          {product.preview_video_url && (
+            <div className="rounded-2xl overflow-hidden border border-border bg-black aspect-video">
+              {(() => {
+                const url = product.preview_video_url as string;
+                const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+                const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+                if (ytMatch) {
+                  return <iframe src={`https://www.youtube.com/embed/${ytMatch[1]}`} className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Demo video" />;
+                }
+                if (vimeoMatch) {
+                  return <iframe src={`https://player.vimeo.com/video/${vimeoMatch[1]}`} className="w-full h-full" allow="autoplay; fullscreen" allowFullScreen title="Demo video" />;
+                }
+                return <video src={url} controls className="w-full h-full" />;
+              })()}
+            </div>
+          )}
+
+          {product.preview_demo_url && (
+            <a href={product.preview_demo_url} target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/5 text-primary py-3 text-sm font-semibold hover:bg-primary/10 transition-colors">
+              <Monitor className="h-4 w-4" /> View Live Demo
+            </a>
+          )}
+
           {discount && (
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -182,9 +208,16 @@ export default function ProductDetail() {
               <h3 className="text-sm font-semibold flex items-center gap-2"><Layers className="h-4 w-4 text-primary" /> Product Details</h3>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 {product.version && <div><span className="text-muted-foreground">Version:</span> {product.version}</div>}
+                {product.version_updated_at && <div><span className="text-muted-foreground">Updated:</span> {new Date(product.version_updated_at).toLocaleDateString()}</div>}
                 {product.file_size && <div><span className="text-muted-foreground">File Size:</span> {product.file_size}</div>}
                 {product.delivery_type && <div><span className="text-muted-foreground">Delivery:</span> {product.delivery_type}</div>}
               </div>
+              {product.version_notes && (
+                <div className="mt-2 pt-2 border-t border-border">
+                  <p className="text-xs font-semibold text-primary mb-1">What's new in {product.version}:</p>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.version_notes}</p>
+                </div>
+              )}
             </div>
           )}
         </motion.div>

@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Package, Download, Heart, Crown, ShoppingCart, ArrowRight } from "lucide-react";
+import { Package, Download, Heart, Crown, ShoppingCart, ArrowRight, Bell, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +46,35 @@ export default function AccountDashboard() {
     enabled: !!user,
   });
 
+  // Product update notifications: products purchased by user, with version updated AFTER their last order
+  const { data: updateNotices = [] } = useQuery({
+    queryKey: ["product-updates", user?.id],
+    queryFn: async () => {
+      const { data: orders } = await supabase.from("orders").select("id, created_at").eq("user_id", user!.id).eq("status", "completed");
+      if (!orders || orders.length === 0) return [];
+      const orderIds = orders.map(o => o.id);
+      const { data: items } = await supabase.from("order_items").select("product_id, order_id").in("order_id", orderIds);
+      if (!items || items.length === 0) return [];
+      const orderDateMap = new Map(orders.map(o => [o.id, new Date(o.created_at).getTime()]));
+      const productEarliest = new Map<string, number>();
+      items.forEach(it => {
+        const t = orderDateMap.get(it.order_id) ?? 0;
+        const existing = productEarliest.get(it.product_id) ?? Infinity;
+        if (t < existing) productEarliest.set(it.product_id, t);
+      });
+      const productIds = Array.from(productEarliest.keys());
+      const { data: products } = await supabase
+        .from("products")
+        .select("id, title, slug, version, version_notes, version_updated_at")
+        .in("id", productIds)
+        .not("version_updated_at", "is", null);
+      return (products || [])
+        .filter(p => p.version_updated_at && new Date(p.version_updated_at).getTime() > (productEarliest.get(p.id) ?? 0))
+        .slice(0, 5);
+    },
+    enabled: !!user,
+  });
+
   const stats = [
     { label: "Total Purchases", value: ordersCount, icon: Package, to: "/account/orders", color: "text-primary bg-primary/10" },
     { label: "Downloads", value: downloadsCount, icon: Download, to: "/account/downloads", color: "text-secondary bg-secondary/10" },
@@ -82,6 +111,32 @@ export default function AccountDashboard() {
         <Button variant="outline" size="sm" asChild><Link to="/pricing" className="gap-2"><Crown className="h-4 w-4" /> Upgrade Plan</Link></Button>
         <Button variant="outline" size="sm" asChild><Link to="/account/downloads" className="gap-2"><Download className="h-4 w-4" /> View Downloads</Link></Button>
       </div>
+
+      {/* Product Update Notifications */}
+      {updateNotices.length > 0 && (
+        <div className="mb-8 rounded-xl border border-primary/30 bg-primary/5 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Bell className="h-4 w-4 text-primary" />
+            <h3 className="font-semibold text-sm">Updates Available</h3>
+            <Badge variant="secondary" className="text-[10px]">{updateNotices.length}</Badge>
+          </div>
+          <div className="space-y-2">
+            {updateNotices.map((p: any) => (
+              <Link key={p.id} to={`/product/${p.slug}`} className="flex items-start justify-between gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <Sparkles className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <p className="text-sm font-semibold truncate">{p.title}</p>
+                    {p.version && <Badge variant="outline" className="text-[10px] py-0">v{p.version}</Badge>}
+                  </div>
+                  {p.version_notes && <p className="text-xs text-muted-foreground line-clamp-2">{p.version_notes}</p>}
+                </div>
+                <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Recent Orders */}
       {recentOrders.length > 0 && (

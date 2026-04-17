@@ -18,7 +18,11 @@ export default function AdminCoupons() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
-  const [form, setForm] = useState({ code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0, max_uses: "", expires_at: "", is_active: true });
+  const [form, setForm] = useState({
+    code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0,
+    max_uses: "", expires_at: "", is_active: true,
+    per_user_limit: "", category_slug: "", first_order_only: false, stackable: false,
+  });
 
   const fetchData = async () => {
     setLoading(true);
@@ -28,11 +32,28 @@ export default function AdminCoupons() {
   };
   useEffect(() => { fetchData(); }, []);
 
-  const resetForm = () => { setForm({ code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0, max_uses: "", expires_at: "", is_active: true }); setEditing(null); };
+  const resetForm = () => {
+    setForm({
+      code: "", discount_type: "percentage", discount_value: 0, min_order_amount: 0,
+      max_uses: "", expires_at: "", is_active: true,
+      per_user_limit: "", category_slug: "", first_order_only: false, stackable: false,
+    });
+    setEditing(null);
+  };
 
   const handleSave = async () => {
     if (!form.code) { toast.error("Code required"); return; }
-    const payload: any = { code: form.code.toUpperCase(), discount_type: form.discount_type, discount_value: form.discount_value, min_order_amount: form.min_order_amount, is_active: form.is_active, max_uses: form.max_uses ? Number(form.max_uses) : null, expires_at: form.expires_at || null };
+    const payload: any = {
+      code: form.code.toUpperCase(), discount_type: form.discount_type,
+      discount_value: form.discount_value, min_order_amount: form.min_order_amount,
+      is_active: form.is_active,
+      max_uses: form.max_uses ? Number(form.max_uses) : null,
+      expires_at: form.expires_at || null,
+      per_user_limit: form.per_user_limit ? Number(form.per_user_limit) : null,
+      category_slug: form.category_slug || null,
+      first_order_only: form.first_order_only,
+      stackable: form.stackable,
+    };
     if (editing) {
       const { error } = await supabase.from("coupons").update(payload).eq("id", editing.id);
       if (error) { toast.error(error.message); return; }
@@ -49,7 +70,17 @@ export default function AdminCoupons() {
 
   const openEdit = (c: any) => {
     setEditing(c);
-    setForm({ code: c.code, discount_type: c.discount_type, discount_value: Number(c.discount_value), min_order_amount: Number(c.min_order_amount || 0), max_uses: c.max_uses?.toString() || "", expires_at: c.expires_at ? c.expires_at.split("T")[0] : "", is_active: c.is_active });
+    setForm({
+      code: c.code, discount_type: c.discount_type, discount_value: Number(c.discount_value),
+      min_order_amount: Number(c.min_order_amount || 0),
+      max_uses: c.max_uses?.toString() || "",
+      expires_at: c.expires_at ? c.expires_at.split("T")[0] : "",
+      is_active: c.is_active,
+      per_user_limit: c.per_user_limit?.toString() || "",
+      category_slug: c.category_slug || "",
+      first_order_only: !!c.first_order_only,
+      stackable: !!c.stackable,
+    });
     setOpen(true);
   };
 
@@ -92,6 +123,22 @@ export default function AdminCoupons() {
                 <div><Label>Max Uses</Label><Input type="number" value={form.max_uses} onChange={(e) => setForm({ ...form, max_uses: e.target.value })} placeholder="Unlimited" className="mt-1" /></div>
               </div>
               <div><Label>Expires At</Label><Input type="date" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} className="mt-1" /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Per-User Limit</Label><Input type="number" value={form.per_user_limit} onChange={(e) => setForm({ ...form, per_user_limit: e.target.value })} placeholder="Unlimited" className="mt-1" /></div>
+                <div><Label>Category Slug</Label><Input value={form.category_slug} onChange={(e) => setForm({ ...form, category_slug: e.target.value })} placeholder="All categories" className="mt-1" /></div>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">First-Order Only</p><p className="text-xs text-muted-foreground">Restricts to users with no prior orders</p></div>
+                <Checkbox checked={form.first_order_only} onCheckedChange={(v) => setForm({ ...form, first_order_only: !!v })} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">Stackable</p><p className="text-xs text-muted-foreground">Can be combined with other coupons</p></div>
+                <Checkbox checked={form.stackable} onCheckedChange={(v) => setForm({ ...form, stackable: !!v })} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">Active</p></div>
+                <Checkbox checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: !!v })} />
+              </div>
               <Button onClick={handleSave} className="w-full">{editing ? "Update" : "Create"}</Button>
             </div>
           </DialogContent>
