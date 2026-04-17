@@ -4,12 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { FileText, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import AdminToolbar from "@/components/admin/AdminToolbar";
+import { useAdminTable } from "@/hooks/useAdminTable";
 
 export default function AdminBlogs() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -18,8 +21,13 @@ export default function AdminBlogs() {
   const [editing, setEditing] = useState<any>(null);
   const [form, setForm] = useState({ title: "", slug: "", excerpt: "", content: "", cover_image: "", is_published: false, tags: "" });
 
-  const fetch = async () => { setLoading(true); const { data } = await supabase.from("blogs").select("*").order("created_at", { ascending: false }); setBlogs(data || []); setLoading(false); };
-  useEffect(() => { fetch(); }, []);
+  const fetchData = async () => {
+    setLoading(true);
+    const { data } = await supabase.from("blogs").select("*").order("created_at", { ascending: false });
+    setBlogs(data || []);
+    setLoading(false);
+  };
+  useEffect(() => { fetchData(); }, []);
 
   const resetForm = () => { setForm({ title: "", slug: "", excerpt: "", content: "", cover_image: "", is_published: false, tags: "" }); setEditing(null); };
 
@@ -35,20 +43,32 @@ export default function AdminBlogs() {
       if (error) { toast.error(error.message); return; }
       toast.success("Blog created");
     }
-    setOpen(false); resetForm(); fetch();
+    setOpen(false); resetForm(); fetchData();
   };
 
-  const handleDelete = async (id: string) => { await supabase.from("blogs").delete().eq("id", id); toast.success("Deleted"); fetch(); };
+  const handleDelete = async (id: string) => { await supabase.from("blogs").delete().eq("id", id); toast.success("Deleted"); fetchData(); };
 
   const openEdit = (b: any) => { setEditing(b); setForm({ title: b.title, slug: b.slug, excerpt: b.excerpt || "", content: b.content, cover_image: b.cover_image || "", is_published: b.is_published, tags: b.tags?.join(", ") || "" }); setOpen(true); };
 
+  const tbl = useAdminTable<any>({
+    table: "blogs", rows: blogs, refresh: fetchData,
+    searchKeys: ["title", "slug", "excerpt", "tags"],
+    exportColumns: ["title","slug","excerpt","content","cover_image","is_published","tags"],
+    importPrepare: (r) => (r.title && r.slug) ? {
+      title: r.title, slug: r.slug, excerpt: r.excerpt || null, content: r.content || "",
+      cover_image: r.cover_image || null,
+      is_published: r.is_published === false ? false : true,
+      tags: typeof r.tags === "string" ? r.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
+    } : null,
+  });
+
   return (
-    <Card className="glass border-border/50">
+    <Card className="border-border">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg flex items-center gap-2"><FileText className="h-5 w-5 text-primary" /> Blog Posts ({blogs.length})</CardTitle>
         <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
           <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add</Button></DialogTrigger>
-          <DialogContent className="glass max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Edit" : "New"} Blog Post</DialogTitle></DialogHeader>
             <div className="space-y-3">
               <div><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="mt-1" /></div>
@@ -64,14 +84,19 @@ export default function AdminBlogs() {
         </Dialog>
       </CardHeader>
       <CardContent>
-        {loading ? <p className="text-sm text-muted-foreground">Loading...</p> : blogs.length === 0 ? <p className="text-sm text-muted-foreground">No blogs yet.</p> : (
+        <AdminToolbar searchQuery={tbl.search} onSearchChange={tbl.setSearch} searchPlaceholder="Search blogs..."
+          selectedCount={tbl.selected.size} onBulkDelete={tbl.bulkDelete} onExport={tbl.handleExport} onImport={tbl.handleImport} />
+        {loading ? <p className="text-sm text-muted-foreground">Loading...</p> : tbl.filtered.length === 0 ? <p className="text-sm text-muted-foreground">No blogs found.</p> : (
           <Table>
-            <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Date</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+            <TableHeader><TableRow>
+              <TableHead className="w-10"><Checkbox checked={tbl.allSelected} onCheckedChange={tbl.toggleAll} /></TableHead>
+              <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Date</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
             <TableBody>
-              {blogs.map((b) => (
-                <TableRow key={b.id}>
+              {tbl.filtered.map((b) => (
+                <TableRow key={b.id} data-state={tbl.selected.has(b.id) ? "selected" : undefined}>
+                  <TableCell><Checkbox checked={tbl.selected.has(b.id)} onCheckedChange={() => tbl.toggleOne(b.id)} /></TableCell>
                   <TableCell className="font-medium">{b.title}</TableCell>
-                  <TableCell><span className={`text-xs px-2 py-0.5 rounded-full ${b.is_published ? "bg-green-500/10 text-green-400" : "bg-yellow-500/10 text-yellow-400"}`}>{b.is_published ? "Published" : "Draft"}</span></TableCell>
+                  <TableCell><span className={`text-xs px-2 py-0.5 rounded-full ${b.is_published ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>{b.is_published ? "Published" : "Draft"}</span></TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(b.created_at).toLocaleDateString()}</TableCell>
                   <TableCell className="text-right space-x-1">
                     <Button size="icon" variant="ghost" onClick={() => openEdit(b)}><Pencil className="h-4 w-4" /></Button>
