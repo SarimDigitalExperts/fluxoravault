@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import AdminToolbar from "@/components/admin/AdminToolbar";
+import { useAdminTable } from "@/hooks/useAdminTable";
 
 interface ProductForm {
   title: string; slug: string; description: string; price: number;
