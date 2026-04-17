@@ -6,24 +6,26 @@ import { useWishlist } from "@/hooks/useWishlist";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/hooks/useLanguage";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "Shop", to: "/shop" },
-  { label: "Pricing", to: "/pricing" },
-  { label: "Blog", to: "/blog" },
-  { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
-];
 
 export default function Navbar() {
   const { itemCount } = useCart();
   const { items: wishlistItems } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { label: t("home"), to: "/" },
+    { label: t("shop"), to: "/shop" },
+    { label: t("pricing"), to: "/pricing" },
+    { label: t("blog"), to: "/blog" },
+    { label: t("about"), to: "/about" },
+    { label: t("contact"), to: "/contact" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -82,18 +84,18 @@ export default function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/account" className="flex items-center gap-2">
-                    <User className="h-4 w-4" /> My Account
+                    <User className="h-4 w-4" /> {t("my_account")}
                   </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <DropdownMenuItem asChild>
                     <Link to="/admin" className="flex items-center gap-2">
-                      <Shield className="h-4 w-4" /> Admin Panel
+                      <Shield className="h-4 w-4" /> {t("admin_panel")}
                     </Link>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 text-destructive">
-                  <LogOut className="h-4 w-4" /> Sign Out
+                  <LogOut className="h-4 w-4" /> {t("sign_out")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -121,12 +123,12 @@ export default function Navbar() {
             ))}
             {!user && (
               <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm text-primary font-medium">
-                Sign In
+                {t("sign_in")}
               </Link>
             )}
             {isAdmin && (
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="text-sm text-primary font-medium">
-                Admin Panel
+                {t("admin_panel")}
               </Link>
             )}
           </div>
