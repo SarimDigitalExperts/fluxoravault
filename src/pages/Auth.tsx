@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
@@ -94,6 +94,13 @@ export default function Auth() {
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="pl-10" />
           </div>
+          {isLogin && (
+            <div className="text-right">
+              <Link to="/forgot-password" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+                Forgot password?
+              </Link>
+            </div>
+          )}
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
             <ArrowRight className="h-4 w-4 ml-1" />

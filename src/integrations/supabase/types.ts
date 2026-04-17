@@ -166,6 +166,7 @@ export type Database = {
       }
       coupons: {
         Row: {
+          applies_to: string
           code: string
           created_at: string
           discount_type: string
@@ -179,6 +180,7 @@ export type Database = {
           used_count: number
         }
         Insert: {
+          applies_to?: string
           code: string
           created_at?: string
           discount_type?: string
@@ -192,6 +194,7 @@ export type Database = {
           used_count?: number
         }
         Update: {
+          applies_to?: string
           code?: string
           created_at?: string
           discount_type?: string
@@ -441,6 +444,9 @@ export type Database = {
           download_link: string | null
           file_size: string | null
           file_url: string | null
+          flash_sale_ends_at: string | null
+          flash_sale_price: number | null
+          flash_sale_starts_at: string | null
           id: string
           image: string | null
           is_featured: boolean
@@ -451,6 +457,8 @@ export type Database = {
           meta_title: string | null
           original_price: number | null
           os_compatibility: string | null
+          preview_demo_url: string | null
+          preview_video_url: string | null
           price: number
           qr_image_url: string | null
           qr_target_url: string | null
@@ -474,6 +482,9 @@ export type Database = {
           download_link?: string | null
           file_size?: string | null
           file_url?: string | null
+          flash_sale_ends_at?: string | null
+          flash_sale_price?: number | null
+          flash_sale_starts_at?: string | null
           id?: string
           image?: string | null
           is_featured?: boolean
@@ -484,6 +495,8 @@ export type Database = {
           meta_title?: string | null
           original_price?: number | null
           os_compatibility?: string | null
+          preview_demo_url?: string | null
+          preview_video_url?: string | null
           price?: number
           qr_image_url?: string | null
           qr_target_url?: string | null
@@ -507,6 +520,9 @@ export type Database = {
           download_link?: string | null
           file_size?: string | null
           file_url?: string | null
+          flash_sale_ends_at?: string | null
+          flash_sale_price?: number | null
+          flash_sale_starts_at?: string | null
           id?: string
           image?: string | null
           is_featured?: boolean
@@ -517,6 +533,8 @@ export type Database = {
           meta_title?: string | null
           original_price?: number | null
           os_compatibility?: string | null
+          preview_demo_url?: string | null
+          preview_video_url?: string | null
           price?: number
           qr_image_url?: string | null
           qr_target_url?: string | null
@@ -592,6 +610,27 @@ export type Database = {
           reviewer_name?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string | null
         }
         Relationships: []
       }
