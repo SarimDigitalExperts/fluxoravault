@@ -8,8 +8,10 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Download, Shield, Zap, Star, Users, Package, Check,
   ChevronDown, Layers, Award, Clock, Globe, Headphones, Lock,
-  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search,
+  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck,
 } from "lucide-react";
+import FlashSaleSection from "@/components/FlashSaleSection";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
@@ -144,98 +146,105 @@ export default function Home() {
     { name: "David L.", role: "Startup Founder", text: "Signify Vault helped us launch our product 3x faster. Incredible value.", rating: 5 },
   ];
 
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen">
-      {/* Hero - Reference Image Style */}
-      <section className="relative overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24">
-        {/* Background decorative elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-secondary/5 rounded-full blur-3xl" />
-        <div className="absolute top-40 right-1/4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
-
+      {/* HERO — redesigned */}
+      <section className="relative overflow-hidden pt-28 md:pt-32 pb-16 md:pb-20 bg-gradient-to-br from-primary/5 via-background to-background">
+        <div className="absolute top-1/3 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
+            {/* LEFT */}
             <div>
-              <motion.div {...fadeUp}>
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-                  <Sparkles className="h-4 w-4" /> Premium Digital Assets Marketplace
-                </span>
-              </motion.div>
-              <motion.h1 {...fadeUp} transition={{ delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-tight mb-6">
-                {products.length > 0 ? `${products.length}+` : "2M+"} Curated{" "}
-                <span className="text-primary">Digital Products</span>
+              <motion.span {...fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-5">
+                <Sparkles className="h-3.5 w-3.5" /> Premium Digital Marketplace
+              </motion.span>
+              <motion.h1 {...fadeUp} transition={{ delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.1] mb-5 tracking-tight">
+                {t("hero_title").split("Vault")[0] || t("hero_title")}
+                {t("hero_title").includes("Vault") && <span className="text-primary">Vault</span>}
               </motion.h1>
-              <motion.p {...fadeUp} transition={{ delay: 0.2 }} className="text-lg text-muted-foreground mb-8 max-w-lg">
-                Explore the best premium themes, plugins, templates, and digital assets available for sale. 
-                Our unique collection is hand-curated by experts.
+              <motion.p {...fadeUp} transition={{ delay: 0.2 }} className="text-lg text-muted-foreground mb-7 max-w-xl leading-relaxed">
+                {t("hero_subtitle")}
               </motion.p>
-
-              {/* Search bar */}
-              <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="relative max-w-lg mb-8">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search themes, plugins & more..."
-                  className="w-full h-14 pl-12 pr-14 rounded-full border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                  onFocus={(e) => { e.target.blur(); window.location.href = '/shop'; }}
-                />
-                <Link to="/shop" className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="flex flex-wrap gap-3 mb-8">
+                <Button asChild size="lg" className="rounded-full px-7 shadow-md hover:shadow-lg transition-shadow">
+                  <Link to="/shop">{t("browse_products")} <ArrowRight className="h-4 w-4 ml-1.5" /></Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="rounded-full px-7">
+                  <Link to="/pricing">{t("view_pricing")}</Link>
+                </Button>
               </motion.div>
-
-              {/* Category icons row */}
-              <motion.div {...fadeUp} transition={{ delay: 0.4 }} className="flex flex-wrap gap-3">
-                {categories.slice(0, 6).map(cat => {
-                  const Icon = iconMap[cat.icon || ""] || Layers;
-                  return (
-                    <Link key={cat.id} to={`/shop?category=${cat.slug}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card hover:border-primary/50 transition-colors text-xs font-medium">
-                      <Icon className="h-4 w-4 text-primary" />
-                      {cat.name}
-                    </Link>
-                  );
-                })}
+              {/* Trust badges */}
+              <motion.div {...fadeUp} transition={{ delay: 0.4 }} className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
+                {[
+                  { icon: Shield, label: t("secure_payments") },
+                  { icon: Zap, label: t("instant_access") },
+                  { icon: BadgeCheck, label: t("verified_products") },
+                ].map((b) => (
+                  <div key={b.label} className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Check className="h-4 w-4 text-primary" />
+                    <span>{b.label}</span>
+                  </div>
+                ))}
+              </motion.div>
+              {/* Stats */}
+              <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="grid grid-cols-3 gap-4 max-w-md">
+                {[
+                  { value: "1000+", label: t("assets") },
+                  { value: "500+", label: t("users") },
+                  { value: "100+", label: t("sales") },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <p className="text-2xl md:text-3xl font-display font-bold text-foreground">{s.value}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">{s.label}</p>
+                  </div>
+                ))}
               </motion.div>
             </div>
-
-            {/* Right - Product showcase grid */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="hidden lg:block relative"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                {products.slice(0, 4).map((p, i) => (
-                  <Link key={p.id} to={`/product/${p.slug}`}
-                    className={`group relative rounded-xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-lg transition-all duration-300 ${i === 0 ? 'row-span-2' : ''}`}
-                  >
-                    <div className={`overflow-hidden ${i === 0 ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
-                      <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-                      <p className="text-white text-xs font-semibold truncate">{p.title}</p>
-                      <p className="text-white/80 text-[10px]">PKR {p.price.toLocaleString()}</p>
-                    </div>
-                  </Link>
-                ))}
+            {/* RIGHT — Product showcase */}
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.6 }} className="relative hidden lg:block">
+              <div className="relative rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-xl border border-primary/10">
+                <div className="grid grid-cols-2 gap-3">
+                  {products.slice(0, 4).map((p, i) => (
+                    <Link key={p.id} to={`/product/${p.slug}`}
+                      className={`group relative rounded-xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-md transition-all ${i === 0 ? "row-span-2 aspect-[3/4]" : "aspect-[4/3]"}`}>
+                      <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2.5">
+                        <p className="text-white text-xs font-semibold truncate">{p.title}</p>
+                        <p className="text-white/80 text-[10px]">PKR {p.price.toLocaleString()}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-
-              {/* Floating badges */}
-              <div className="absolute -top-4 -right-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
-                <p className="text-2xl font-display font-bold text-primary">{products.length > 0 ? `${products.length}+` : '19K+'}</p>
-                <p className="text-xs text-muted-foreground">Products</p>
+              {/* Floating cards */}
+              <div className="absolute -top-3 -right-3 bg-card border border-border rounded-xl px-3.5 py-2.5 shadow-lg flex items-center gap-2">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <BadgeCheck className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold">Verified</p>
+                  <p className="text-[10px] text-muted-foreground">Quality assured</p>
+                </div>
               </div>
-              <div className="absolute bottom-16 -left-6 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
-                <p className="text-lg font-display font-bold text-secondary">50k+</p>
-                <p className="text-xs text-muted-foreground">Customers</p>
+              <div className="absolute -bottom-3 -left-3 bg-card border border-border rounded-xl px-3.5 py-2.5 shadow-lg flex items-center gap-2">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Download className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold">Instant Delivery</p>
+                  <p className="text-[10px] text-muted-foreground">After approval</p>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
+
+      {/* Flash Sale */}
+      <FlashSaleSection />
 
       {/* Stats */}
       <section className="py-12 border-y border-border bg-muted/20">
