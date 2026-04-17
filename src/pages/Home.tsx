@@ -11,7 +11,8 @@ import {
   TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck,
 } from "lucide-react";
 import FlashSaleSection from "@/components/FlashSaleSection";
-import { useLanguage } from "@/hooks/useLanguage";
+import HeroSlideshow from "@/components/HeroSlideshow";
+import { plans as pricingPlans } from "@/data/plans";
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
@@ -146,102 +147,10 @@ export default function Home() {
     { name: "David L.", role: "Startup Founder", text: "Signify Vault helped us launch our product 3x faster. Incredible value.", rating: 5 },
   ];
 
-  const { t } = useLanguage();
-
   return (
     <div className="min-h-screen">
-      {/* HERO — redesigned */}
-      <section className="relative overflow-hidden pt-28 md:pt-32 pb-16 md:pb-20 bg-gradient-to-br from-primary/5 via-background to-background">
-        <div className="absolute top-1/3 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* LEFT */}
-            <div>
-              <motion.span {...fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-5">
-                <Sparkles className="h-3.5 w-3.5" /> Premium Digital Marketplace
-              </motion.span>
-              <motion.h1 {...fadeUp} transition={{ delay: 0.1 }} className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.1] mb-5 tracking-tight">
-                {t("hero_title").split("Vault")[0] || t("hero_title")}
-                {t("hero_title").includes("Vault") && <span className="text-primary">Vault</span>}
-              </motion.h1>
-              <motion.p {...fadeUp} transition={{ delay: 0.2 }} className="text-lg text-muted-foreground mb-7 max-w-xl leading-relaxed">
-                {t("hero_subtitle")}
-              </motion.p>
-              <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="flex flex-wrap gap-3 mb-8">
-                <Button asChild size="lg" className="rounded-full px-7 shadow-md hover:shadow-lg transition-shadow">
-                  <Link to="/shop">{t("browse_products")} <ArrowRight className="h-4 w-4 ml-1.5" /></Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-full px-7">
-                  <Link to="/pricing">{t("view_pricing")}</Link>
-                </Button>
-              </motion.div>
-              {/* Trust badges */}
-              <motion.div {...fadeUp} transition={{ delay: 0.4 }} className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
-                {[
-                  { icon: Shield, label: t("secure_payments") },
-                  { icon: Zap, label: t("instant_access") },
-                  { icon: BadgeCheck, label: t("verified_products") },
-                ].map((b) => (
-                  <div key={b.label} className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Check className="h-4 w-4 text-primary" />
-                    <span>{b.label}</span>
-                  </div>
-                ))}
-              </motion.div>
-              {/* Stats */}
-              <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="grid grid-cols-3 gap-4 max-w-md">
-                {[
-                  { value: "1000+", label: t("assets") },
-                  { value: "500+", label: t("users") },
-                  { value: "100+", label: t("sales") },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="text-2xl md:text-3xl font-display font-bold text-foreground">{s.value}</p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">{s.label}</p>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-            {/* RIGHT — Product showcase */}
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.6 }} className="relative hidden lg:block">
-              <div className="relative rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-xl border border-primary/10">
-                <div className="grid grid-cols-2 gap-3">
-                  {products.slice(0, 4).map((p, i) => (
-                    <Link key={p.id} to={`/product/${p.slug}`}
-                      className={`group relative rounded-xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-md transition-all ${i === 0 ? "row-span-2 aspect-[3/4]" : "aspect-[4/3]"}`}>
-                      <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2.5">
-                        <p className="text-white text-xs font-semibold truncate">{p.title}</p>
-                        <p className="text-white/80 text-[10px]">PKR {p.price.toLocaleString()}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              {/* Floating cards */}
-              <div className="absolute -top-3 -right-3 bg-card border border-border rounded-xl px-3.5 py-2.5 shadow-lg flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BadgeCheck className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold">Verified</p>
-                  <p className="text-[10px] text-muted-foreground">Quality assured</p>
-                </div>
-              </div>
-              <div className="absolute -bottom-3 -left-3 bg-card border border-border rounded-xl px-3.5 py-2.5 shadow-lg flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Download className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold">Instant Delivery</p>
-                  <p className="text-[10px] text-muted-foreground">After approval</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* HERO — slideshow + animated */}
+      <HeroSlideshow />
 
       {/* Flash Sale */}
       <FlashSaleSection />
@@ -383,28 +292,24 @@ export default function Home() {
             <p className="text-muted-foreground">Choose a plan that works for you</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {[
-              { name: "Starter", price: "PKR 999", desc: "5 downloads/month", features: ["Free assets", "Basic formats", "Email support"] },
-              { name: "Pro", price: "PKR 2,999", desc: "50 downloads/month", features: ["All assets", "Premium formats", "Priority support", "Commercial license"], popular: true },
-              { name: "Enterprise", price: "PKR 7,999", desc: "Unlimited downloads", features: ["Everything in Pro", "Source files", "API access", "Team tools"] },
-            ].map((plan, i) => (
+            {pricingPlans.map((plan, i) => (
               <motion.div key={plan.name} {...fadeUp} transition={{ delay: i * 0.1 }}
-                className={`p-7 rounded-xl border bg-card flex flex-col ${plan.popular ? "border-primary shadow-lg" : "border-border"}`}
+                className={`p-7 rounded-xl border bg-card flex flex-col ${plan.featured ? "border-primary shadow-lg" : "border-border"}`}
               >
-                {plan.popular && (
+                {plan.featured && (
                   <span className="text-xs font-bold text-primary mb-3 uppercase tracking-wider">Most Popular</span>
                 )}
                 <h3 className="font-display font-bold text-xl">{plan.name}</h3>
-                <p className="text-3xl font-bold mt-2 mb-1">{plan.price}<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
-                <p className="text-sm text-muted-foreground mb-6">{plan.desc}</p>
+                <p className="text-3xl font-bold mt-2 mb-1">PKR {plan.price.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">{plan.period}</span></p>
+                <p className="text-sm text-muted-foreground mb-6">{plan.shortDesc}</p>
                 <ul className="space-y-2 mb-6 flex-1">
-                  {plan.features.map(f => (
+                  {plan.features.slice(0, 5).map(f => (
                     <li key={f} className="flex items-center gap-2 text-sm">
                       <Check className="h-4 w-4 text-primary shrink-0" /> {f}
                     </li>
                   ))}
                 </ul>
-                <Button asChild variant={plan.popular ? "default" : "outline"} className="w-full">
+                <Button asChild variant={plan.featured ? "default" : "outline"} className="w-full">
                   <Link to="/pricing">Get Started</Link>
                 </Button>
               </motion.div>
