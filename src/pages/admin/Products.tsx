@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import AdminToolbar from "@/components/admin/AdminToolbar";
+import { useAdminTable } from "@/hooks/useAdminTable";
 
 interface ProductForm {
   title: string; slug: string; description: string; price: number;
@@ -176,11 +179,24 @@ export default function AdminProducts() {
 
   const discount = form.original_price && form.price ? Math.round((1 - form.price / form.original_price) * 100) : null;
 
-  const filtered = products.filter(p => {
+  const baseFiltered = products.filter(p => {
     if (searchQuery && !p.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (filterStatus !== "all" && p.status !== filterStatus) return false;
     return true;
   });
+  const tbl = useAdminTable<any>({
+    table: "products", rows: baseFiltered, refresh: fetchProducts,
+    searchKeys: ["title","category","slug","tags"],
+    exportColumns: ["title","slug","description","price","original_price","category","category_slug","image","status","delivery_type","version","is_featured","is_trending"],
+    importPrepare: (r) => (r.title && r.slug && r.category && r.category_slug) ? {
+      title: r.title, slug: r.slug, description: r.description || "", price: Number(r.price) || 0,
+      original_price: r.original_price ? Number(r.original_price) : null,
+      category: r.category, category_slug: r.category_slug, image: r.image || null,
+      status: r.status || "published", delivery_type: r.delivery_type || "file",
+      version: r.version || "1.0", is_featured: !!r.is_featured, is_trending: !!r.is_trending,
+    } : null,
+  });
+  const filtered = tbl.filtered;
 
   const statusBadge = (s: string) => {
     if (s === "published") return <Badge className="bg-green-500/10 text-green-600 border-green-200">Published</Badge>;
@@ -198,10 +214,10 @@ export default function AdminProducts() {
         <Button size="sm" onClick={openCreate}><Plus className="h-4 w-4 mr-1" /> Add Product</Button>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-3">
           <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search products..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9" />
+            <Input placeholder="Quick title search..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9" />
           </div>
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
@@ -213,6 +229,12 @@ export default function AdminProducts() {
             </SelectContent>
           </Select>
         </div>
+        <AdminToolbar
+          searchQuery={tbl.search} onSearchChange={tbl.setSearch}
+          searchPlaceholder="Search across title, category, slug, tags..."
+          selectedCount={tbl.selected.size} onBulkDelete={tbl.bulkDelete}
+          onExport={tbl.handleExport} onImport={tbl.handleImport}
+        />
 
         {loading ? <p className="text-muted-foreground text-sm">Loading...</p> : filtered.length === 0 ? (
           <p className="text-muted-foreground text-sm text-center py-8">No products found.</p>
@@ -221,6 +243,7 @@ export default function AdminProducts() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-10"><Checkbox checked={tbl.allSelected} onCheckedChange={tbl.toggleAll} /></TableHead>
                   <TableHead>Product</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Price</TableHead>
@@ -231,7 +254,8 @@ export default function AdminProducts() {
               </TableHeader>
               <TableBody>
                 {filtered.map(p => (
-                  <TableRow key={p.id}>
+                  <TableRow key={p.id} data-state={tbl.selected.has(p.id) ? "selected" : undefined}>
+                    <TableCell><Checkbox checked={tbl.selected.has(p.id)} onCheckedChange={() => tbl.toggleOne(p.id)} /></TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {p.image && <img src={p.image} alt="" className="h-10 w-10 rounded object-cover border" />}
