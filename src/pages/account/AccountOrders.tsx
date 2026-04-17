@@ -1,8 +1,10 @@
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Package } from "lucide-react";
+import { Package, FileDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { generateInvoicePDF } from "@/lib/invoice";
 
 export default function AccountOrders() {
   const { user } = useAuth();
@@ -53,6 +55,21 @@ export default function AccountOrders() {
                     {order.status}
                   </span>
                   <span className="font-bold">PKR {Number(order.total).toLocaleString()}</span>
+                  {order.status === "completed" && (
+                    <Button size="sm" variant="outline" onClick={() => generateInvoicePDF({
+                      orderId: order.id,
+                      date: new Date(order.created_at).toLocaleDateString(),
+                      customer: { name: order.customer_name, email: order.customer_email, phone: order.customer_phone },
+                      items: (order.order_items || []).map((i: any) => ({ title: i.products?.title || "Product", quantity: i.quantity, price: Number(i.price) })),
+                      subtotal: Number(order.total) + Number(order.discount_amount || 0),
+                      discount: Number(order.discount_amount || 0),
+                      total: Number(order.total),
+                      paymentMethod: order.payment_method,
+                      couponCode: order.coupon_code,
+                    })}>
+                      <FileDown className="h-3.5 w-3.5 mr-1" /> Invoice
+                    </Button>
+                  )}
                 </div>
               </div>
               {order.order_items?.map((item: any) => (
