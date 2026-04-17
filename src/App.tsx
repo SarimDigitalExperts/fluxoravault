@@ -20,6 +20,11 @@ import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Checkout from "@/pages/Checkout";
 import Auth from "@/pages/Auth";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
+import Blogs from "@/pages/Blogs";
+import BlogDetail from "@/pages/BlogDetail";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import Pricing from "@/pages/Pricing";
 import SubscriptionCheckout from "@/pages/SubscriptionCheckout";
 import AccountLayout from "@/pages/account/AccountLayout";
@@ -94,6 +99,10 @@ const App = () => (
                         <Route path="/privacy" element={<Privacy />} />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route path="/auth" element={<Auth />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password" element={<ResetPassword />} />
+                        <Route path="/blog" element={<Blogs />} />
+                        <Route path="/blog/:slug" element={<BlogDetail />} />
                         <Route path="/pricing" element={<Pricing />} />
                         <Route path="/subscribe/:plan" element={<SubscriptionCheckout />} />
                         <Route path="/account" element={<AccountLayout />}>
@@ -110,6 +119,7 @@ const App = () => (
                       </Routes>
                     </main>
                     <Footer />
+                    <WhatsAppButton />
                   </>
                 } />
               </Routes>
