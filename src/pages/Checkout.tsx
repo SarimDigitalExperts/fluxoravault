@@ -36,6 +36,7 @@ export default function Checkout() {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
   const [proofFile, setProofFile] = useState<File | null>(null);
@@ -61,15 +62,43 @@ export default function Checkout() {
 
   const applyCoupon = async () => {
     if (!couponCode.trim()) return;
+    if (!user) { toast.error("Please sign in to apply a coupon"); return; }
     const { data } = await supabase.from("coupons").select("*").eq("code", couponCode.toUpperCase()).eq("is_active", true).maybeSingle();
     if (!data) { toast.error("Invalid or expired coupon"); return; }
     const coupon = data as any;
     if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) { toast.error("Coupon expired"); return; }
     if (coupon.max_uses && coupon.used_count >= coupon.max_uses) { toast.error("Coupon usage limit reached"); return; }
     if (coupon.min_order_amount && total < Number(coupon.min_order_amount)) { toast.error(`Minimum order: PKR ${Number(coupon.min_order_amount).toLocaleString()}`); return; }
-    const disc = coupon.discount_type === "percentage" ? (total * Number(coupon.discount_value)) / 100 : Number(coupon.discount_value);
-    setDiscount(Math.min(disc, total)); setCouponApplied(true);
-    toast.success(`Coupon applied! -PKR ${Math.min(disc, total).toLocaleString()}`);
+
+    // First-order only
+    if (coupon.first_order_only) {
+      const { count } = await supabase.from("orders").select("*", { count: "exact", head: true }).eq("user_id", user.id);
+      if ((count || 0) > 0) { toast.error("This coupon is for first-time orders only"); return; }
+    }
+
+    // Per-user limit
+    if (coupon.per_user_limit) {
+      const { count } = await supabase.from("coupon_redemptions").select("*", { count: "exact", head: true })
+        .eq("coupon_id", coupon.id).eq("user_id", user.id);
+      if ((count || 0) >= coupon.per_user_limit) { toast.error(`You've already used this coupon ${coupon.per_user_limit} time(s)`); return; }
+    }
+
+    // Category restriction
+    if (coupon.category_slug) {
+      const matches = items.some(it => (it.product as any).categorySlug === coupon.category_slug);
+      if (!matches) { toast.error(`This coupon only applies to "${coupon.category_slug}" products`); return; }
+    }
+
+    const base = coupon.category_slug
+      ? items.filter(it => (it.product as any).categorySlug === coupon.category_slug)
+          .reduce((s, it) => s + it.product.price * it.quantity, 0)
+      : total;
+
+    const disc = coupon.discount_type === "percentage" ? (base * Number(coupon.discount_value)) / 100 : Number(coupon.discount_value);
+    setDiscount(Math.min(disc, total));
+    setCouponApplied(true);
+    setAppliedCoupon(coupon);
+    toast.success(`Coupon applied! -PKR ${Math.min(disc, total).toLocaleString()}${coupon.stackable ? " (stackable)" : ""}`);
   };
 
   const finalTotal = total - discount;
@@ -97,6 +126,12 @@ export default function Checkout() {
       if (orderErr) throw orderErr;
       for (const item of items) {
         await supabase.from("order_items").insert({ order_id: order.id, product_id: item.product.id, quantity: item.quantity, price: item.product.price });
+      }
+      // Record coupon redemption for per-user limit tracking
+      if (appliedCoupon) {
+        await supabase.from("coupon_redemptions").insert({
+          coupon_id: appliedCoupon.id, user_id: user.id, order_id: order.id,
+        });
       }
       clearCart(); setOrderPlaced(true);
     } catch (err: any) { toast.error(err.message || "Failed to place order"); }
