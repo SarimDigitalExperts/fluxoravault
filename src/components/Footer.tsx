@@ -13,6 +13,7 @@ export default function Footer() {
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
             <Link to="/shop" className="hover:text-foreground transition-colors">Shop</Link>
             <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+            <Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link>
             <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
             <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
           </div>
@@ -27,6 +28,7 @@ export default function Footer() {
         <div>
           <h4 className="font-display font-semibold text-sm mb-3">Connect</h4>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <a href="https://wa.me/447907269967" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">WhatsApp Support</a>
             <a href="#" className="hover:text-foreground transition-colors">Instagram</a>
             <a href="#" className="hover:text-foreground transition-colors">Facebook</a>
             <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
