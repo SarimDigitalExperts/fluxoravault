@@ -1,30 +1,10 @@
-import { Check, Zap, Crown, Rocket } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-
-const plans = [
-  {
-    name: "Starter", price: 999, period: "/month", planKey: "starter",
-    description: "Perfect for beginners exploring digital assets",
-    icon: Zap, featured: false,
-    features: ["5 downloads per month", "Access to free assets", "Basic file formats", "Email support", "Personal use license"],
-  },
-  {
-    name: "Pro", price: 2999, period: "/month", planKey: "pro",
-    description: "Ideal for professionals and freelancers",
-    icon: Crown, featured: true,
-    features: ["50 downloads per month", "Access to all assets", "Premium file formats", "Priority support", "Commercial license", "Early access to new drops", "Custom requests"],
-  },
-  {
-    name: "Enterprise", price: 7999, period: "/month", planKey: "enterprise",
-    description: "For teams and agencies needing unlimited access",
-    icon: Rocket, featured: false,
-    features: ["Unlimited downloads", "Access to all assets", "All file formats + source files", "Dedicated account manager", "Extended commercial license", "Team collaboration tools", "API access", "Custom branding options"],
-  },
-];
+import { plans } from "@/data/plans";
 
 export default function Pricing() {
   const { user } = useAuth();

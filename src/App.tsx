@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/useCart";
 import { WishlistProvider } from "@/hooks/useWishlist";
 import { AuthProvider } from "@/hooks/useAuth";
-import { LanguageProvider } from "@/hooks/useLanguage";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PromoPopup from "@/components/PromoPopup";
@@ -58,7 +58,6 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <LanguageProvider>
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
@@ -129,7 +128,6 @@ const App = () => (
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>
-      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
