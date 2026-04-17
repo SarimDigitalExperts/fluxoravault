@@ -123,6 +123,22 @@ export default function AdminCoupons() {
                 <div><Label>Max Uses</Label><Input type="number" value={form.max_uses} onChange={(e) => setForm({ ...form, max_uses: e.target.value })} placeholder="Unlimited" className="mt-1" /></div>
               </div>
               <div><Label>Expires At</Label><Input type="date" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} className="mt-1" /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><Label>Per-User Limit</Label><Input type="number" value={form.per_user_limit} onChange={(e) => setForm({ ...form, per_user_limit: e.target.value })} placeholder="Unlimited" className="mt-1" /></div>
+                <div><Label>Category Slug</Label><Input value={form.category_slug} onChange={(e) => setForm({ ...form, category_slug: e.target.value })} placeholder="All categories" className="mt-1" /></div>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">First-Order Only</p><p className="text-xs text-muted-foreground">Restricts to users with no prior orders</p></div>
+                <Checkbox checked={form.first_order_only} onCheckedChange={(v) => setForm({ ...form, first_order_only: !!v })} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">Stackable</p><p className="text-xs text-muted-foreground">Can be combined with other coupons</p></div>
+                <Checkbox checked={form.stackable} onCheckedChange={(v) => setForm({ ...form, stackable: !!v })} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div><p className="text-sm font-medium">Active</p></div>
+                <Checkbox checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: !!v })} />
+              </div>
               <Button onClick={handleSave} className="w-full">{editing ? "Update" : "Create"}</Button>
             </div>
           </DialogContent>
