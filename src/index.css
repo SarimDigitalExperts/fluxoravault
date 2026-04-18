@@ -97,3 +97,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(28 96% 49% / 0.6);
 }
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+

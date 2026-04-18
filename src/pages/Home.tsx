@@ -191,28 +191,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories */}
+      {/* Popular Categories */}
       {categories.length > 0 && (
-        <section className="section-padding bg-muted/30">
+        <section className="section-padding">
           <div className="container">
-            <motion.div {...fadeUp} className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Browse by Category</h2>
-              <p className="text-muted-foreground">Find exactly what you need</p>
+            <motion.div {...fadeUp} className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-display font-extrabold">Popular Categories</h2>
             </motion.div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {categories.map((cat, i) => {
-                const Icon = iconMap[cat.icon || ""] || Layers;
-                return (
-                  <motion.div key={cat.id} {...fadeUp} transition={{ delay: i * 0.05 }}>
-                    <Link to={`/shop?category=${cat.slug}`}
-                      className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all text-center">
-                      <Icon className="h-8 w-8 text-primary mb-3" />
-                      <span className="font-display font-semibold text-sm">{cat.name}</span>
-                      {cat.description && <span className="text-xs text-muted-foreground mt-1">{cat.description}</span>}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+
+            <div className="relative">
+              <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+                {categories.map((cat, i) => {
+                  const Icon = iconMap[cat.icon || ""] || Layers;
+                  const count = products.filter((p) => p.categorySlug === cat.slug).length;
+                  return (
+                    <motion.div
+                      key={cat.id}
+                      {...fadeUp}
+                      transition={{ delay: i * 0.05 }}
+                      className="snap-start min-w-[170px] sm:min-w-[190px]"
+                    >
+                      <Link
+                        to={`/shop?category=${cat.slug}`}
+                        className="group flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-border bg-card hover:border-primary hover:shadow-lg transition-all text-center h-full"
+                      >
+                        <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+                          <Icon className="h-7 w-7 text-primary" />
+                        </div>
+                        <span className="font-display font-bold text-sm mb-1">{cat.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {count.toLocaleString()} {count === 1 ? "item" : "items"}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="text-center mt-6">
+              <Link
+                to="/shop"
+                className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+              >
+                Explore More
+              </Link>
             </div>
           </div>
         </section>
