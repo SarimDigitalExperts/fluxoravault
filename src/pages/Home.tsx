@@ -89,6 +89,80 @@ function ProductCarousel({ products, title, subtitle }: { products: Product[]; t
   );
 }
 
+function CategoriesRow({ categories, products }: { categories: DBCategory[]; products: Product[] }) {
+  const scrollRef = { current: null as HTMLDivElement | null };
+  const setRef = (el: HTMLDivElement | null) => { scrollRef.current = el; };
+  const scroll = (dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = el.clientWidth * 0.8;
+    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+  };
+
+  return (
+    <section className="section-padding">
+      <div className="container">
+        <motion.div {...fadeUp} className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-display font-extrabold">Popular Categories</h2>
+        </motion.div>
+
+        <div className="relative">
+          <button
+            onClick={() => scroll("left")}
+            aria-label="Scroll left"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-md items-center justify-center hover:border-primary hover:shadow-lg transition-all"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+
+          <button
+            onClick={() => scroll("right")}
+            aria-label="Scroll right"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-md items-center justify-center hover:border-primary hover:shadow-lg transition-all"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          <div ref={setRef} className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
+            {categories.map((cat, i) => {
+              const Icon = iconMap[cat.icon || ""] || Layers;
+              const count = products.filter((p) => p.categorySlug === cat.slug).length;
+              return (
+                <motion.div
+                  key={cat.id}
+                  {...fadeUp}
+                  transition={{ delay: i * 0.04 }}
+                  className="min-w-[180px] sm:min-w-[200px] flex-shrink-0"
+                >
+                  <Link
+                    to={`/shop?category=${cat.slug}`}
+                    className="group block rounded-2xl border-2 border-primary/20 bg-card hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all p-6 text-center h-full"
+                  >
+                    <div className="h-20 w-20 rounded-full bg-muted/60 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+                      <Icon className="h-9 w-9 text-primary" />
+                    </div>
+                    <h3 className="font-display font-bold text-base mb-1">{cat.name}</h3>
+                    <p className="text-sm text-muted-foreground font-medium">{count.toLocaleString()}</p>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link
+            to="/shop"
+            className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+          >
+            Explore More
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<DBCategory[]>([]);
@@ -192,54 +266,7 @@ export default function Home() {
       </section>
 
       {/* Popular Categories */}
-      {categories.length > 0 && (
-        <section className="section-padding">
-          <div className="container">
-            <motion.div {...fadeUp} className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-display font-extrabold">Popular Categories</h2>
-            </motion.div>
-
-            <div className="relative">
-              <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
-                {categories.map((cat, i) => {
-                  const Icon = iconMap[cat.icon || ""] || Layers;
-                  const count = products.filter((p) => p.categorySlug === cat.slug).length;
-                  return (
-                    <motion.div
-                      key={cat.id}
-                      {...fadeUp}
-                      transition={{ delay: i * 0.05 }}
-                      className="snap-start min-w-[170px] sm:min-w-[190px]"
-                    >
-                      <Link
-                        to={`/shop?category=${cat.slug}`}
-                        className="group flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-border bg-card hover:border-primary hover:shadow-lg transition-all text-center h-full"
-                      >
-                        <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                          <Icon className="h-7 w-7 text-primary" />
-                        </div>
-                        <span className="font-display font-bold text-sm mb-1">{cat.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {count.toLocaleString()} {count === 1 ? "item" : "items"}
-                        </span>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="text-center mt-6">
-              <Link
-                to="/shop"
-                className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-primary transition-colors"
-              >
-                Explore More
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      {categories.length > 0 && <CategoriesRow categories={categories} products={products} />}
 
       {/* Product Carousels */}
       <ProductCarousel products={featured} title="Featured Products" subtitle="Hand-picked premium assets" />
