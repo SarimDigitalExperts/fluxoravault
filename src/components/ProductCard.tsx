@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWishlist } from "@/hooks/useWishlist";
+import { useCart } from "@/hooks/useCart";
 import type { Product } from "@/data/products";
 import { motion } from "framer-motion";
 
@@ -11,6 +12,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const wishlisted = isInWishlist(product.id);
   const sales = (product.reviews || 0) * 25 + 100; // derived display number
 
@@ -105,12 +107,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
         <Button
-          asChild
-          variant="outline"
           size="sm"
-          className="rounded-full text-xs h-8 px-4 border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
+          onClick={() => addToCart(product)}
+          className="rounded-full text-xs h-8 px-4"
         >
-          <Link to={`/product/${product.slug}`}>Live Demo</Link>
+          <ShoppingCart className="h-3.5 w-3.5 mr-1" /> Add to Cart
         </Button>
       </div>
     </motion.div>
