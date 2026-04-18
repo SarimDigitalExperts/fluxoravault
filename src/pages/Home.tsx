@@ -10,8 +10,8 @@ import {
   ChevronDown, Layers, Award, Clock, Globe, Headphones, Lock,
   TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck,
 } from "lucide-react";
-import FlashSaleSection from "@/components/FlashSaleSection";
 import HeroSlideshow from "@/components/HeroSlideshow";
+import CategoryIcon from "@/components/CategoryIcon";
 import { plans as pricingPlans } from "@/data/plans";
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
@@ -125,7 +125,6 @@ function CategoriesRow({ categories, products }: { categories: DBCategory[]; pro
 
           <div ref={setRef} className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
             {categories.map((cat, i) => {
-              const Icon = iconMap[cat.icon || ""] || Layers;
               const count = products.filter((p) => p.categorySlug === cat.slug).length;
               return (
                 <motion.div
@@ -136,13 +135,13 @@ function CategoriesRow({ categories, products }: { categories: DBCategory[]; pro
                 >
                   <Link
                     to={`/shop?category=${cat.slug}`}
-                    className="group block rounded-2xl border-2 border-primary/20 bg-card hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all p-6 text-center h-full"
+                    className="group block rounded-2xl border-2 border-primary/15 bg-card hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all p-6 text-center h-full"
                   >
-                    <div className="h-20 w-20 rounded-full bg-muted/60 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                      <Icon className="h-9 w-9 text-primary" />
+                    <div className="flex justify-center mb-4">
+                      <CategoryIcon slug={cat.slug} iconName={cat.icon} size={76} className="group-hover:scale-105 transition-transform" />
                     </div>
                     <h3 className="font-display font-bold text-base mb-1">{cat.name}</h3>
-                    <p className="text-sm text-muted-foreground font-medium">{count.toLocaleString()}</p>
+                    <p className="text-sm text-muted-foreground font-medium">{count.toLocaleString()} items</p>
                   </Link>
                 </motion.div>
               );
@@ -225,9 +224,6 @@ export default function Home() {
     <div className="min-h-screen">
       {/* HERO — slideshow + animated */}
       <HeroSlideshow />
-
-      {/* Flash Sale */}
-      <FlashSaleSection />
 
       {/* Stats */}
       <section className="py-12 border-y border-border bg-muted/20">
