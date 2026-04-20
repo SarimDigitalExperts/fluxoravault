@@ -98,10 +98,10 @@ export default function AccountDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {stats.map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
-            <Link to={s.to} className="rounded-2xl border border-border p-5 flex items-start gap-3 hover:border-primary hover:shadow-md transition-all bg-card group">
-              <div className={`p-2.5 rounded-xl ${s.color} shrink-0`}><s.icon className="h-5 w-5" /></div>
+            <Link to={s.to} className="rounded-2xl border border-border p-4 flex flex-col gap-2 hover:border-primary hover:shadow-md transition-all bg-card group h-full">
+              <div className={`p-2 rounded-xl ${s.color} w-fit`}><s.icon className="h-4 w-4" /></div>
               <div className="min-w-0">
-                <p className="text-lg font-display font-extrabold leading-tight truncate">{s.value}</p>
+                <p className="text-base sm:text-lg font-display font-extrabold leading-tight break-words">{s.value}</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
               </div>
             </Link>
