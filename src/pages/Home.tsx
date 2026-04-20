@@ -90,72 +90,86 @@ function ProductCarousel({ products, title, subtitle }: { products: Product[]; t
 }
 
 function CategoriesRow({ categories, products }: { categories: DBCategory[]; products: Product[] }) {
-  const scrollRef = { current: null as HTMLDivElement | null };
-  const setRef = (el: HTMLDivElement | null) => { scrollRef.current = el; };
-  const scroll = (dir: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.8;
-    el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
-  };
-
   return (
-    <section className="section-padding">
+    <section className="section-padding relative overflow-hidden">
+      {/* decorative background */}
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.04]"
+        style={{
+          backgroundImage: "radial-gradient(hsl(var(--primary)) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+        }}
+      />
       <div className="container">
-        <motion.div {...fadeUp} className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-display font-extrabold">Popular Categories</h2>
-        </motion.div>
-
-        <div className="relative">
-          <button
-            onClick={() => scroll("left")}
-            aria-label="Scroll left"
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-md items-center justify-center hover:border-primary hover:shadow-lg transition-all"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-
-          <button
-            onClick={() => scroll("right")}
-            aria-label="Scroll right"
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 h-10 w-10 rounded-full bg-card border border-border shadow-md items-center justify-center hover:border-primary hover:shadow-lg transition-all"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
-          <div ref={setRef} className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
-            {categories.map((cat, i) => {
-              const count = products.filter((p) => p.categorySlug === cat.slug).length;
-              return (
-                <motion.div
-                  key={cat.id}
-                  {...fadeUp}
-                  transition={{ delay: i * 0.04 }}
-                  className="min-w-[180px] sm:min-w-[200px] flex-shrink-0"
-                >
-                  <Link
-                    to={`/shop?category=${cat.slug}`}
-                    className="group block rounded-2xl border-2 border-primary/15 bg-card hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all p-6 text-center h-full"
-                  >
-                    <div className="flex justify-center mb-4">
-                      <CategoryIcon slug={cat.slug} iconName={cat.icon} size={76} className="group-hover:scale-105 transition-transform" />
-                    </div>
-                    <h3 className="font-display font-bold text-base mb-1">{cat.name}</h3>
-                    <p className="text-sm text-muted-foreground font-medium">{count.toLocaleString()} items</p>
-                  </Link>
-                </motion.div>
-              );
-            })}
+        <motion.div {...fadeUp} className="flex items-end justify-between flex-wrap gap-4 mb-10">
+          <div>
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
+              <Sparkles className="h-3 w-3" /> Browse by category
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold leading-tight">
+              Find your <span className="italic text-primary">perfect</span> asset.
+            </h2>
           </div>
-        </div>
-
-        <div className="text-center mt-8">
           <Link
             to="/shop"
-            className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-semibold border-b-2 border-primary text-primary hover:gap-2 transition-all"
           >
-            Explore More
+            View all categories <ArrowRight className="h-4 w-4" />
           </Link>
+        </motion.div>
+
+        {/* Bento-style mosaic grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categories.slice(0, 8).map((cat, i) => {
+            const count = products.filter((p) => p.categorySlug === cat.slug).length;
+            // First card: tall feature card, then standard
+            const isFeature = i === 0;
+            return (
+              <motion.div
+                key={cat.id}
+                {...fadeUp}
+                transition={{ delay: i * 0.05 }}
+                className={isFeature ? "col-span-2 row-span-2" : ""}
+              >
+                <Link
+                  to={`/shop?category=${cat.slug}`}
+                  className={`group relative block h-full overflow-hidden rounded-3xl border border-border bg-card hover:border-primary/40 hover:shadow-xl transition-all ${
+                    isFeature ? "p-7 min-h-[240px]" : "p-5"
+                  }`}
+                >
+                  {/* hover sheen */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                  <div className="relative flex flex-col h-full justify-between gap-4">
+                    <div className="flex items-start justify-between">
+                      <CategoryIcon
+                        slug={cat.slug}
+                        iconName={cat.icon}
+                        size={isFeature ? 84 : 56}
+                        className="group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"
+                      />
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/70">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className={`font-display font-extrabold leading-tight ${isFeature ? "text-2xl md:text-3xl" : "text-base"}`}>
+                        {cat.name}
+                      </h3>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className={`text-muted-foreground ${isFeature ? "text-sm" : "text-xs"}`}>
+                          {count.toLocaleString()} items
+                        </p>
+                        <span className="h-7 w-7 rounded-full bg-foreground/5 group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center transition-colors">
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

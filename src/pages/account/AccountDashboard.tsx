@@ -89,25 +89,29 @@ export default function AccountDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-display font-bold mb-1">Welcome back!</h1>
-      <p className="text-muted-foreground text-sm mb-8">{user?.user_metadata?.display_name || user?.email}</p>
+      <div className="mb-8">
+        <h2 className="text-xl font-display font-bold">Dashboard</h2>
+        <p className="text-muted-foreground text-sm">A quick overview of your activity.</p>
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {stats.map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
-            <Link to={s.to} className="rounded-xl border border-border p-5 flex flex-col items-center text-center hover:border-primary/30 transition-all bg-card group">
-              <div className={`p-3 rounded-xl ${s.color} mb-2`}><s.icon className="h-5 w-5" /></div>
-              <p className="text-xl font-bold">{s.value}</p>
-              <p className="text-xs text-muted-foreground">{s.label}</p>
+            <Link to={s.to} className="rounded-2xl border border-border p-5 flex items-start gap-3 hover:border-primary hover:shadow-md transition-all bg-card group">
+              <div className={`p-2.5 rounded-xl ${s.color} shrink-0`}><s.icon className="h-5 w-5" /></div>
+              <div className="min-w-0">
+                <p className="text-lg font-display font-extrabold leading-tight truncate">{s.value}</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
+              </div>
             </Link>
           </motion.div>
         ))}
       </div>
 
       {/* Quick Actions */}
-      <div className="flex gap-3 mb-8">
-        <Button variant="outline" size="sm" asChild><Link to="/shop" className="gap-2"><ShoppingCart className="h-4 w-4" /> Browse Products</Link></Button>
+      <div className="flex flex-wrap gap-3 mb-8">
+        <Button size="sm" asChild><Link to="/shop" className="gap-2"><ShoppingCart className="h-4 w-4" /> Browse Products</Link></Button>
         <Button variant="outline" size="sm" asChild><Link to="/pricing" className="gap-2"><Crown className="h-4 w-4" /> Upgrade Plan</Link></Button>
         <Button variant="outline" size="sm" asChild><Link to="/account/downloads" className="gap-2"><Download className="h-4 w-4" /> View Downloads</Link></Button>
       </div>

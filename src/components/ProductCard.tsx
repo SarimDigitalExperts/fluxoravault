@@ -27,7 +27,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-3">
         <Link
           to={`/product/${product.slug}`}
-          className="block relative overflow-hidden aspect-[16/10] rounded-xl border border-border bg-muted/30"
+          className="block relative overflow-hidden aspect-square rounded-xl border border-border bg-muted/30"
         >
           <img
             src={product.image}

@@ -28,7 +28,8 @@ export default function Footer() {
         <div>
           <h4 className="font-display font-semibold text-sm mb-3">Connect</h4>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <a href="https://wa.me/447907269967" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">WhatsApp Support</a>
+            <a href="mailto:signifyvault@digitalsigns.site" className="hover:text-foreground transition-colors">signifyvault@digitalsigns.site</a>
+            <a href="https://wa.me/447907269967" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">WhatsApp +44 7907 269967</a>
             <a href="#" className="hover:text-foreground transition-colors">Instagram</a>
             <a href="#" className="hover:text-foreground transition-colors">Facebook</a>
             <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
