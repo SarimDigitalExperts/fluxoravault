@@ -224,54 +224,91 @@ export default function ProductDetail() {
       </div>
 
       {/* Reviews Section */}
-      <section className="mt-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-display font-bold">Customer Reviews</h2>
-            <p className="text-sm text-muted-foreground">{reviews.length} reviews · {avgRating} average rating</p>
+      <section className="mt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+          {/* Rating Summary */}
+          <div className="rounded-2xl border border-border p-6 bg-gradient-to-br from-primary/5 to-card text-center lg:col-span-1">
+            <p className="text-5xl font-display font-extrabold text-primary">{avgRating}</p>
+            <div className="flex justify-center gap-0.5 mt-2 mb-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className={`h-4 w-4 ${i < Math.round(Number(avgRating)) ? "fill-primary text-primary" : "text-muted-foreground/25"}`} />
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">Based on {reviews.length} review{reviews.length !== 1 ? "s" : ""}</p>
+          </div>
+
+          {/* Distribution */}
+          <div className="rounded-2xl border border-border p-6 bg-card lg:col-span-2">
+            <h3 className="text-sm font-semibold mb-4">Rating Distribution</h3>
+            <div className="space-y-2">
+              {[5, 4, 3, 2, 1].map(star => {
+                const count = reviews.filter(r => r.rating === star).length;
+                const pct = reviews.length ? (count / reviews.length) * 100 : 0;
+                return (
+                  <div key={star} className="flex items-center gap-3">
+                    <span className="text-xs font-medium w-8 flex items-center gap-0.5">{star}<Star className="h-3 w-3 fill-primary text-primary" /></span>
+                    <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                      <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="text-xs text-muted-foreground w-10 text-right">{count}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-display font-bold">Customer Reviews</h2>
+        </div>
+
         {/* Write Review */}
-        <div className="rounded-2xl border border-border p-6 mb-8 bg-muted/10">
-          <h3 className="font-semibold mb-4">Write a Review</h3>
-          <div className="flex gap-2 mb-3">
+        <div className="rounded-2xl border border-border p-6 mb-8 bg-card">
+          <h3 className="font-semibold mb-1">Share your experience</h3>
+          <p className="text-xs text-muted-foreground mb-4">Help others by leaving a thoughtful review</p>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xs font-medium text-muted-foreground mr-1">Your rating:</span>
             {[1, 2, 3, 4, 5].map(s => (
-              <button key={s} onClick={() => setNewReview(r => ({ ...r, rating: s }))} className="focus:outline-none">
+              <button key={s} onClick={() => setNewReview(r => ({ ...r, rating: s }))} className="focus:outline-none hover:scale-110 transition-transform">
                 <Star className={`h-6 w-6 transition-colors ${s <= newReview.rating ? "fill-primary text-primary" : "text-muted-foreground/30"}`} />
               </button>
             ))}
           </div>
-          <Textarea placeholder="Share your experience with this product..." value={newReview.comment} onChange={e => setNewReview(r => ({ ...r, comment: e.target.value }))} className="mb-3" rows={3} />
-          <Button onClick={handleSubmitReview} disabled={submitting} size="sm">
+          <Textarea placeholder="What did you like or dislike? How did the product perform?" value={newReview.comment} onChange={e => setNewReview(r => ({ ...r, comment: e.target.value }))} className="mb-3" rows={4} />
+          <Button onClick={handleSubmitReview} disabled={submitting}>
             <Send className="h-4 w-4 mr-2" /> {submitting ? "Submitting..." : "Submit Review"}
           </Button>
         </div>
 
         {/* Review List */}
         {reviews.length === 0 ? (
-          <p className="text-muted-foreground text-center py-8">No reviews yet. Be the first to review!</p>
+          <div className="text-center py-12 rounded-2xl border border-dashed border-border">
+            <Star className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
+            <p className="text-muted-foreground font-medium">No reviews yet</p>
+            <p className="text-xs text-muted-foreground mt-1">Be the first to share your thoughts!</p>
+          </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {reviews.map(r => (
-              <div key={r.id} className="rounded-xl border border-border p-5 bg-card">
-                <div className="flex items-center justify-between mb-2">
+              <div key={r.id} className="rounded-2xl border border-border p-5 bg-card hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">
-                      {r.reviewer_name?.charAt(0) || "U"}
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center text-sm font-bold shadow-sm">
+                      {r.reviewer_name?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{r.reviewer_name}</p>
-                      <p className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</p>
+                      <p className="text-[11px] text-muted-foreground">{new Date(r.created_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}</p>
                     </div>
                   </div>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-primary text-primary" : "text-muted-foreground/20"}`} />
-                    ))}
-                  </div>
+                  <Badge variant="secondary" className="text-[10px] px-2 py-0.5 rounded-md">Verified</Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{r.comment}</p>
+                <div className="flex gap-0.5 mb-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-primary text-primary" : "text-muted-foreground/20"}`} />
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{r.comment}</p>
               </div>
             ))}
           </div>
