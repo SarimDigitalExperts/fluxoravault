@@ -3,46 +3,17 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Sparkles, Search, Star, Download, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-
-interface Banner {
-  id: string;
-  title: string;
-  subtitle: string | null;
-  image_url: string | null;
-  link_url: string | null;
-}
 
 const ROTATING_WORDS = ["Themes", "Plugins", "UI Kits", "Mockups", "Icons"];
 
 export default function HeroSlideshow() {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [slide, setSlide] = useState(0);
   const [wordIdx, setWordIdx] = useState(0);
   const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    supabase
-      .from("banners")
-      .select("id,title,subtitle,image_url,link_url")
-      .eq("is_active", true)
-      .eq("position", "hero")
-      .order("display_order")
-      .then(({ data }) => data && setBanners(data as Banner[]));
-  }, []);
-
-  useEffect(() => {
-    if (banners.length < 2) return;
-    const id = setInterval(() => setSlide((s) => (s + 1) % banners.length), 5000);
-    return () => clearInterval(id);
-  }, [banners.length]);
 
   useEffect(() => {
     const id = setInterval(() => setWordIdx((w) => (w + 1) % ROTATING_WORDS.length), 2200);
     return () => clearInterval(id);
   }, []);
-
-  const current = banners[slide];
 
   return (
     <section className="relative overflow-hidden pt-24 md:pt-28 pb-16 md:pb-24 bg-background">
@@ -160,109 +131,12 @@ export default function HeroSlideshow() {
           </motion.div>
         </div>
 
-        {/* Banner showcase strip */}
-        {banners.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.7 }}
-            className="mt-16 relative max-w-5xl mx-auto"
-          >
-            <div className="relative rounded-3xl overflow-hidden border border-border bg-foreground shadow-2xl shadow-foreground/20 aspect-[16/7]">
-              <AnimatePresence mode="wait">
-                {current?.image_url ? (
-                  <motion.img
-                    key={current.id}
-                    src={current.image_url}
-                    alt={current.title}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.7 }}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/20 to-foreground" />
-                )}
-              </AnimatePresence>
-
-              {/* Bottom info bar */}
-              <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-foreground/95 via-foreground/60 to-transparent">
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-background/60 mb-1">
-                      Featured drop
-                    </p>
-                    <h3 className="font-display font-bold text-lg md:text-2xl text-background line-clamp-1">
-                      {current?.title || "Premium Asset Showcase"}
-                    </h3>
-                  </div>
-                  {current?.link_url && (
-                    <Button asChild size="sm" variant="secondary" className="rounded-lg shrink-0">
-                      <Link to={current.link_url}>
-                        View <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
-                      </Link>
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Slide dots */}
-              {banners.length > 1 && (
-                <div className="absolute top-4 right-4 flex gap-1.5">
-                  {banners.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSlide(i)}
-                      aria-label={`Slide ${i + 1}`}
-                      className={`h-1.5 rounded-full transition-all ${
-                        i === slide ? "w-6 bg-background" : "w-1.5 bg-background/40 hover:bg-background/70"
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Floating stat chips */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1 }}
-              className="hidden md:flex absolute -left-6 top-8 items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 shadow-xl"
-            >
-              <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center">
-                <Star className="h-5 w-5 text-primary fill-primary" />
-              </div>
-              <div>
-                <p className="font-display font-extrabold text-base leading-none">4.9 / 5</p>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">2.5k reviews</p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.15 }}
-              className="hidden md:flex absolute -right-6 -bottom-6 items-center gap-3 bg-primary text-primary-foreground rounded-2xl px-4 py-3 shadow-xl"
-            >
-              <div className="h-10 w-10 rounded-xl bg-primary-foreground/15 flex items-center justify-center">
-                <Download className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-display font-extrabold text-base leading-none">15k+</p>
-                <p className="text-[10px] uppercase tracking-widest opacity-80 mt-1">downloads</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-
         {/* Bottom trust row */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.3 }}
-          className="mt-16 md:mt-20 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs text-muted-foreground"
+          className="mt-12 md:mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs text-muted-foreground"
         >
           <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Verified vault</span>
           <span className="flex items-center gap-2"><Star className="h-4 w-4 text-primary fill-primary" /> 4.9 average rating</span>
