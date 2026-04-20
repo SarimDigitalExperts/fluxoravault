@@ -109,7 +109,7 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image / Demo */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-          <div className="relative rounded-2xl overflow-hidden aspect-[4/3] border border-border bg-muted/20">
+          <div className="relative rounded-2xl overflow-hidden aspect-square border border-border bg-muted/20">
             <img src={product.image || "/placeholder.svg"} alt={product.title} className="w-full h-full object-cover" />
             {discount && <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">-{discount}%</span>}
             {product.is_featured && <Badge className="absolute top-4 right-4 bg-secondary text-secondary-foreground">Featured</Badge>}
