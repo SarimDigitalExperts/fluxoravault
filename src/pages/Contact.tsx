@@ -64,9 +64,9 @@ export default function Contact() {
       </section>
 
       <section className="container pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* Left: contact info cards */}
-          <div className="space-y-4 lg:col-span-1">
+          <div className="space-y-4 lg:col-span-1 lg:order-1 order-2">
             {[
               { icon: Mail, title: "Email us", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, hint: "Replies within hours" },
               { icon: Phone, title: "Call us", value: CONTACT_PHONE, href: `tel:${CONTACT_PHONE.replace(/\s/g, "")}`, hint: "Mon–Sat" },
@@ -75,19 +75,19 @@ export default function Contact() {
               { icon: Clock, title: "Hours", value: "9:00 – 21:00 PKT", hint: "Mon to Sat" },
             ].map((item) => {
               const inner = (
-                <div className="rounded-2xl border border-border bg-card p-5 flex items-start gap-4 hover:border-primary/40 hover:shadow-sm transition-all h-full">
+                <div className="rounded-2xl border border-border bg-card p-5 flex items-start gap-4 hover:border-primary/40 hover:shadow-sm transition-all">
                   <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <item.icon className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{item.title}</p>
-                    <p className="text-sm font-medium mt-0.5 truncate">{item.value}</p>
+                    <p className="text-sm font-medium mt-0.5 break-all">{item.value}</p>
                     <p className="text-[11px] text-muted-foreground mt-0.5">{item.hint}</p>
                   </div>
                 </div>
               );
               return item.href ? (
-                <a key={item.title} href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">{inner}</a>
+                <a key={item.title} href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block">{inner}</a>
               ) : (
                 <div key={item.title}>{inner}</div>
               );
@@ -95,7 +95,7 @@ export default function Contact() {
           </div>
 
           {/* Right: form */}
-          <form onSubmit={handleSubmit} className="lg:col-span-2 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm space-y-5">
+          <form onSubmit={handleSubmit} className="lg:col-span-2 lg:order-2 order-1 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm space-y-5">
             <div>
               <h2 className="text-xl font-display font-bold">Send us a message</h2>
               <p className="text-sm text-muted-foreground">Fill in the form and we'll be in touch shortly.</p>
