@@ -5,7 +5,7 @@ import { ArrowUpRight, Sparkles, Search, Star, Download, ShieldCheck } from "luc
 import { Button } from "@/components/ui/button";
 import {
   SiShopify, SiWordpress, SiCanva, SiFigma, SiNodedotjs, SiReact,
-  SiTailwindcss, SiAdobexd,
+  SiTailwindcss, SiFramer,
 } from "react-icons/si";
 
 const ROTATING_WORDS = ["Themes", "Plugins", "UI Kits", "Mockups", "Icons"];
@@ -18,7 +18,7 @@ const BRANDS: { name: string; Icon: any; color: string; query: string }[] = [
   { name: "Node.js", Icon: SiNodedotjs, color: "#339933", query: "Node" },
   { name: "React", Icon: SiReact, color: "#61DAFB", query: "React" },
   { name: "Tailwind", Icon: SiTailwindcss, color: "#06B6D4", query: "Tailwind" },
-  { name: "Adobe XD", Icon: SiAdobexd, color: "#FF61F6", query: "Adobe" },
+  { name: "Framer", Icon: SiFramer, color: "#0055FF", query: "Framer" },
 ];
 
 export default function HeroSlideshow() {
