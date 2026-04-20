@@ -3,8 +3,23 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Sparkles, Search, Star, Download, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  SiShopify, SiWordpress, SiCanva, SiFigma, SiNodedotjs, SiReact,
+  SiTailwindcss, SiAdobephotoshop,
+} from "react-icons/si";
 
 const ROTATING_WORDS = ["Themes", "Plugins", "UI Kits", "Mockups", "Icons"];
+
+const BRANDS: { name: string; Icon: any; color: string; query: string }[] = [
+  { name: "Shopify", Icon: SiShopify, color: "#95BF47", query: "Shopify" },
+  { name: "WordPress", Icon: SiWordpress, color: "#21759B", query: "WordPress" },
+  { name: "Canva", Icon: SiCanva, color: "#00C4CC", query: "Canva" },
+  { name: "Figma", Icon: SiFigma, color: "#F24E1E", query: "Figma" },
+  { name: "Node.js", Icon: SiNodedotjs, color: "#339933", query: "Node" },
+  { name: "React", Icon: SiReact, color: "#61DAFB", query: "React" },
+  { name: "Tailwind", Icon: SiTailwindcss, color: "#06B6D4", query: "Tailwind" },
+  { name: "Photoshop", Icon: SiAdobephotoshop, color: "#31A8FF", query: "Photoshop" },
+];
 
 export default function HeroSlideshow() {
   const [wordIdx, setWordIdx] = useState(0);
@@ -116,16 +131,20 @@ export default function HeroSlideshow() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.55 }}
-            className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs"
+            className="mt-8 flex flex-wrap items-center justify-center gap-2.5"
           >
-            <span className="text-muted-foreground">Popular:</span>
-            {["WordPress", "React", "Tailwind", "Figma", "Dashboards"].map((t) => (
+            <span className="w-full text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/80 mb-1">
+              Built for your favorite tools
+            </span>
+            {BRANDS.map((b) => (
               <Link
-                key={t}
-                to={`/shop?search=${t}`}
-                className="px-3 py-1 rounded-md border border-border bg-card hover:border-primary hover:text-primary transition-colors"
+                key={b.name}
+                to={`/shop?search=${encodeURIComponent(b.query)}`}
+                title={b.name}
+                className="group flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all"
               >
-                {t}
+                <b.Icon className="h-4 w-4 transition-transform group-hover:scale-110" style={{ color: b.color }} />
+                <span className="text-xs font-medium text-foreground/80 group-hover:text-foreground">{b.name}</span>
               </Link>
             ))}
           </motion.div>
