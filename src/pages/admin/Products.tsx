@@ -448,6 +448,14 @@ export default function AdminProducts() {
                   )}
                 </TabsContent>
 
+                {/* VARIATIONS */}
+                <TabsContent value="variations" className="space-y-4 mt-4">
+                  <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
+                    <strong className="text-foreground">Advanced variations:</strong> Define axes (Duration, Tier, Seats…) and combinations with their own prices, durations, badges, and stock. Buyers will pick from these on the product page.
+                  </div>
+                  <ProductVariationsEditor productId={editing?.id || null} />
+                </TabsContent>
+
                 {/* DELIVERY */}
                 <TabsContent value="delivery" className="space-y-4 mt-4">
                   <div>
