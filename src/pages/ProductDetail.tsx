@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
 import { toast } from "sonner";
 import type { Product } from "@/data/products";
+import ProductVariationPicker, { ProductVariation, variationDisplayName } from "@/components/ProductVariationPicker";
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -22,6 +23,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<any>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [variations, setVariations] = useState<ProductVariation[]>([]);
+  const [selectedVariationId, setSelectedVariationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -44,9 +47,10 @@ export default function ProductDetail() {
       const { data } = await supabase.from("products").select("*").eq("slug", slug).maybeSingle();
       if (data) {
         setProduct(data);
-        const [relRes, revRes] = await Promise.all([
+        const [relRes, revRes, varRes] = await Promise.all([
           supabase.from("products").select("*").eq("category_slug", data.category_slug).neq("id", data.id).eq("is_published", true).limit(4),
           supabase.from("reviews").select("*").eq("product_id", data.id).eq("is_approved", true).order("created_at", { ascending: false }),
+          supabase.from("product_variations").select("*").eq("product_id", data.id).eq("is_active", true).order("display_order", { ascending: true }),
         ]);
         if (relRes.data) setRelated(relRes.data.map((r: any) => ({
           id: r.id, title: r.title, description: r.description || "", price: r.price,
@@ -55,6 +59,12 @@ export default function ProductDetail() {
           reviews: r.reviews_count || 0, slug: r.slug,
         })));
         if (revRes.data) setReviews(revRes.data);
+        if (varRes.data) {
+          const vs = varRes.data as ProductVariation[];
+          setVariations(vs);
+          const def = vs.find(v => v.is_default) || vs[0];
+          if (def) setSelectedVariationId(def.id);
+        }
       }
       setLoading(false);
     };
@@ -89,14 +99,28 @@ export default function ProductDetail() {
   );
 
   const wishlisted = isInWishlist(product.id);
-  const discount = product.original_price ? Math.round((1 - product.price / product.original_price) * 100) : null;
+  const selectedVariation = variations.find(v => v.id === selectedVariationId) || null;
+  const effectivePrice = selectedVariation?.price ?? product.price;
+  const effectiveOriginal = selectedVariation?.original_price ?? product.original_price;
+  const discount = effectiveOriginal && effectiveOriginal > effectivePrice
+    ? Math.round((1 - effectivePrice / effectiveOriginal) * 100)
+    : null;
   const productForCart: Product = {
     id: product.id, title: product.title, description: product.description || "",
-    price: product.price, originalPrice: product.original_price || undefined,
+    price: effectivePrice, originalPrice: effectiveOriginal || undefined,
     category: product.category, categorySlug: product.category_slug,
     image: product.image || "/placeholder.svg", tags: product.tags || [],
     rating: product.rating || 0, reviews: product.reviews_count || 0, slug: product.slug,
   };
+
+  const cartVariation = selectedVariation ? {
+    id: selectedVariation.id,
+    label: variationDisplayName(selectedVariation),
+    price: selectedVariation.price,
+    original_price: selectedVariation.original_price,
+    duration_type: selectedVariation.duration_type,
+    duration_days: selectedVariation.duration_days,
+  } : undefined;
 
   const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : "0";
 
@@ -169,18 +193,26 @@ export default function ProductDetail() {
             <span className="text-sm text-muted-foreground">({reviews.length} reviews)</span>
             {(product.tags || []).map((tag: string) => <Badge key={tag} variant="secondary" className="text-[10px]">{tag}</Badge>)}
           </div>
-          <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-display font-bold">PKR {product.price.toLocaleString()}</span>
-            {product.original_price && <span className="text-lg text-muted-foreground line-through">PKR {product.original_price.toLocaleString()}</span>}
-            {discount && <Badge className="bg-green-500/10 text-green-600 border-green-200">{discount}% OFF</Badge>}
-          </div>
+          {variations.length > 0 ? (
+            <ProductVariationPicker
+              variations={variations}
+              selectedId={selectedVariationId}
+              onChange={setSelectedVariationId}
+            />
+          ) : (
+            <div className="flex items-baseline gap-3">
+              <span className="text-4xl font-display font-bold">PKR {product.price.toLocaleString()}</span>
+              {product.original_price && <span className="text-lg text-muted-foreground line-through">PKR {product.original_price.toLocaleString()}</span>}
+              {discount && <Badge className="bg-green-500/10 text-green-600 border-green-200">{discount}% OFF</Badge>}
+            </div>
+          )}
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
           <div className="flex gap-3">
-            <Button size="lg" variant="outline" className="flex-1" onClick={() => addToCart(productForCart)}>
+            <Button size="lg" variant="outline" className="flex-1" onClick={() => addToCart(productForCart, cartVariation)}>
               <ShoppingCart className="h-4 w-4 mr-2" /> Add to Cart
             </Button>
-            <Button size="lg" className="flex-1" onClick={() => { addToCart(productForCart); navigate("/checkout"); }}>
+            <Button size="lg" className="flex-1" onClick={() => { addToCart(productForCart, cartVariation); navigate("/checkout"); }}>
               <Zap className="h-4 w-4 mr-2" /> Buy Now
             </Button>
             <Button variant="outline" size="lg" onClick={() => wishlisted ? removeFromWishlist(product.id) : addToWishlist(productForCart)}>

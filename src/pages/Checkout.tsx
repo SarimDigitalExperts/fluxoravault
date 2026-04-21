@@ -125,7 +125,16 @@ export default function Checkout() {
       }).select().single();
       if (orderErr) throw orderErr;
       for (const item of items) {
-        await supabase.from("order_items").insert({ order_id: order.id, product_id: item.product.id, quantity: item.quantity, price: item.product.price });
+        await supabase.from("order_items").insert({
+          order_id: order.id,
+          product_id: item.product.id,
+          quantity: item.quantity,
+          price: item.variation?.price ?? item.product.price,
+          variation_id: item.variation?.id || null,
+          variation_label: item.variation?.label || null,
+          duration_type: item.variation?.duration_type || null,
+          duration_days: item.variation?.duration_days || null,
+        });
       }
       // Record coupon redemption for per-user limit tracking
       if (appliedCoupon) {
@@ -254,9 +263,12 @@ export default function Checkout() {
                 <h2 className="text-lg font-semibold">Order Summary</h2>
                 <div className="space-y-3 max-h-64 overflow-y-auto">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm">
-                      <span className="truncate mr-2">{item.product.title} × {item.quantity}</span>
-                      <span className="font-medium shrink-0">PKR {(item.product.price * item.quantity).toLocaleString()}</span>
+                    <div key={`${item.product.id}-${item.variation?.id || "_"}`} className="flex justify-between text-sm">
+                      <span className="truncate mr-2">
+                        {item.product.title}
+                        {item.variation ? ` (${item.variation.label})` : ""} × {item.quantity}
+                      </span>
+                      <span className="font-medium shrink-0">PKR {((item.variation?.price ?? item.product.price) * item.quantity).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>

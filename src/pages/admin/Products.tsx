@@ -13,13 +13,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   Plus, Pencil, Trash2, Package, Save, X, FileText, DollarSign, Tag, Image as ImageIcon,
   Download, Shield, Settings, Search as SearchIcon, Eye, Upload, Link as LinkIcon, Key, QrCode,
-  Star, TrendingUp, Globe
+  Star, TrendingUp, Globe, Layers
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import AdminToolbar from "@/components/admin/AdminToolbar";
 import { useAdminTable } from "@/hooks/useAdminTable";
+import ProductVariationsEditor from "@/components/admin/ProductVariationsEditor";
 
 interface ProductForm {
   title: string; slug: string; description: string; price: number;
@@ -324,9 +325,10 @@ export default function AdminProducts() {
             {/* Main Form */}
             <div className="lg:col-span-2 space-y-6">
               <Tabs defaultValue="basic" className="w-full">
-                <TabsList className="grid grid-cols-5 w-full">
+                <TabsList className="grid grid-cols-6 w-full">
                   <TabsTrigger value="basic" className="text-xs"><FileText className="h-3 w-3 mr-1" />Basic</TabsTrigger>
                   <TabsTrigger value="pricing" className="text-xs"><DollarSign className="h-3 w-3 mr-1" />Pricing</TabsTrigger>
+                  <TabsTrigger value="variations" className="text-xs"><Layers className="h-3 w-3 mr-1" />Variations</TabsTrigger>
                   <TabsTrigger value="delivery" className="text-xs"><Download className="h-3 w-3 mr-1" />Delivery</TabsTrigger>
                   <TabsTrigger value="access" className="text-xs"><Shield className="h-3 w-3 mr-1" />Access</TabsTrigger>
                   <TabsTrigger value="seo" className="text-xs"><Globe className="h-3 w-3 mr-1" />SEO</TabsTrigger>
@@ -444,6 +446,14 @@ export default function AdminProducts() {
                       🎉 Discount: <strong>{discount}% off</strong> (saves PKR {((form.original_price || 0) - form.price).toLocaleString()})
                     </div>
                   )}
+                </TabsContent>
+
+                {/* VARIATIONS */}
+                <TabsContent value="variations" className="space-y-4 mt-4">
+                  <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
+                    <strong className="text-foreground">Advanced variations:</strong> Define axes (Duration, Tier, Seats…) and combinations with their own prices, durations, badges, and stock. Buyers will pick from these on the product page.
+                  </div>
+                  <ProductVariationsEditor productId={editing?.id || null} />
                 </TabsContent>
 
                 {/* DELIVERY */}
