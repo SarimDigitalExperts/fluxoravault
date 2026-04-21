@@ -54,6 +54,7 @@ export default function AdminProducts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [productFile, setProductFile] = useState<File | null>(null);
+  const [imageUploading, setImageUploading] = useState(false);
   const { toast } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -90,6 +91,33 @@ export default function AdminProducts() {
   };
 
   const removeTag = (tag: string) => updateField("tags", form.tags.filter(t => t !== tag));
+
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Invalid file", description: "Please upload an image file.", variant: "destructive" });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Image must be under 5MB.", variant: "destructive" });
+      return;
+    }
+    setImageUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error } = await supabase.storage.from("product-images").upload(path, file, {
+        cacheControl: "3600", upsert: false,
+      });
+      if (error) throw error;
+      const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+      updateField("image", data.publicUrl);
+      toast({ title: "Image uploaded!" });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setImageUploading(false);
+    }
+  };
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setLicenseKeys([]); setProductFile(null); setDialogOpen(true); };
 
@@ -352,8 +380,46 @@ export default function AdminProducts() {
                   </div>
                   {/* Media */}
                   <div>
-                    <Label className="text-xs font-medium">Product Image URL</Label>
-                    <Input value={form.image} onChange={e => updateField("image", e.target.value)} placeholder="https://..." className="mt-1" />
+                    <Label className="text-xs font-medium">Product Image</Label>
+                    <div className="mt-1 space-y-2">
+                      {form.image && (
+                        <div className="relative inline-block">
+                          <img src={form.image} alt="Preview" className="h-32 w-32 rounded-lg object-cover border border-border" />
+                          <Button
+                            type="button" variant="destructive" size="icon"
+                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                            onClick={() => updateField("image", "")}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex gap-2">
+                        <label className="flex-1">
+                          <input
+                            type="file" accept="image/*" className="hidden"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) handleImageUpload(f);
+                              e.target.value = "";
+                            }}
+                          />
+                          <Button type="button" variant="outline" className="w-full cursor-pointer" asChild disabled={imageUploading}>
+                            <span>
+                              <Upload className="h-4 w-4 mr-2" />
+                              {imageUploading ? "Uploading..." : form.image ? "Replace Image" : "Upload Image"}
+                            </span>
+                          </Button>
+                        </label>
+                      </div>
+                      <Input
+                        value={form.image}
+                        onChange={(e) => updateField("image", e.target.value)}
+                        placeholder="...or paste image URL"
+                        className="text-xs"
+                      />
+                      <p className="text-[10px] text-muted-foreground">Recommended: 1080×1080px square. Max 5MB.</p>
+                    </div>
                   </div>
                   <div>
                     <Label className="text-xs font-medium">OS / Compatibility</Label>
