@@ -193,18 +193,26 @@ export default function ProductDetail() {
             <span className="text-sm text-muted-foreground">({reviews.length} reviews)</span>
             {(product.tags || []).map((tag: string) => <Badge key={tag} variant="secondary" className="text-[10px]">{tag}</Badge>)}
           </div>
-          <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-display font-bold">PKR {product.price.toLocaleString()}</span>
-            {product.original_price && <span className="text-lg text-muted-foreground line-through">PKR {product.original_price.toLocaleString()}</span>}
-            {discount && <Badge className="bg-green-500/10 text-green-600 border-green-200">{discount}% OFF</Badge>}
-          </div>
+          {variations.length > 0 ? (
+            <ProductVariationPicker
+              variations={variations}
+              selectedId={selectedVariationId}
+              onChange={setSelectedVariationId}
+            />
+          ) : (
+            <div className="flex items-baseline gap-3">
+              <span className="text-4xl font-display font-bold">PKR {product.price.toLocaleString()}</span>
+              {product.original_price && <span className="text-lg text-muted-foreground line-through">PKR {product.original_price.toLocaleString()}</span>}
+              {discount && <Badge className="bg-green-500/10 text-green-600 border-green-200">{discount}% OFF</Badge>}
+            </div>
+          )}
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
           <div className="flex gap-3">
-            <Button size="lg" variant="outline" className="flex-1" onClick={() => addToCart(productForCart)}>
+            <Button size="lg" variant="outline" className="flex-1" onClick={() => addToCart(productForCart, cartVariation)}>
               <ShoppingCart className="h-4 w-4 mr-2" /> Add to Cart
             </Button>
-            <Button size="lg" className="flex-1" onClick={() => { addToCart(productForCart); navigate("/checkout"); }}>
+            <Button size="lg" className="flex-1" onClick={() => { addToCart(productForCart, cartVariation); navigate("/checkout"); }}>
               <Zap className="h-4 w-4 mr-2" /> Buy Now
             </Button>
             <Button variant="outline" size="lg" onClick={() => wishlisted ? removeFromWishlist(product.id) : addToWishlist(productForCart)}>
