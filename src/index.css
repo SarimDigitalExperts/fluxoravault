@@ -15,10 +15,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 28 96% 49%;
+    --primary: 227 100% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 227 100% 58%;
+    --secondary: 28 96% 49%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
@@ -32,18 +32,18 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 28 96% 49%;
+    --ring: 227 100% 58%;
 
     --radius: 0.625rem;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 28 96% 49%;
+    --sidebar-primary: 227 100% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 14% 96%;
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 28 96% 49%;
+    --sidebar-ring: 227 100% 58%;
   }
 }
 
@@ -61,7 +61,7 @@
 
 @layer utilities {
   .gradient-text {
-    background: linear-gradient(135deg, hsl(28 96% 49%), hsl(227 100% 58%));
+    background: linear-gradient(135deg, hsl(227 100% 58%), hsl(28 96% 49%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -95,7 +95,7 @@
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(28 96% 49% / 0.6);
+  background: hsl(227 100% 58% / 0.6);
 }
 
 /* Hide scrollbar utility */
