@@ -214,24 +214,46 @@ export default function Home() {
       <ProductCarousel products={latest} title="Latest Products" subtitle="Recently added to our collection" />
 
       {/* How It Works */}
-      <section className="section-padding bg-muted/30">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">How It Works</h2>
-            <p className="text-muted-foreground">Get started in 3 simple steps</p>
+      <section className="section-padding bg-muted/30 relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[44rem] rounded-full bg-primary/10 blur-3xl" />
+        <div className="container relative">
+          <motion.div {...fadeUp} className="text-center mb-14 max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
+              <Sparkles className="h-3 w-3" /> Simple process
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold mb-3">How It <span className="italic text-primary">Works</span></h2>
+            <p className="text-muted-foreground">From discovery to download in just a few minutes — zero friction, zero stress.</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+            {/* connecting dotted line (desktop) */}
+            <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px border-t-2 border-dashed border-primary/30" />
+
             {[
-              { step: "01", title: "Browse & Choose", desc: "Explore our curated collection of premium digital assets" },
-              { step: "02", title: "Pay & Verify", desc: "Complete payment using any available method. We verify within hours" },
-              { step: "03", title: "Download & Build", desc: "Access your files instantly from your account dashboard" },
+              { step: "01", title: "Browse & Choose", desc: "Explore our curated collection of premium digital assets across every category.", icon: Search },
+              { step: "02", title: "Pay & Verify", desc: "Complete checkout with any payment method. We verify within hours, around the clock.", icon: Shield },
+              { step: "03", title: "Download & Build", desc: "Access your files instantly from your dashboard with lifetime updates included.", icon: Download },
             ].map((item, i) => (
-              <motion.div key={item.step} {...fadeUp} transition={{ delay: i * 0.1 }} className="text-center p-6">
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4">
-                  {item.step}
+              <motion.div
+                key={item.step}
+                {...fadeUp}
+                transition={{ delay: i * 0.12 }}
+                className="relative group"
+              >
+                <div className="relative rounded-2xl border border-border bg-card p-7 text-center hover:-translate-y-1 hover:shadow-xl hover:border-primary/40 transition-all duration-300">
+                  {/* Step badge */}
+                  <div className="relative mx-auto mb-5 w-20 h-20">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary opacity-20 blur-md group-hover:opacity-40 transition-opacity" />
+                    <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground flex items-center justify-center shadow-lg">
+                      <item.icon className="h-8 w-8" />
+                    </div>
+                    <span className="absolute -top-1 -right-1 h-7 w-7 rounded-full bg-card border-2 border-primary text-primary text-[11px] font-extrabold flex items-center justify-center">
+                      {item.step}
+                    </span>
+                  </div>
+                  <h3 className="font-display font-bold text-lg mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="font-display font-semibold text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -239,27 +261,58 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="section-padding">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">What Our Customers Say</h2>
-            <p className="text-muted-foreground">Trusted by thousands of creators worldwide</p>
+      <section className="section-padding relative overflow-hidden">
+        <div className="container relative">
+          <motion.div {...fadeUp} className="text-center mb-14 max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
+              <Heart className="h-3 w-3 fill-primary" /> Loved worldwide
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold mb-3">
+              What Our <span className="italic text-primary">Customers</span> Say
+            </h2>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <div className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                ))}
+              </div>
+              <span className="text-sm font-semibold">4.9/5</span>
+              <span className="text-sm text-muted-foreground">from 2,500+ reviews</span>
+            </div>
           </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((t, i) => (
-              <motion.div key={t.name} {...fadeUp} transition={{ delay: i * 0.1 }} className="p-6 rounded-xl border border-border bg-card">
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 italic">"{t.text}"</p>
-                <div>
-                  <p className="font-display font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </motion.div>
-            ))}
+            {testimonials.map((t, i) => {
+              const initials = t.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+              return (
+                <motion.div
+                  key={t.name}
+                  {...fadeUp}
+                  transition={{ delay: i * 0.08 }}
+                  className="group relative p-7 rounded-2xl border border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                >
+                  {/* big quote mark */}
+                  <span className="absolute top-3 right-4 text-7xl font-display font-extrabold text-primary/10 leading-none select-none">"</span>
+
+                  <div className="flex gap-0.5 mb-4 relative">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-foreground/80 mb-6 leading-relaxed relative">"{t.text}"</p>
+                  <div className="flex items-center gap-3 relative pt-4 border-t border-border">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground flex items-center justify-center text-sm font-bold shadow-md">
+                      {initials}
+                    </div>
+                    <div>
+                      <p className="font-display font-bold text-sm leading-tight">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                    <BadgeCheck className="h-4 w-4 text-primary ml-auto" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -328,21 +381,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — Ready to get started + Newsletter */}
       <section className="section-padding">
         <div className="container">
-          <motion.div {...fadeUp} className="max-w-3xl mx-auto text-center bg-primary rounded-2xl p-12 text-primary-foreground">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-primary-foreground/80 mb-8 max-w-md mx-auto">
-              Join thousands of creators using Signify Vault to build amazing projects.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-base px-8">
-                <Link to="/shop">Browse Shop <ArrowRight className="h-4 w-4 ml-2" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/auth">Create Account</Link>
-              </Button>
+          <motion.div
+            {...fadeUp}
+            className="relative max-w-6xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary text-primary-foreground shadow-2xl"
+          >
+            {/* decorative blobs */}
+            <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-secondary/40 blur-3xl" />
+            {/* dot grid */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
+            />
+
+            <div className="relative grid md:grid-cols-2 gap-10 p-8 md:p-14 items-center">
+              {/* Left: heading + CTAs */}
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 mb-4">
+                  <Sparkles className="h-3 w-3" /> Join 2,500+ creators
+                </span>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-extrabold leading-tight mb-4">
+                  Ready to <span className="italic">build</span> something amazing?
+                </h2>
+                <p className="text-primary-foreground/90 mb-7 max-w-md">
+                  Get instant access to premium templates, tools and digital assets. New drops every week.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild size="lg" variant="secondary" className="text-base px-7 font-semibold shadow-lg">
+                    <Link to="/shop">Browse Shop <ArrowRight className="h-4 w-4 ml-2" /></Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="text-base px-7 font-semibold border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground"
+                  >
+                    <Link to="/auth">Create Account</Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right: newsletter card */}
+              <div className="relative">
+                <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-7 shadow-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BadgeCheck className="h-5 w-5" />
+                    <h3 className="font-display font-bold text-lg">Get 10% off your first order</h3>
+                  </div>
+                  <p className="text-sm text-primary-foreground/85 mb-5">
+                    Subscribe to our newsletter for fresh drops, deals and free assets — straight to your inbox.
+                  </p>
+                  <form
+                    onSubmit={(e) => { e.preventDefault(); }}
+                    className="flex flex-col sm:flex-row gap-2"
+                  >
+                    <input
+                      type="email"
+                      required
+                      placeholder="you@email.com"
+                      className="flex-1 h-11 rounded-md px-4 text-sm bg-white/95 text-foreground placeholder:text-muted-foreground border border-white/40 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    />
+                    <Button
+                      type="submit"
+                      size="lg"
+                      variant="secondary"
+                      className="h-11 px-5 font-semibold whitespace-nowrap shadow-md"
+                    >
+                      Subscribe
+                    </Button>
+                  </form>
+                  <div className="flex items-center gap-4 mt-4 text-[11px] text-primary-foreground/80">
+                    <span className="inline-flex items-center gap-1"><Lock className="h-3 w-3" /> No spam, ever</span>
+                    <span className="inline-flex items-center gap-1"><Zap className="h-3 w-3" /> Unsubscribe anytime</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
