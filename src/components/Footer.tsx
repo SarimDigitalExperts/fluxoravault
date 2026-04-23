@@ -144,12 +144,12 @@ export default function Footer() {
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">We accept</p>
             <div className="flex flex-wrap items-center gap-2">
               {[
-                { name: "Easypaisa", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Easypaisa_logo.png/320px-Easypaisa_logo.png" },
-                { name: "JazzCash", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/JazzCash_logo.png/320px-JazzCash_logo.png" },
-                { name: "SadaPay", src: "https://play-lh.googleusercontent.com/3rWfZmMzfX_8gTd9akEnT0V0iMIz5kVrkMm6Sks7L1l4_AmO_Y3kPmqkwUz-vH-l6w" },
-                { name: "Visa", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/320px-Visa_Inc._logo.svg.png" },
-                { name: "Mastercard", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/240px-Mastercard-logo.svg.png" },
-                { name: "Bank Transfer", src: "https://cdn-icons-png.flaticon.com/512/2830/2830284.png" },
+                { name: "Easypaisa", src: "https://logos-world.net/wp-content/uploads/2022/12/Easypaisa-Logo.png" },
+                { name: "JazzCash", src: "https://seeklogo.com/images/J/jazzcash-logo-3F1D625A45-seeklogo.com.png" },
+                { name: "SadaPay", src: "https://seeklogo.com/images/S/sadapay-logo-7C5A4A6F8E-seeklogo.com.png" },
+                { name: "Visa", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/visa.svg" },
+                { name: "Mastercard", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/mastercard.svg" },
+                { name: "Bank Transfer", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/bank.svg" },
               ].map((m) => (
                 <div
                   key={m.name}
