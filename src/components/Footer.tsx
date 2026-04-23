@@ -147,33 +147,32 @@ export default function Footer() {
                 {
                   group: "E-Wallets",
                   items: [
-                    { name: "Easypaisa", bg: "bg-[#00B14F]", fg: "text-white", label: "easypaisa" },
-                    { name: "JazzCash", bg: "bg-[#ED1C24]", fg: "text-white", label: "JazzCash" },
-                    { name: "SadaPay", bg: "bg-[#0A0A0A]", fg: "text-white", label: "SadaPay" },
-                    { name: "NayaPay", bg: "bg-[#7C3AED]", fg: "text-white", label: "NayaPay" },
+                    { name: "Easypaisa", src: "https://logos-world.net/wp-content/uploads/2022/12/Easypaisa-Logo.png", bg: "bg-white" },
+                    { name: "JazzCash", src: "https://seeklogo.com/images/J/jazzcash-logo-7BBE0E055F-seeklogo.com.png", bg: "bg-white" },
+                    { name: "SadaPay", src: "https://seeklogo.com/images/S/sadapay-logo-A8AC0E2C9F-seeklogo.com.png", bg: "bg-white" },
+                    { name: "NayaPay", src: "https://seeklogo.com/images/N/nayapay-logo-3DC4FA8DE1-seeklogo.com.png", bg: "bg-white" },
                   ],
                 },
                 {
                   group: "Bank Transfer",
                   items: [
-                    { name: "Meezan Bank", bg: "bg-[#003F2D]", fg: "text-white", label: "Meezan" },
-                    { name: "Bank Alfalah", bg: "bg-[#00529B]", fg: "text-white", label: "Alfalah" },
-                    { name: "HBL", bg: "bg-[#006A4E]", fg: "text-white", label: "HBL" },
+                    { name: "Meezan Bank", src: "https://seeklogo.com/images/M/meezan-bank-logo-8B0F1B0EFE-seeklogo.com.png", bg: "bg-white" },
+                    { name: "Bank Alfalah", src: "https://seeklogo.com/images/B/bank-alfalah-logo-7CB0BBC8A1-seeklogo.com.png", bg: "bg-white" },
+                    { name: "HBL", src: "https://seeklogo.com/images/H/hbl-habib-bank-limited-logo-1F0843A7AB-seeklogo.com.png", bg: "bg-white" },
                   ],
                 },
                 {
                   group: "Cards",
                   items: [
-                    { name: "Visa", bg: "bg-[#1A1F71]", fg: "text-white", label: "VISA" },
-                    { name: "Mastercard", bg: "bg-white border border-border", fg: "text-[#EB001B]", label: "MC" },
-                    { name: "PayPak", bg: "bg-[#0F4C81]", fg: "text-white", label: "PayPak" },
+                    { name: "Visa", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/visa.svg", bg: "bg-white" },
+                    { name: "Mastercard", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/mastercard.svg", bg: "bg-white" },
+                    { name: "PayPak", src: "https://seeklogo.com/images/P/paypak-logo-F6A2D2F3E2-seeklogo.com.png", bg: "bg-white" },
                   ],
                 },
                 {
                   group: "QR Payments",
                   items: [
-                    { name: "Raast QR", bg: "bg-[#1E40AF]", fg: "text-white", label: "Raast" },
-                    { name: "QR Code", bg: "bg-foreground", fg: "text-background", label: "QR" },
+                    { name: "Raast", src: "https://seeklogo.com/images/R/raast-logo-2F0E5F8E6F-seeklogo.com.png", bg: "bg-white" },
                   ],
                 },
               ].map((row) => (
@@ -184,9 +183,25 @@ export default function Footer() {
                       <div
                         key={m.name}
                         title={m.name}
-                        className={`h-7 px-2.5 rounded-md ${m.bg} ${m.fg} flex items-center justify-center text-[10px] font-bold tracking-wide shadow-sm`}
+                        className={`h-9 w-14 rounded-md ${m.bg} border border-border flex items-center justify-center p-1 shadow-sm`}
                       >
-                        {m.label}
+                        <img
+                          src={m.src}
+                          alt={m.name}
+                          loading="lazy"
+                          className="max-h-full max-w-full object-contain"
+                          onError={(e) => {
+                            const t = e.currentTarget as HTMLImageElement;
+                            t.style.display = "none";
+                            const parent = t.parentElement;
+                            if (parent && !parent.querySelector("span")) {
+                              const s = document.createElement("span");
+                              s.textContent = m.name;
+                              s.className = "text-[9px] font-bold text-foreground text-center leading-tight";
+                              parent.appendChild(s);
+                            }
+                          }}
+                        />
                       </div>
                     ))}
                   </div>
