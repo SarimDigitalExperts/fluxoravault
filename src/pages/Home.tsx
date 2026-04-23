@@ -381,21 +381,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — Ready to get started + Newsletter */}
       <section className="section-padding">
         <div className="container">
-          <motion.div {...fadeUp} className="max-w-3xl mx-auto text-center bg-primary rounded-2xl p-12 text-primary-foreground">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-primary-foreground/80 mb-8 max-w-md mx-auto">
-              Join thousands of creators using Signify Vault to build amazing projects.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-base px-8">
-                <Link to="/shop">Browse Shop <ArrowRight className="h-4 w-4 ml-2" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/auth">Create Account</Link>
-              </Button>
+          <motion.div
+            {...fadeUp}
+            className="relative max-w-6xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary text-primary-foreground shadow-2xl"
+          >
+            {/* decorative blobs */}
+            <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-secondary/40 blur-3xl" />
+            {/* dot grid */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
+                backgroundSize: "20px 20px",
+              }}
+            />
+
+            <div className="relative grid md:grid-cols-2 gap-10 p-8 md:p-14 items-center">
+              {/* Left: heading + CTAs */}
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 mb-4">
+                  <Sparkles className="h-3 w-3" /> Join 2,500+ creators
+                </span>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-extrabold leading-tight mb-4">
+                  Ready to <span className="italic">build</span> something amazing?
+                </h2>
+                <p className="text-primary-foreground/90 mb-7 max-w-md">
+                  Get instant access to premium templates, tools and digital assets. New drops every week.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild size="lg" variant="secondary" className="text-base px-7 font-semibold shadow-lg">
+                    <Link to="/shop">Browse Shop <ArrowRight className="h-4 w-4 ml-2" /></Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="text-base px-7 font-semibold border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground"
+                  >
+                    <Link to="/auth">Create Account</Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right: newsletter card */}
+              <div className="relative">
+                <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-6 md:p-7 shadow-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BadgeCheck className="h-5 w-5" />
+                    <h3 className="font-display font-bold text-lg">Get 10% off your first order</h3>
+                  </div>
+                  <p className="text-sm text-primary-foreground/85 mb-5">
+                    Subscribe to our newsletter for fresh drops, deals and free assets — straight to your inbox.
+                  </p>
+                  <form
+                    onSubmit={(e) => { e.preventDefault(); }}
+                    className="flex flex-col sm:flex-row gap-2"
+                  >
+                    <input
+                      type="email"
+                      required
+                      placeholder="you@email.com"
+                      className="flex-1 h-11 rounded-md px-4 text-sm bg-white/95 text-foreground placeholder:text-muted-foreground border border-white/40 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    />
+                    <Button
+                      type="submit"
+                      size="lg"
+                      variant="secondary"
+                      className="h-11 px-5 font-semibold whitespace-nowrap shadow-md"
+                    >
+                      Subscribe
+                    </Button>
+                  </form>
+                  <div className="flex items-center gap-4 mt-4 text-[11px] text-primary-foreground/80">
+                    <span className="inline-flex items-center gap-1"><Lock className="h-3 w-3" /> No spam, ever</span>
+                    <span className="inline-flex items-center gap-1"><Zap className="h-3 w-3" /> Unsubscribe anytime</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
