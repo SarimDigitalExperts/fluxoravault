@@ -143,13 +143,21 @@ export default function Footer() {
           <div className="mt-6">
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">We accept</p>
             <div className="flex flex-wrap items-center gap-2">
-              {["Bank", "Easypaisa", "SadaPay", "JazzCash", "QR Pay"].map((m) => (
-                <span
-                  key={m}
-                  className="px-2.5 py-1 text-[11px] font-semibold rounded-md border border-border bg-card text-muted-foreground"
+              {[
+                { name: "Easypaisa", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Easypaisa_logo.png/320px-Easypaisa_logo.png" },
+                { name: "JazzCash", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/JazzCash_logo.png/320px-JazzCash_logo.png" },
+                { name: "SadaPay", src: "https://play-lh.googleusercontent.com/3rWfZmMzfX_8gTd9akEnT0V0iMIz5kVrkMm6Sks7L1l4_AmO_Y3kPmqkwUz-vH-l6w" },
+                { name: "Visa", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/320px-Visa_Inc._logo.svg.png" },
+                { name: "Mastercard", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/240px-Mastercard-logo.svg.png" },
+                { name: "Bank Transfer", src: "https://cdn-icons-png.flaticon.com/512/2830/2830284.png" },
+              ].map((m) => (
+                <div
+                  key={m.name}
+                  title={m.name}
+                  className="h-9 w-14 rounded-md border border-border bg-white flex items-center justify-center p-1.5 shadow-sm"
                 >
-                  {m}
-                </span>
+                  <img src={m.src} alt={m.name} loading="lazy" className="max-h-full max-w-full object-contain" />
+                </div>
               ))}
             </div>
           </div>
