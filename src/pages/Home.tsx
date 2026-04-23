@@ -214,24 +214,46 @@ export default function Home() {
       <ProductCarousel products={latest} title="Latest Products" subtitle="Recently added to our collection" />
 
       {/* How It Works */}
-      <section className="section-padding bg-muted/30">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">How It Works</h2>
-            <p className="text-muted-foreground">Get started in 3 simple steps</p>
+      <section className="section-padding bg-muted/30 relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[44rem] rounded-full bg-primary/10 blur-3xl" />
+        <div className="container relative">
+          <motion.div {...fadeUp} className="text-center mb-14 max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
+              <Sparkles className="h-3 w-3" /> Simple process
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold mb-3">How It <span className="italic text-primary">Works</span></h2>
+            <p className="text-muted-foreground">From discovery to download in just a few minutes — zero friction, zero stress.</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+            {/* connecting dotted line (desktop) */}
+            <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px border-t-2 border-dashed border-primary/30" />
+
             {[
-              { step: "01", title: "Browse & Choose", desc: "Explore our curated collection of premium digital assets" },
-              { step: "02", title: "Pay & Verify", desc: "Complete payment using any available method. We verify within hours" },
-              { step: "03", title: "Download & Build", desc: "Access your files instantly from your account dashboard" },
+              { step: "01", title: "Browse & Choose", desc: "Explore our curated collection of premium digital assets across every category.", icon: Search },
+              { step: "02", title: "Pay & Verify", desc: "Complete checkout with any payment method. We verify within hours, around the clock.", icon: Shield },
+              { step: "03", title: "Download & Build", desc: "Access your files instantly from your dashboard with lifetime updates included.", icon: Download },
             ].map((item, i) => (
-              <motion.div key={item.step} {...fadeUp} transition={{ delay: i * 0.1 }} className="text-center p-6">
-                <div className="w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto mb-4">
-                  {item.step}
+              <motion.div
+                key={item.step}
+                {...fadeUp}
+                transition={{ delay: i * 0.12 }}
+                className="relative group"
+              >
+                <div className="relative rounded-2xl border border-border bg-card p-7 text-center hover:-translate-y-1 hover:shadow-xl hover:border-primary/40 transition-all duration-300">
+                  {/* Step badge */}
+                  <div className="relative mx-auto mb-5 w-20 h-20">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary opacity-20 blur-md group-hover:opacity-40 transition-opacity" />
+                    <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground flex items-center justify-center shadow-lg">
+                      <item.icon className="h-8 w-8" />
+                    </div>
+                    <span className="absolute -top-1 -right-1 h-7 w-7 rounded-full bg-card border-2 border-primary text-primary text-[11px] font-extrabold flex items-center justify-center">
+                      {item.step}
+                    </span>
+                  </div>
+                  <h3 className="font-display font-bold text-lg mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="font-display font-semibold text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -239,27 +261,58 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="section-padding">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">What Our Customers Say</h2>
-            <p className="text-muted-foreground">Trusted by thousands of creators worldwide</p>
+      <section className="section-padding relative overflow-hidden">
+        <div className="container relative">
+          <motion.div {...fadeUp} className="text-center mb-14 max-w-2xl mx-auto">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
+              <Heart className="h-3 w-3 fill-primary" /> Loved worldwide
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold mb-3">
+              What Our <span className="italic text-primary">Customers</span> Say
+            </h2>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <div className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                ))}
+              </div>
+              <span className="text-sm font-semibold">4.9/5</span>
+              <span className="text-sm text-muted-foreground">from 2,500+ reviews</span>
+            </div>
           </motion.div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((t, i) => (
-              <motion.div key={t.name} {...fadeUp} transition={{ delay: i * 0.1 }} className="p-6 rounded-xl border border-border bg-card">
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 italic">"{t.text}"</p>
-                <div>
-                  <p className="font-display font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </motion.div>
-            ))}
+            {testimonials.map((t, i) => {
+              const initials = t.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+              return (
+                <motion.div
+                  key={t.name}
+                  {...fadeUp}
+                  transition={{ delay: i * 0.08 }}
+                  className="group relative p-7 rounded-2xl border border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                >
+                  {/* big quote mark */}
+                  <span className="absolute top-3 right-4 text-7xl font-display font-extrabold text-primary/10 leading-none select-none">"</span>
+
+                  <div className="flex gap-0.5 mb-4 relative">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-foreground/80 mb-6 leading-relaxed relative">"{t.text}"</p>
+                  <div className="flex items-center gap-3 relative pt-4 border-t border-border">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground flex items-center justify-center text-sm font-bold shadow-md">
+                      {initials}
+                    </div>
+                    <div>
+                      <p className="font-display font-bold text-sm leading-tight">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                    <BadgeCheck className="h-4 w-4 text-primary ml-auto" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
