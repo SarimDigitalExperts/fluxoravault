@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+      className="group bg-card rounded-2xl border border-border overflow-hidden hover:-translate-y-0.5 hover:border-primary/40 transition-all duration-300"
     >
       {/* Image inside padded frame with inner border */}
       <div className="p-3">
