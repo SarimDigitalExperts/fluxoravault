@@ -139,24 +139,57 @@ export default function Footer() {
           </form>
           <p className="text-[11px] text-muted-foreground mt-2">By subscribing you agree to our Privacy Policy.</p>
 
-          {/* Payment badges */}
+          {/* Payment methods — grouped */}
           <div className="mt-6">
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">We accept</p>
-            <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-3">We accept</p>
+            <div className="space-y-3">
               {[
-                { name: "Easypaisa", src: "https://logos-world.net/wp-content/uploads/2022/12/Easypaisa-Logo.png" },
-                { name: "JazzCash", src: "https://seeklogo.com/images/J/jazzcash-logo-3F1D625A45-seeklogo.com.png" },
-                { name: "SadaPay", src: "https://seeklogo.com/images/S/sadapay-logo-7C5A4A6F8E-seeklogo.com.png" },
-                { name: "Visa", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/visa.svg" },
-                { name: "Mastercard", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/mastercard.svg" },
-                { name: "Bank Transfer", src: "https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/flat/bank.svg" },
-              ].map((m) => (
-                <div
-                  key={m.name}
-                  title={m.name}
-                  className="h-9 w-14 rounded-md border border-border bg-white flex items-center justify-center p-1.5 shadow-sm"
-                >
-                  <img src={m.src} alt={m.name} loading="lazy" className="max-h-full max-w-full object-contain" />
+                {
+                  group: "E-Wallets",
+                  items: [
+                    { name: "Easypaisa", bg: "bg-[#00B14F]", fg: "text-white", label: "easypaisa" },
+                    { name: "JazzCash", bg: "bg-[#ED1C24]", fg: "text-white", label: "JazzCash" },
+                    { name: "SadaPay", bg: "bg-[#0A0A0A]", fg: "text-white", label: "SadaPay" },
+                    { name: "NayaPay", bg: "bg-[#7C3AED]", fg: "text-white", label: "NayaPay" },
+                  ],
+                },
+                {
+                  group: "Bank Transfer",
+                  items: [
+                    { name: "Meezan Bank", bg: "bg-[#003F2D]", fg: "text-white", label: "Meezan" },
+                    { name: "Bank Alfalah", bg: "bg-[#00529B]", fg: "text-white", label: "Alfalah" },
+                    { name: "HBL", bg: "bg-[#006A4E]", fg: "text-white", label: "HBL" },
+                  ],
+                },
+                {
+                  group: "Cards",
+                  items: [
+                    { name: "Visa", bg: "bg-[#1A1F71]", fg: "text-white", label: "VISA" },
+                    { name: "Mastercard", bg: "bg-white border border-border", fg: "text-[#EB001B]", label: "MC" },
+                    { name: "PayPak", bg: "bg-[#0F4C81]", fg: "text-white", label: "PayPak" },
+                  ],
+                },
+                {
+                  group: "QR Payments",
+                  items: [
+                    { name: "Raast QR", bg: "bg-[#1E40AF]", fg: "text-white", label: "Raast" },
+                    { name: "QR Code", bg: "bg-foreground", fg: "text-background", label: "QR" },
+                  ],
+                },
+              ].map((row) => (
+                <div key={row.group}>
+                  <p className="text-[10px] font-semibold text-muted-foreground/80 mb-1.5">{row.group}</p>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {row.items.map((m) => (
+                      <div
+                        key={m.name}
+                        title={m.name}
+                        className={`h-7 px-2.5 rounded-md ${m.bg} ${m.fg} flex items-center justify-center text-[10px] font-bold tracking-wide shadow-sm`}
+                      >
+                        {m.label}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
