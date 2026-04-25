@@ -68,21 +68,27 @@ function ProductCarousel({ products, title, subtitle }: { products: Product[]; t
             </Button>
           </div>
         </motion.div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden hidden lg:block">
           <div
             className="flex gap-6 transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${scrollIndex * (100 / 4 + 1.5)}%)` }}
           >
             {products.map(p => (
-              <div key={p.id} className="min-w-[calc(25%-18px)] max-w-[calc(25%-18px)] flex-shrink-0 hidden lg:block first:block [&:nth-child(-n+2)]:block sm:[&:nth-child(-n+2)]:block lg:[&]:block">
+              <div key={p.id} className="min-w-[calc(25%-18px)] max-w-[calc(25%-18px)] flex-shrink-0">
                 <ProductCard product={p} />
               </div>
             ))}
           </div>
         </div>
-        {/* Mobile: show grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:hidden mt-4">
-          {products.slice(0, 4).map(p => <ProductCard key={p.id} product={p} />)}
+        {/* Mobile/tablet: horizontally scrollable cards */}
+        <div className="lg:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+          <div className="flex gap-4 pb-2">
+            {products.map(p => (
+              <div key={p.id} className="min-w-[75%] sm:min-w-[45%] snap-start">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
