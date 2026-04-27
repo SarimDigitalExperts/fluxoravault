@@ -10,6 +10,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PromoPopup from "@/components/PromoPopup";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Home from "@/pages/Home";
 import Shop from "@/pages/Shop";
 import ProductDetail from "@/pages/ProductDetail";
@@ -86,8 +87,9 @@ const App = () => (
                 {/* Public routes with navbar/footer */}
                 <Route path="*" element={
                   <>
+                    <AnnouncementBar />
                     <Navbar />
-                    <main className="relative pt-6">
+                    <main className="relative pt-[88px]">
                       <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/shop" element={<Shop />} />

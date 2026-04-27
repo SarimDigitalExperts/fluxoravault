@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Plus Jakarta Sans"', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['Gabarito', '"Plus Jakarta Sans"', 'sans-serif'],
+        body: ['Gabarito', 'Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
