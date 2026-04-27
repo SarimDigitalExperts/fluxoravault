@@ -51,7 +51,7 @@ export default function AccountSupport() {
           <Button onClick={handleSubmit} disabled={sending}>{sending ? "Sending..." : "Send Message"}</Button>
         </div>
         <div className="mt-4 flex gap-4 text-xs text-muted-foreground">
-          <p>📧 support@signifyvault.com</p>
+          <p>📧 support@fluxoravault.io</p>
           <p>💬 WhatsApp available</p>
         </div>
       </div>

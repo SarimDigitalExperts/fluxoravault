@@ -58,7 +58,7 @@ export default function BlogDetail() {
       .then(async ({ data }) => {
         setBlog(data as BlogFull | null);
         if (data) {
-          document.title = `${data.title} | Signify Vault`;
+          document.title = `${data.title} | Fluxora Vault`;
           const { data: rel } = await supabase.from("blogs").select("*")
             .eq("is_published", true).neq("id", data.id).order("created_at", { ascending: false }).limit(3);
           setRelated(rel as BlogFull[] || []);
@@ -88,7 +88,7 @@ export default function BlogDetail() {
             {new Date(blog.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
           </span>
           <span>·</span>
-          <span>By Signify Vault Team</span>
+          <span>By Fluxora Vault Team</span>
           {(blog.tags || []).length > 0 && (
             <span className="inline-flex items-center gap-2">
               <Tag className="h-3.5 w-3.5" />

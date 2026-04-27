@@ -63,7 +63,7 @@ export default function PromoPopup() {
                     Get <span className="text-primary">50% OFF</span> Your First Order
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Subscribe and use code <strong className="text-primary">SIGNIFY50</strong> at checkout
+                    Subscribe and use code <strong className="text-primary">FLUXORA50</strong> at checkout
                   </p>
 
                   <form onSubmit={handleSubmit} className="flex gap-2">

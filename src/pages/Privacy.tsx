@@ -16,7 +16,7 @@ export default function Privacy() {
           <h2 className="text-foreground font-display">4. Cookies</h2>
           <p>We use cookies to enhance your browsing experience and analyze site traffic. You can manage cookie preferences in your browser settings.</p>
           <h2 className="text-foreground font-display">5. Contact</h2>
-          <p>For privacy-related inquiries, contact us at privacy@signifyvault.com.</p>
+          <p>For privacy-related inquiries, contact us at privacy@fluxoravault.io.</p>
         </div>
       </motion.div>
     </div>

@@ -10,7 +10,7 @@ export default function WhatsAppButton() {
   }, []);
 
   const cleanNumber = number.replace(/[^\d]/g, "") || "447907269967";
-  const message = encodeURIComponent("Hi Signify Vault, I need help with");
+  const message = encodeURIComponent("Hi Fluxora Vault, I need help with");
   const href = `https://wa.me/${cleanNumber}?text=${message}`;
 
   return (

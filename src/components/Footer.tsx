@@ -44,7 +44,7 @@ export default function Footer() {
         {/* Brand column */}
         <div className="md:col-span-4">
           <Link to="/" className="inline-flex items-center">
-            <img src="/logo.png" alt="Signify Vault" className="h-9" />
+            <img src="/logo.png" alt="Fluxora Vault" className="h-11 w-auto object-contain" />
           </Link>
           <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-sm">
             Premium digital apps, software, templates and tools — handpicked for creators, freelancers and growing teams.
@@ -53,11 +53,11 @@ export default function Footer() {
           {/* Contact rows */}
           <div className="mt-6 space-y-2.5">
             <a
-              href="mailto:signifyvault@digitalsigns.site"
+              href="mailto:fluxoravault@digitalsigns.site"
               className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <Mail className="h-4 w-4 shrink-0" />
-              signifyvault@digitalsigns.site
+              fluxoravault@digitalsigns.site
             </a>
             <a
               href="https://wa.me/447907269967"
@@ -201,7 +201,7 @@ export default function Footer() {
       <div className="relative border-t border-border bg-muted/40">
         <div className="container py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} <span className="font-semibold text-foreground">Signify Vault</span>. All rights reserved.
+            © {new Date().getFullYear()} <span className="font-semibold text-foreground">Fluxora Vault</span>. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <Link to="/terms" className="hover:text-primary transition-colors">Terms</Link>

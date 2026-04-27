@@ -8,7 +8,7 @@ export default function Terms() {
         <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
           <p>Last updated: April 2026</p>
           <h2 className="text-foreground font-display">1. Acceptance of Terms</h2>
-          <p>By accessing and using Signify Vault, you agree to be bound by these terms and conditions.</p>
+          <p>By accessing and using Fluxora Vault, you agree to be bound by these terms and conditions.</p>
           <h2 className="text-foreground font-display">2. Digital Products</h2>
           <p>All digital products are delivered electronically. Once purchased, you receive a license to use the assets as specified in each product's license terms.</p>
           <h2 className="text-foreground font-display">3. Refund Policy</h2>
