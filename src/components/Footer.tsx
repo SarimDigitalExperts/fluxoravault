@@ -44,7 +44,7 @@ export default function Footer() {
         {/* Brand column */}
         <div className="md:col-span-4">
           <Link to="/" className="inline-flex items-center">
-            <img src="/logo.png" alt="Fluxora Vault" className="h-9" />
+            <img src="/logo.png" alt="Fluxora Vault" className="h-11 w-auto object-contain" />
           </Link>
           <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-sm">
             Premium digital apps, software, templates and tools — handpicked for creators, freelancers and growing teams.
