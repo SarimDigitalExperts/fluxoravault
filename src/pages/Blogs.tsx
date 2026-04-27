@@ -22,7 +22,7 @@ export default function Blogs() {
   const [tag, setTag] = useState<string>("all");
 
   useEffect(() => {
-    document.title = "Blog | Signify Vault";
+    document.title = "Blog | Fluxora Vault";
     supabase.from("blogs").select("id,title,slug,excerpt,cover_image,tags,created_at")
       .eq("is_published", true).order("created_at", { ascending: false })
       .then(({ data }) => { setBlogs(data || []); setLoading(false); });
@@ -44,7 +44,7 @@ export default function Blogs() {
     <div className="container pt-24 pb-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-          <BookOpen className="h-4 w-4" /> Signify Vault Blog
+          <BookOpen className="h-4 w-4" /> Fluxora Vault Blog
         </span>
         <h1 className="text-4xl md:text-5xl font-display font-bold mb-3">Insights, Guides & Trends</h1>
         <p className="text-muted-foreground max-w-xl mx-auto">Articles for creators, freelancers, and founders building with digital assets.</p>
