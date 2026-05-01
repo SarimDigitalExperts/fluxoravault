@@ -278,61 +278,143 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="section-padding relative overflow-hidden">
+      {/* Testimonials — editorial redesign */}
+      <section className="section-padding relative overflow-hidden bg-background">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(hsl(var(--foreground)) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="absolute -top-20 right-0 w-[480px] h-[480px] bg-secondary/10 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 -left-20 w-[420px] h-[420px] bg-primary/10 rounded-full blur-3xl -z-10" />
+
         <div className="container relative">
-          <motion.div {...fadeUp} className="text-center mb-14 max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-2">
-              <Heart className="h-3 w-3 fill-primary" /> Loved worldwide
-            </span>
-            <h2 className="text-3xl md:text-4xl font-display font-extrabold mb-3">
-              What Our <span className="italic text-primary">Customers</span> Say
-            </h2>
-            <div className="flex items-center justify-center gap-2 mt-3">
-              <div className="flex gap-0.5">
+          <motion.div {...fadeUp} className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+            <div className="max-w-xl">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-primary mb-3">
+                <Heart className="h-3 w-3 fill-primary" /> Loved by 2,500+ creators
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-black tracking-[-0.02em] leading-[0.95]">
+                Don't just take<br />our word <span className="italic text-primary">for it.</span>
+              </h2>
+            </div>
+            <div className="flex items-center gap-6 lg:flex-col lg:items-end lg:gap-2">
+              <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, j) => (
-                  <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                  <Star key={j} className="h-5 w-5 fill-primary text-primary" />
                 ))}
               </div>
-              <span className="text-sm font-semibold">4.9/5</span>
-              <span className="text-sm text-muted-foreground">from 2,500+ reviews</span>
+              <div className="text-right">
+                <div className="font-display text-3xl font-black leading-none">4.9<span className="text-muted-foreground/50 text-xl">/5</span></div>
+                <div className="text-xs text-muted-foreground mt-1">from 2,500+ verified reviews</div>
+              </div>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
             {testimonials.map((t, i) => {
-              const initials = t.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+              const isFeatured = i === 0;
               return (
                 <motion.div
                   key={t.name}
                   {...fadeUp}
-                  transition={{ delay: i * 0.08 }}
-                  className="group relative p-7 rounded-2xl border border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                  transition={{ delay: i * 0.07 }}
+                  className={`group relative rounded-3xl overflow-hidden transition-all duration-300 ${
+                    isFeatured
+                      ? "md:col-span-2 md:row-span-2 bg-gradient-to-br from-primary to-secondary text-primary-foreground p-8 md:p-10 shadow-2xl shadow-primary/20"
+                      : "border border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 p-6"
+                  }`}
                 >
-                  {/* big quote mark */}
-                  <span className="absolute top-3 right-4 text-7xl font-display font-extrabold text-primary/10 leading-none select-none">"</span>
+                  <span
+                    className={`absolute font-display font-black leading-none select-none pointer-events-none ${
+                      isFeatured
+                        ? "top-4 right-6 text-[10rem] text-primary-foreground/15"
+                        : "top-2 right-4 text-7xl text-primary/10"
+                    }`}
+                  >
+                    "
+                  </span>
 
                   <div className="flex gap-0.5 mb-4 relative">
                     {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                      <Star
+                        key={j}
+                        className={`h-4 w-4 ${isFeatured ? "fill-primary-foreground text-primary-foreground" : "fill-primary text-primary"}`}
+                      />
                     ))}
                   </div>
-                  <p className="text-sm text-foreground/80 mb-6 leading-relaxed relative">"{t.text}"</p>
-                  <div className="flex items-center gap-3 relative pt-4 border-t border-border">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground flex items-center justify-center text-sm font-bold shadow-md">
-                      {initials}
+
+                  <p
+                    className={`relative leading-relaxed ${
+                      isFeatured
+                        ? "text-xl md:text-2xl lg:text-3xl font-display font-semibold mb-8"
+                        : "text-sm text-foreground/80 mb-6"
+                    }`}
+                  >
+                    "{t.text}"
+                  </p>
+
+                  <div
+                    className={`relative flex items-center gap-3 pt-4 border-t ${
+                      isFeatured ? "border-primary-foreground/20" : "border-border"
+                    }`}
+                  >
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      loading="lazy"
+                      className={`h-11 w-11 rounded-full object-cover ring-2 ${
+                        isFeatured ? "ring-primary-foreground/30" : "ring-border"
+                      }`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-display font-bold text-sm leading-tight truncate">{t.name}</p>
+                      <p className={`text-xs truncate ${isFeatured ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                        {t.role} · {t.company}
+                      </p>
                     </div>
-                    <div>
-                      <p className="font-display font-bold text-sm leading-tight">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
-                    </div>
-                    <BadgeCheck className="h-4 w-4 text-primary ml-auto" />
+                    <BadgeCheck className={`h-4 w-4 ml-auto shrink-0 ${isFeatured ? "text-primary-foreground" : "text-primary"}`} />
                   </div>
                 </motion.div>
               );
             })}
           </div>
+
+          <motion.div {...fadeUp} className="mt-14 -mx-4 md:mx-0">
+            <div
+              className="relative overflow-hidden border-y border-border py-4"
+              style={{
+                maskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
+                WebkitMaskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
+              }}
+            >
+              <div className="flex gap-10 animate-marquee-slow whitespace-nowrap">
+                {[...reviewMarquee, ...reviewMarquee].map((r, i) => (
+                  <span key={i} className="font-display font-semibold text-base md:text-lg text-foreground/70 shrink-0">
+                    {r}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div {...fadeUp} className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <p className="text-sm text-muted-foreground">Join thousands of creators shipping faster.</p>
+            <Button asChild size="lg" className="rounded-xl">
+              <Link to="/shop">Browse the vault <ArrowRight className="h-4 w-4" /></Link>
+            </Button>
+          </motion.div>
         </div>
+
+        <style>{`
+          @keyframes marquee-slow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee-slow { animation: marquee-slow 40s linear infinite; }
+        `}</style>
       </section>
 
       {/* Pricing Preview */}
