@@ -97,6 +97,130 @@ function ProductCarousel({ products, title, subtitle }: { products: Product[]; t
 
 // CategoriesRow replaced by reusable <CategoriesRail /> component
 
+interface Testimonial {
+  name: string; role: string; company: string; text: string; rating: number; avatar: string;
+}
+
+function TestimonialsSlider({ testimonials }: { testimonials: Testimonial[] }) {
+  const [index, setIndex] = useState(0);
+  const [perView, setPerView] = useState(3);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setPerView(w < 640 ? 1 : w < 1024 ? 2 : 3);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const maxIndex = Math.max(0, testimonials.length - perView);
+  const prev = () => setIndex((i) => Math.max(0, i - 1));
+  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+  const slidePct = 100 / perView;
+
+  return (
+    <section className="section-padding relative overflow-hidden bg-gradient-to-br from-secondary/[0.04] via-background to-primary/[0.04]">
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(135deg, hsl(var(--foreground)) 0, hsl(var(--foreground)) 1px, transparent 1px, transparent 22px)",
+        }}
+      />
+
+      <div className="container relative">
+        <div className="flex items-start sm:items-center justify-between gap-6 mb-10 md:mb-14">
+          <motion.div {...fadeUp}>
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1] text-3xl sm:text-4xl md:text-5xl">
+              What <span className="text-secondary">Our Clients</span> Say
+            </h2>
+            <p className="text-muted-foreground mt-3 text-sm md:text-base">
+              Hear Directly From Our Satisfied Partners
+            </p>
+          </motion.div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={prev}
+              disabled={index === 0}
+              aria-label="Previous testimonial"
+              className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-card border border-border flex items-center justify-center hover:border-secondary hover:text-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={next}
+              disabled={index >= maxIndex}
+              aria-label="Next testimonial"
+              className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:bg-secondary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-hidden -mx-3">
+          <div
+            className="flex transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${index * slidePct}%)` }}
+          >
+            {testimonials.map((t) => (
+              <div key={t.name} className="px-3 shrink-0" style={{ width: `${slidePct}%` }}>
+                <article className="relative bg-card rounded-2xl p-7 md:p-8 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] border border-border/60 h-full flex flex-col min-h-[320px]">
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center">
+                      <Quote className="h-4 w-4 fill-current" />
+                    </div>
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: t.rating }).map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-[15px] leading-relaxed text-foreground/80 flex-1">
+                    {t.text}
+                  </p>
+
+                  <div className="mt-6 pt-5 border-t border-border/60 flex items-center gap-3">
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      loading="lazy"
+                      className="h-11 w-11 rounded-full object-cover ring-2 ring-card shadow-md"
+                    />
+                    <div className="min-w-0">
+                      <p className="font-display font-bold text-sm leading-tight">{t.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {t.role} at {t.company}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-2">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2 rounded-full transition-all ${
+                i === index ? "w-6 bg-secondary" : "w-2 bg-border hover:bg-muted-foreground/40"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<DBCategory[]>([]);
