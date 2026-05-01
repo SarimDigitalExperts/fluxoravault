@@ -5,7 +5,7 @@ import { ArrowUpRight, Sparkles, Search, Star, Download, ShieldCheck, Zap, Play 
 import { Button } from "@/components/ui/button";
 import {
   SiShopify, SiWordpress, SiCanva, SiFigma, SiNodedotjs, SiReact,
-  SiTailwindcss, SiFramer, SiNotion, SiAdobephotoshop, SiAdobeillustrator, SiWebflow,
+  SiTailwindcss, SiFramer, SiNotion, SiAdobe, SiWebflow, SiNextdotjs,
 } from "react-icons/si";
 
 const ROTATING = [
@@ -26,8 +26,8 @@ const MARQUEE_BRANDS = [
   { Icon: SiTailwindcss, color: "#06B6D4", name: "Tailwind" },
   { Icon: SiFramer, color: "#0055FF", name: "Framer" },
   { Icon: SiNotion, color: "#000000", name: "Notion" },
-  { Icon: SiAdobephotoshop, color: "#31A8FF", name: "Photoshop" },
-  { Icon: SiAdobeillustrator, color: "#FF9A00", name: "Illustrator" },
+  { Icon: SiAdobe, color: "#FF0000", name: "Adobe" },
+  { Icon: SiNextdotjs, color: "#000000", name: "Next.js" },
   { Icon: SiWebflow, color: "#146EF5", name: "Webflow" },
 ];
 
