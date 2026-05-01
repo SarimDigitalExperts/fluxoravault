@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Download, Shield, Zap, Star, Users, Package, Check,
   ChevronDown, Layers, Award, Clock, Globe, Headphones, Lock,
-  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck,
+  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck, Quote,
 } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import CategoriesRail from "@/components/CategoriesRail";
