@@ -147,13 +147,25 @@ export default function Home() {
   ];
 
   const testimonials = [
-    { name: "Sarah M.", role: "UI Designer", text: "The quality of templates from Fluxora Mart is outstanding. Saved me weeks of work!", rating: 5 },
-    { name: "Ahmed K.", role: "Developer", text: "Best digital assets store I've used. Great support and instant delivery.", rating: 5 },
-    { name: "Lisa T.", role: "Freelancer", text: "Premium quality at affordable prices. The lifetime access is a game changer.", rating: 5 },
-    { name: "Usman R.", role: "Agency Owner", text: "Our go-to marketplace for digital assets. The enterprise plan is worth every rupee.", rating: 5 },
-    { name: "Fatima S.", role: "Content Creator", text: "Amazing collection and super fast delivery. Highly recommend!", rating: 5 },
-    { name: "David L.", role: "Startup Founder", text: "Fluxora Mart helped us launch our product 3x faster. Incredible value.", rating: 5 },
+    { name: "Sarah M.", role: "UI Designer", company: "Linear", text: "The quality of templates from Fluxora Mart is outstanding. Saved me weeks of work on our last product launch — every asset felt hand-crafted.", rating: 5, avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" },
+    { name: "Ahmed K.", role: "Full-stack Dev", company: "Stripe", text: "Best digital assets store I've used. Great support and instant delivery.", rating: 5, avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
+    { name: "Lisa T.", role: "Freelancer", company: "Independent", text: "Premium quality at affordable prices. Lifetime access is a game changer.", rating: 5, avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
+    { name: "Usman R.", role: "Agency Owner", company: "Pixelmint", text: "Our go-to marketplace. The enterprise plan is worth every rupee.", rating: 5, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" },
+    { name: "Fatima S.", role: "Content Creator", company: "Notion", text: "Amazing collection and super fast delivery. Highly recommend!", rating: 5, avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" },
+    { name: "David L.", role: "Startup Founder", company: "Shipfast", text: "Fluxora Mart helped us launch 3x faster. Incredible value.", rating: 5, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80" },
   ];
+
+  const reviewMarquee = [
+    "★★★★★ Pixel-perfect every time",
+    "★★★★★ Worth every rupee",
+    "★★★★★ Saved us 200+ hours",
+    "★★★★★ Best marketplace in PK",
+    "★★★★★ Fast verification",
+    "★★★★★ Incredible quality",
+    "★★★★★ Lifetime updates work",
+    "★★★★★ Support is top-tier",
+  ];
+
 
   return (
     <div className="min-h-screen">
