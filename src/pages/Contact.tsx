@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-const CONTACT_EMAIL = "support@fluxoravault.io";
+const CONTACT_EMAIL = "support@fluxoramart.io";
 const CONTACT_PHONE = "+447907269967";
 const WA_LINK = "https://wa.me/447907269967";
 
