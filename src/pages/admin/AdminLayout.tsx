@@ -36,7 +36,7 @@ export default function AdminLayout() {
         <aside className="w-64 shrink-0 hidden md:flex flex-col border-r border-border bg-card fixed top-0 left-0 h-screen z-40">
           <div className="p-5 border-b border-border">
             <Link to="/admin" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Fluxora Vault" className="h-8 w-auto object-contain" />
+              <img src="/logo.png" alt="Fluxora Mart" className="h-8 w-auto object-contain" />
               <span className="text-xs text-muted-foreground font-normal">Admin</span>
             </Link>
           </div>

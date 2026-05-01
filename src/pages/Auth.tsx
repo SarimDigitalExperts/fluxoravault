@@ -59,7 +59,7 @@ export default function Auth() {
             {isLogin ? "Welcome Back" : "Create Account"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {isLogin ? "Sign in to your Fluxora Vault account" : "Join the Fluxora Vault community"}
+            {isLogin ? "Sign in to your Fluxora Mart account" : "Join the Fluxora Mart community"}
           </p>
         </div>
 

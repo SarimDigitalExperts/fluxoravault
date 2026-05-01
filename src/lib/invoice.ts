@@ -24,7 +24,7 @@ export function generateInvoicePDF(data: InvoiceData) {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.text("Fluxora Vault", 14, 18);
+  doc.text("Fluxora Mart", 14, 18);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.text("INVOICE", 196, 18, { align: "right" });
@@ -69,7 +69,7 @@ export function generateInvoicePDF(data: InvoiceData) {
   doc.setTextColor(120, 120, 120);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text("Thank you for your purchase! For support, contact support@fluxoravault.com", 105, 285, { align: "center" });
+  doc.text("Thank you for your purchase! For support, contact support@fluxoramart.com", 105, 285, { align: "center" });
   doc.text("This is a computer-generated invoice.", 105, 290, { align: "center" });
 
   doc.save(`invoice-${data.orderId.slice(0, 8)}.pdf`);

@@ -563,7 +563,7 @@ export default function AdminProducts() {
                   </div>
                   <div className="bg-muted/50 border border-border rounded-lg p-3">
                     <p className="text-xs text-primary font-medium">{form.meta_title || form.title || "Product Title"}</p>
-                    <p className="text-[10px] text-green-600">fluxoravault.lovable.app/product/{form.slug || "slug"}</p>
+                    <p className="text-[10px] text-green-600">fluxoramart.lovable.app/product/{form.slug || "slug"}</p>
                     <p className="text-[10px] text-muted-foreground mt-1">{form.meta_description || form.description || "Product description..."}</p>
                   </div>
                 </TabsContent>

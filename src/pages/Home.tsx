@@ -147,12 +147,12 @@ export default function Home() {
   ];
 
   const testimonials = [
-    { name: "Sarah M.", role: "UI Designer", text: "The quality of templates from Fluxora Vault is outstanding. Saved me weeks of work!", rating: 5 },
+    { name: "Sarah M.", role: "UI Designer", text: "The quality of templates from Fluxora Mart is outstanding. Saved me weeks of work!", rating: 5 },
     { name: "Ahmed K.", role: "Developer", text: "Best digital assets store I've used. Great support and instant delivery.", rating: 5 },
     { name: "Lisa T.", role: "Freelancer", text: "Premium quality at affordable prices. The lifetime access is a game changer.", rating: 5 },
     { name: "Usman R.", role: "Agency Owner", text: "Our go-to marketplace for digital assets. The enterprise plan is worth every rupee.", rating: 5 },
     { name: "Fatima S.", role: "Content Creator", text: "Amazing collection and super fast delivery. Highly recommend!", rating: 5 },
-    { name: "David L.", role: "Startup Founder", text: "Fluxora Vault helped us launch our product 3x faster. Incredible value.", rating: 5 },
+    { name: "David L.", role: "Startup Founder", text: "Fluxora Mart helped us launch our product 3x faster. Incredible value.", rating: 5 },
   ];
 
   return (
@@ -179,7 +179,7 @@ export default function Home() {
       <section className="section-padding">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Why Choose <span className="text-primary">Fluxora Vault</span></h2>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Why Choose <span className="text-primary">Fluxora Mart</span></h2>
             <p className="text-muted-foreground max-w-lg mx-auto">Everything you need in one platform</p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
