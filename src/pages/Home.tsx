@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Download, Shield, Zap, Star, Users, Package, Check,
   ChevronDown, Layers, Award, Clock, Globe, Headphones, Lock,
-  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck,
+  TrendingUp, Sparkles, Heart, ChevronLeft, ChevronRight, Search, BadgeCheck, Quote,
 } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import CategoriesRail from "@/components/CategoriesRail";
@@ -96,6 +96,130 @@ function ProductCarousel({ products, title, subtitle }: { products: Product[]; t
 }
 
 // CategoriesRow replaced by reusable <CategoriesRail /> component
+
+interface Testimonial {
+  name: string; role: string; company: string; text: string; rating: number; avatar: string;
+}
+
+function TestimonialsSlider({ testimonials }: { testimonials: Testimonial[] }) {
+  const [index, setIndex] = useState(0);
+  const [perView, setPerView] = useState(3);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setPerView(w < 640 ? 1 : w < 1024 ? 2 : 3);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const maxIndex = Math.max(0, testimonials.length - perView);
+  const prev = () => setIndex((i) => Math.max(0, i - 1));
+  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+  const slidePct = 100 / perView;
+
+  return (
+    <section className="section-padding relative overflow-hidden bg-gradient-to-br from-secondary/[0.04] via-background to-primary/[0.04]">
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(135deg, hsl(var(--foreground)) 0, hsl(var(--foreground)) 1px, transparent 1px, transparent 22px)",
+        }}
+      />
+
+      <div className="container relative">
+        <div className="flex items-start sm:items-center justify-between gap-6 mb-10 md:mb-14">
+          <motion.div {...fadeUp}>
+            <h2 className="font-display font-black tracking-[-0.02em] leading-[1] text-3xl sm:text-4xl md:text-5xl">
+              What <span className="text-secondary">Our Clients</span> Say
+            </h2>
+            <p className="text-muted-foreground mt-3 text-sm md:text-base">
+              Hear Directly From Our Satisfied Partners
+            </p>
+          </motion.div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={prev}
+              disabled={index === 0}
+              aria-label="Previous testimonial"
+              className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-card border border-border flex items-center justify-center hover:border-secondary hover:text-secondary disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={next}
+              disabled={index >= maxIndex}
+              aria-label="Next testimonial"
+              className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:bg-secondary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-hidden -mx-3">
+          <div
+            className="flex transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${index * slidePct}%)` }}
+          >
+            {testimonials.map((t) => (
+              <div key={t.name} className="px-3 shrink-0" style={{ width: `${slidePct}%` }}>
+                <article className="relative bg-card rounded-2xl p-7 md:p-8 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] border border-border/60 h-full flex flex-col min-h-[320px]">
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center">
+                      <Quote className="h-4 w-4 fill-current" />
+                    </div>
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: t.rating }).map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-[15px] leading-relaxed text-foreground/80 flex-1">
+                    {t.text}
+                  </p>
+
+                  <div className="mt-6 pt-5 border-t border-border/60 flex items-center gap-3">
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      loading="lazy"
+                      className="h-11 w-11 rounded-full object-cover ring-2 ring-card shadow-md"
+                    />
+                    <div className="min-w-0">
+                      <p className="font-display font-bold text-sm leading-tight">{t.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {t.role} at {t.company}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-2">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2 rounded-full transition-all ${
+                i === index ? "w-6 bg-secondary" : "w-2 bg-border hover:bg-muted-foreground/40"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -278,144 +402,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials — editorial redesign */}
-      <section className="section-padding relative overflow-hidden bg-background">
-        <div
-          className="absolute inset-0 -z-10 opacity-[0.04]"
-          style={{
-            backgroundImage: "radial-gradient(hsl(var(--foreground)) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        <div className="absolute -top-20 right-0 w-[480px] h-[480px] bg-secondary/10 rounded-full blur-3xl -z-10" />
-        <div className="absolute bottom-0 -left-20 w-[420px] h-[420px] bg-primary/10 rounded-full blur-3xl -z-10" />
+      {/* Testimonials — clean slider style */}
+      <TestimonialsSlider testimonials={testimonials} />
 
-        <div className="container relative">
-          <motion.div {...fadeUp} className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-primary mb-3">
-                <Heart className="h-3 w-3 fill-primary" /> Loved by 2,500+ creators
-              </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-black tracking-[-0.02em] leading-[0.95]">
-                Don't just take<br />our word <span className="italic text-primary">for it.</span>
-              </h2>
-            </div>
-            <div className="flex items-center gap-6 lg:flex-col lg:items-end lg:gap-2">
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, j) => (
-                  <Star key={j} className="h-5 w-5 fill-primary text-primary" />
-                ))}
-              </div>
-              <div className="text-right">
-                <div className="font-display text-3xl font-black leading-none">4.9<span className="text-muted-foreground/50 text-xl">/5</span></div>
-                <div className="text-xs text-muted-foreground mt-1">from 2,500+ verified reviews</div>
-              </div>
-            </div>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
-            {testimonials.map((t, i) => {
-              const isFeatured = i === 0;
-              return (
-                <motion.div
-                  key={t.name}
-                  {...fadeUp}
-                  transition={{ delay: i * 0.07 }}
-                  className={`group relative rounded-3xl overflow-hidden transition-all duration-300 ${
-                    isFeatured
-                      ? "md:col-span-2 md:row-span-2 bg-gradient-to-br from-primary to-secondary text-primary-foreground p-8 md:p-10 shadow-2xl shadow-primary/20"
-                      : "border border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 p-6"
-                  }`}
-                >
-                  <span
-                    className={`absolute font-display font-black leading-none select-none pointer-events-none ${
-                      isFeatured
-                        ? "top-4 right-6 text-[10rem] text-primary-foreground/15"
-                        : "top-2 right-4 text-7xl text-primary/10"
-                    }`}
-                  >
-                    "
-                  </span>
-
-                  <div className="flex gap-0.5 mb-4 relative">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star
-                        key={j}
-                        className={`h-4 w-4 ${isFeatured ? "fill-primary-foreground text-primary-foreground" : "fill-primary text-primary"}`}
-                      />
-                    ))}
-                  </div>
-
-                  <p
-                    className={`relative leading-relaxed ${
-                      isFeatured
-                        ? "text-xl md:text-2xl lg:text-3xl font-display font-semibold mb-8"
-                        : "text-sm text-foreground/80 mb-6"
-                    }`}
-                  >
-                    "{t.text}"
-                  </p>
-
-                  <div
-                    className={`relative flex items-center gap-3 pt-4 border-t ${
-                      isFeatured ? "border-primary-foreground/20" : "border-border"
-                    }`}
-                  >
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      loading="lazy"
-                      className={`h-11 w-11 rounded-full object-cover ring-2 ${
-                        isFeatured ? "ring-primary-foreground/30" : "ring-border"
-                      }`}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="font-display font-bold text-sm leading-tight truncate">{t.name}</p>
-                      <p className={`text-xs truncate ${isFeatured ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                        {t.role} · {t.company}
-                      </p>
-                    </div>
-                    <BadgeCheck className={`h-4 w-4 ml-auto shrink-0 ${isFeatured ? "text-primary-foreground" : "text-primary"}`} />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          <motion.div {...fadeUp} className="mt-14 -mx-4 md:mx-0">
-            <div
-              className="relative overflow-hidden border-y border-border py-4"
-              style={{
-                maskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
-                WebkitMaskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
-              }}
-            >
-              <div className="flex gap-10 animate-marquee-slow whitespace-nowrap">
-                {[...reviewMarquee, ...reviewMarquee].map((r, i) => (
-                  <span key={i} className="font-display font-semibold text-base md:text-lg text-foreground/70 shrink-0">
-                    {r}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div {...fadeUp} className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <p className="text-sm text-muted-foreground">Join thousands of creators shipping faster.</p>
-            <Button asChild size="lg" className="rounded-xl">
-              <Link to="/shop">Browse the vault <ArrowRight className="h-4 w-4" /></Link>
-            </Button>
-          </motion.div>
-        </div>
-
-        <style>{`
-          @keyframes marquee-slow {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-marquee-slow { animation: marquee-slow 40s linear infinite; }
-        `}</style>
-      </section>
 
       {/* Pricing Preview */}
       <section className="section-padding bg-muted/30">
