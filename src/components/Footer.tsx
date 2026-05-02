@@ -96,7 +96,7 @@ export default function Footer() {
             <Link to="/shop" className="hover:text-primary transition-colors">All Products</Link>
             <Link to="/shop?sort=latest" className="hover:text-primary transition-colors">New Arrivals</Link>
             <Link to="/shop?sort=trending" className="hover:text-primary transition-colors">Trending</Link>
-            <Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link>
+            
             <Link to="/wishlist" className="hover:text-primary transition-colors">Wishlist</Link>
           </div>
         </div>

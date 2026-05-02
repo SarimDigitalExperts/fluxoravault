@@ -1,71 +1,55 @@
-import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { plans } from "@/data/plans";
+import { Sparkles, Clock, ArrowLeft, Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Pricing() {
-  const { user } = useAuth();
-
   return (
-    <div className="container pt-24 pb-20">
-      <div className="text-center mb-14">
-        <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-display font-bold mb-4">
-          Choose Your <span className="text-primary">Plan</span>
-        </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-lg mx-auto">
-          Unlock premium digital assets with a plan that fits your workflow. Cancel anytime.
-        </motion.p>
-      </div>
+    <div className="min-h-[80vh] flex items-center justify-center px-4 pt-16 pb-16 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {plans.map((plan, i) => (
-          <motion.div
-            key={plan.name}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className={cn(
-              "rounded-2xl p-7 flex flex-col relative bg-card border",
-              plan.featured ? "border-primary shadow-lg" : "border-border"
-            )}
-          >
-            {plan.featured && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-4 py-1 rounded-full">
-                Most Popular
-              </span>
-            )}
-            <div className={cn("p-3 rounded-xl w-fit mb-4", plan.featured ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
-              <plan.icon className="h-6 w-6" />
-            </div>
-            <h2 className="text-xl font-display font-bold">{plan.name}</h2>
-            <p className="text-sm text-muted-foreground mt-1 mb-5">{plan.description}</p>
-            <div className="mb-6">
-              <span className="text-4xl font-bold">PKR {plan.price.toLocaleString()}</span>
-              <span className="text-muted-foreground text-sm">{plan.period}</span>
-            </div>
-            <ul className="space-y-3 mb-8 flex-1">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm">
-                  <Check className={cn("h-4 w-4 mt-0.5 shrink-0", plan.featured ? "text-primary" : "text-muted-foreground")} />
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-            <Button
-              variant={plan.featured ? "default" : "outline"}
-              className="w-full"
-              asChild
-            >
-              <Link to={user ? `/subscribe/${plan.planKey}` : "/auth"}>
-                Get Started
-              </Link>
-            </Button>
-          </motion.div>
-        ))}
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative text-center max-w-2xl"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.1, type: "spring" }}
+          className="h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-primary/30"
+        >
+          <Clock className="h-12 w-12 text-white" />
+        </motion.div>
+
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold mb-4 uppercase tracking-wider">
+          <Sparkles className="h-3.5 w-3.5" /> Coming Soon
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Pricing Coming Soon
+        </h1>
+
+        <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+          We're crafting flexible pricing plans designed to give you the best value.
+          Stay tuned — something exciting is on the way.
+        </p>
+
+        <div className="flex flex-wrap gap-3 justify-center">
+          <Button asChild size="lg" className="gap-2">
+            <Link to="/shop">
+              <ArrowLeft className="h-4 w-4" /> Browse the Shop
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="gap-2">
+            <Link to="/contact">
+              <Bell className="h-4 w-4" /> Notify Me
+            </Link>
+          </Button>
+        </div>
+      </motion.div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const adminLinks = [
   { label: "Products", to: "/admin/products", icon: Package },
   { label: "Categories", to: "/admin/categories", icon: Layers },
   { label: "Users", to: "/admin/users", icon: Users },
-  { label: "Subscriptions", to: "/admin/pricing-plans", icon: Crown },
+  
   { label: "Coupons", to: "/admin/coupons", icon: Ticket },
   { label: "Payment Methods", to: "/admin/payment-methods", icon: Wallet },
   { label: "Banners", to: "/admin/banners", icon: Image },

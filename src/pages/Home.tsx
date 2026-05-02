@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import CategoriesRail from "@/components/CategoriesRail";
-import { plans as pricingPlans } from "@/data/plans";
+
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
@@ -405,40 +405,6 @@ export default function Home() {
       {/* Testimonials — clean slider style */}
       <TestimonialsSlider testimonials={testimonials} />
 
-
-      {/* Pricing Preview */}
-      <section className="section-padding bg-muted/30">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground">Choose a plan that works for you</p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {pricingPlans.map((plan, i) => (
-              <motion.div key={plan.name} {...fadeUp} transition={{ delay: i * 0.1 }}
-                className={`p-7 rounded-xl border bg-card flex flex-col ${plan.featured ? "border-primary shadow-lg" : "border-border"}`}
-              >
-                {plan.featured && (
-                  <span className="text-xs font-bold text-primary mb-3 uppercase tracking-wider">Most Popular</span>
-                )}
-                <h3 className="font-display font-bold text-xl">{plan.name}</h3>
-                <p className="text-3xl font-bold mt-2 mb-1">PKR {plan.price.toLocaleString()}<span className="text-sm font-normal text-muted-foreground">{plan.period}</span></p>
-                <p className="text-sm text-muted-foreground mb-6">{plan.shortDesc}</p>
-                <ul className="space-y-2 mb-6 flex-1">
-                  {plan.features.slice(0, 5).map(f => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary shrink-0" /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild variant={plan.featured ? "default" : "outline"} className="w-full">
-                  <Link to="/pricing">Get Started</Link>
-                </Button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* FAQ */}
       <section className="section-padding">

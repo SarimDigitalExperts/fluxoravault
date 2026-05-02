@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Package, Download, Heart, Crown, ShoppingCart, ArrowRight, Bell, Sparkles } from "lucide-react";
+import { Package, Download, Heart, ShoppingCart, ArrowRight, Bell, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -78,7 +78,6 @@ export default function AccountDashboard() {
   const stats = [
     { label: "Total Purchases", value: ordersCount, icon: Package, to: "/account/orders", color: "text-primary bg-primary/10" },
     { label: "Downloads", value: downloadsCount, icon: Download, to: "/account/downloads", color: "text-secondary bg-secondary/10" },
-    { label: "Active Plan", value: subscription?.plan ? subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1) : "Free", icon: Crown, to: "/account/subscriptions", color: "text-purple-600 bg-purple-50" },
     { label: "Wishlist", value: "—", icon: Heart, to: "/account/wishlist", color: "text-pink-500 bg-pink-50" },
   ];
 
@@ -112,7 +111,7 @@ export default function AccountDashboard() {
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3 mb-8">
         <Button size="sm" asChild><Link to="/shop" className="gap-2"><ShoppingCart className="h-4 w-4" /> Browse Products</Link></Button>
-        <Button variant="outline" size="sm" asChild><Link to="/pricing" className="gap-2"><Crown className="h-4 w-4" /> Upgrade Plan</Link></Button>
+        
         <Button variant="outline" size="sm" asChild><Link to="/account/downloads" className="gap-2"><Download className="h-4 w-4" /> View Downloads</Link></Button>
       </div>
 
