@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, ShoppingCart, DollarSign, Clock, TrendingUp, Users, Crown, ArrowRight } from "lucide-react";
+import { Package, ShoppingCart, DollarSign, Clock, TrendingUp, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,22 +12,21 @@ interface Stats {
   totalRevenue: number;
   pendingOrders: number;
   totalUsers: number;
-  activeSubs: number;
+  
   recentOrders: any[];
 }
 
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats>({
-    totalProducts: 0, totalOrders: 0, totalRevenue: 0, pendingOrders: 0, totalUsers: 0, activeSubs: 0, recentOrders: [],
+    totalProducts: 0, totalOrders: 0, totalRevenue: 0, pendingOrders: 0, totalUsers: 0, recentOrders: [],
   });
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [productsRes, ordersRes, profilesRes, subsRes] = await Promise.all([
+      const [productsRes, ordersRes, profilesRes] = await Promise.all([
         supabase.from("products").select("id", { count: "exact", head: true }),
         supabase.from("orders").select("*").order("created_at", { ascending: false }),
         supabase.from("profiles").select("id", { count: "exact", head: true }),
-        supabase.from("subscriptions").select("id", { count: "exact", head: true }).eq("status", "active"),
       ]);
       const orders = ordersRes.data || [];
       const totalRevenue = orders.filter(o => o.status === "completed").reduce((sum, o) => sum + Number(o.total), 0);
@@ -38,7 +37,7 @@ export default function Dashboard() {
         totalRevenue,
         pendingOrders,
         totalUsers: profilesRes.count || 0,
-        activeSubs: subsRes.count || 0,
+        
         recentOrders: orders.slice(0, 5),
       });
     };
@@ -49,7 +48,7 @@ export default function Dashboard() {
     { label: "Total Revenue", value: `PKR ${stats.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-green-600 bg-green-50" },
     { label: "Total Orders", value: stats.totalOrders, icon: ShoppingCart, color: "text-secondary bg-secondary/10" },
     { label: "Total Users", value: stats.totalUsers, icon: Users, color: "text-primary bg-primary/10" },
-    { label: "Active Subs", value: stats.activeSubs, icon: Crown, color: "text-purple-600 bg-purple-50" },
+    
     { label: "Products", value: stats.totalProducts, icon: Package, color: "text-primary bg-primary/10" },
     { label: "Pending Orders", value: stats.pendingOrders, icon: Clock, color: "text-amber-600 bg-amber-50" },
   ];
