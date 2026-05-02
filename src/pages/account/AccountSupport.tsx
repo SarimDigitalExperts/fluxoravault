@@ -12,7 +12,7 @@ const faqs = [
   { q: "How do I download my purchased product?", a: "After your payment is verified by admin, downloads will appear in your Downloads section. You can download up to 5 times per purchase." },
   { q: "How long does payment verification take?", a: "Orders are typically verified within 1-6 hours during business hours." },
   { q: "What if my order is rejected?", a: "If your order is rejected, please contact support with your payment details for assistance." },
-  { q: "Can I upgrade my subscription plan?", a: "Yes! Go to the Pricing page and select a new plan. Your old plan will be replaced after admin approval." },
+  
   { q: "Do I get refunds?", a: "Since we sell digital products, refunds are handled on a case-by-case basis. Contact support within 24 hours." },
 ];
 

@@ -8,7 +8,7 @@ const sidebarLinks = [
   { label: "My Orders", to: "/account/orders", icon: Package },
   { label: "Downloads", to: "/account/downloads", icon: Download },
   { label: "Wishlist", to: "/account/wishlist", icon: Heart },
-  { label: "Subscriptions", to: "/account/subscriptions", icon: Crown },
+  
   { label: "Billing", to: "/account/billing", icon: CreditCard },
   { label: "Support", to: "/account/support", icon: HelpCircle },
   { label: "Settings", to: "/account/settings", icon: Settings },

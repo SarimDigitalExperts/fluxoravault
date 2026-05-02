@@ -28,7 +28,6 @@ import Blogs from "@/pages/Blogs";
 import BlogDetail from "@/pages/BlogDetail";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Pricing from "@/pages/Pricing";
-import SubscriptionCheckout from "@/pages/SubscriptionCheckout";
 import AccountLayout from "@/pages/account/AccountLayout";
 import AccountDashboard from "@/pages/account/AccountDashboard";
 import AccountOrders from "@/pages/account/AccountOrders";
@@ -36,7 +35,7 @@ import AccountWishlist from "@/pages/account/AccountWishlist";
 import AccountDownloads from "@/pages/account/AccountDownloads";
 import AccountBilling from "@/pages/account/AccountBilling";
 import AccountSettings from "@/pages/account/AccountSettings";
-import AccountSubscriptions from "@/pages/account/AccountSubscriptions";
+
 import AccountSupport from "@/pages/account/AccountSupport";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import Dashboard from "@/pages/admin/Dashboard";
@@ -47,7 +46,7 @@ import AdminCoupons from "@/pages/admin/Coupons";
 import AdminBanners from "@/pages/admin/Banners";
 import AdminBlogs from "@/pages/admin/Blogs";
 import AdminPaymentMethods from "@/pages/admin/PaymentMethods";
-import AdminPricingPlans from "@/pages/admin/PricingPlans";
+
 import AdminContactMessages from "@/pages/admin/ContactMessages";
 import AdminAnalytics from "@/pages/admin/Analytics";
 import AdminUsers from "@/pages/admin/Users";
@@ -77,7 +76,7 @@ const App = () => (
                   <Route path="banners" element={<AdminBanners />} />
                   <Route path="blogs" element={<AdminBlogs />} />
                   <Route path="payment-methods" element={<AdminPaymentMethods />} />
-                  <Route path="pricing-plans" element={<AdminPricingPlans />} />
+                  
                   <Route path="messages" element={<AdminContactMessages />} />
                   <Route path="analytics" element={<AdminAnalytics />} />
                   <Route path="users" element={<AdminUsers />} />
@@ -107,7 +106,6 @@ const App = () => (
                         <Route path="/blog" element={<Blogs />} />
                         <Route path="/blog/:slug" element={<BlogDetail />} />
                         <Route path="/pricing" element={<Pricing />} />
-                        <Route path="/subscribe/:plan" element={<SubscriptionCheckout />} />
                         <Route path="/account" element={<AccountLayout />}>
                           <Route index element={<AccountDashboard />} />
                           <Route path="orders" element={<AccountOrders />} />
@@ -115,7 +113,7 @@ const App = () => (
                           <Route path="downloads" element={<AccountDownloads />} />
                           <Route path="billing" element={<AccountBilling />} />
                           <Route path="settings" element={<AccountSettings />} />
-                          <Route path="subscriptions" element={<AccountSubscriptions />} />
+                          
                           <Route path="support" element={<AccountSupport />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
