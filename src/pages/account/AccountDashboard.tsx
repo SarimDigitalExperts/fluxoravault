@@ -28,14 +28,7 @@ export default function AccountDashboard() {
     enabled: !!user,
   });
 
-  const { data: subscription } = useQuery({
-    queryKey: ["user-active-sub", user?.id],
-    queryFn: async () => {
-      const { data } = await supabase.from("subscriptions").select("*").eq("user_id", user!.id).eq("status", "active").maybeSingle();
-      return data;
-    },
-    enabled: !!user,
-  });
+
 
   const { data: recentOrders = [] } = useQuery({
     queryKey: ["user-recent-orders", user?.id],
